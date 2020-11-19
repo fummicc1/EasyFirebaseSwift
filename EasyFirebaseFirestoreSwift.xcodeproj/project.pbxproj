@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14B224C072E497377DEAF4EF /* Pods_EasyFirebaseFirestoreSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B28550987A4BA28FBFDCD5D /* Pods_EasyFirebaseFirestoreSwift.framework */; };
+		151F3C0C19766054C1CD7E1E /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F95B86FF2EE4814EA71E128 /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework */; };
 		D37871732566752300703CC4 /* EasyFirebaseFirestoreSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D37871692566752300703CC4 /* EasyFirebaseFirestoreSwift.framework */; };
 		D37871782566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37871772566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.swift */; };
 		D378717A2566752300703CC4 /* EasyFirebaseFirestoreSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = D378716C2566752300703CC4 /* EasyFirebaseFirestoreSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,12 +25,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F95B86FF2EE4814EA71E128 /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B28550987A4BA28FBFDCD5D /* Pods_EasyFirebaseFirestoreSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyFirebaseFirestoreSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7755756D7BEEE381491EF0B7 /* Pods-EasyFirebaseFirestoreSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift.release.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift/Pods-EasyFirebaseFirestoreSwift.release.xcconfig"; sourceTree = "<group>"; };
+		D06E0E967D5CDDAD882C067C /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D37871692566752300703CC4 /* EasyFirebaseFirestoreSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EasyFirebaseFirestoreSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D378716C2566752300703CC4 /* EasyFirebaseFirestoreSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EasyFirebaseFirestoreSwift.h; sourceTree = "<group>"; };
 		D378716D2566752300703CC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D37871722566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyFirebaseFirestoreSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37871772566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyFirebaseFirestoreSwiftTests.swift; sourceTree = "<group>"; };
 		D37871792566752300703CC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E655EE7969E33908D0AC6261 /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
+		EBFDDCBE6F1C12CC6A3A7C92 /* Pods-EasyFirebaseFirestoreSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift.debug.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift/Pods-EasyFirebaseFirestoreSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14B224C072E497377DEAF4EF /* Pods_EasyFirebaseFirestoreSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,18 +53,42 @@
 			buildActionMask = 2147483647;
 			files = (
 				D37871732566752300703CC4 /* EasyFirebaseFirestoreSwift.framework in Frameworks */,
+				151F3C0C19766054C1CD7E1E /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		74F27911698B76F9B6E7CC95 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EBFDDCBE6F1C12CC6A3A7C92 /* Pods-EasyFirebaseFirestoreSwift.debug.xcconfig */,
+				7755756D7BEEE381491EF0B7 /* Pods-EasyFirebaseFirestoreSwift.release.xcconfig */,
+				D06E0E967D5CDDAD882C067C /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig */,
+				E655EE7969E33908D0AC6261 /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		77B14182FEAB254777248008 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B28550987A4BA28FBFDCD5D /* Pods_EasyFirebaseFirestoreSwift.framework */,
+				0F95B86FF2EE4814EA71E128 /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D378715F2566752300703CC4 = {
 			isa = PBXGroup;
 			children = (
 				D378716B2566752300703CC4 /* EasyFirebaseFirestoreSwift */,
 				D37871762566752300703CC4 /* EasyFirebaseFirestoreSwiftTests */,
 				D378716A2566752300703CC4 /* Products */,
+				74F27911698B76F9B6E7CC95 /* Pods */,
+				77B14182FEAB254777248008 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,6 +137,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D378717D2566752300703CC4 /* Build configuration list for PBXNativeTarget "EasyFirebaseFirestoreSwift" */;
 			buildPhases = (
+				389E1390990EB2D015B62AEA /* [CP] Check Pods Manifest.lock */,
 				D37871642566752300703CC4 /* Headers */,
 				D37871652566752300703CC4 /* Sources */,
 				D37871662566752300703CC4 /* Frameworks */,
@@ -122,9 +156,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D37871802566752300703CC4 /* Build configuration list for PBXNativeTarget "EasyFirebaseFirestoreSwiftTests" */;
 			buildPhases = (
+				11CDDA9B56B052BE018DA5E8 /* [CP] Check Pods Manifest.lock */,
 				D378716E2566752300703CC4 /* Sources */,
 				D378716F2566752300703CC4 /* Frameworks */,
 				D37871702566752300703CC4 /* Resources */,
+				44B43233FFC2593EE2AB5848 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -188,6 +224,70 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		11CDDA9B56B052BE018DA5E8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		389E1390990EB2D015B62AEA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EasyFirebaseFirestoreSwift-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44B43233FFC2593EE2AB5848 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D37871652566752300703CC4 /* Sources */ = {
@@ -340,6 +440,7 @@
 		};
 		D378717E2566752300703CC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBFDDCBE6F1C12CC6A3A7C92 /* Pods-EasyFirebaseFirestoreSwift.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -364,6 +465,7 @@
 		};
 		D378717F2566752300703CC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7755756D7BEEE381491EF0B7 /* Pods-EasyFirebaseFirestoreSwift.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -388,6 +490,7 @@
 		};
 		D37871812566752300703CC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D06E0E967D5CDDAD882C067C /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
@@ -406,6 +509,7 @@
 		};
 		D37871822566752300703CC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E655EE7969E33908D0AC6261 /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
