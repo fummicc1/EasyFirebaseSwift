@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		14B224C072E497377DEAF4EF /* Pods_EasyFirebaseFirestoreSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B28550987A4BA28FBFDCD5D /* Pods_EasyFirebaseFirestoreSwift.framework */; };
 		151F3C0C19766054C1CD7E1E /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F95B86FF2EE4814EA71E128 /* Pods_EasyFirebaseFirestoreSwift_EasyFirebaseFirestoreSwiftTests.framework */; };
-		D35A05AC25667647006A46B0 /* EasyFirebaseFirestoreSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A05AB25667647006A46B0 /* EasyFirebaseFirestoreSwift.swift */; };
+		D36489D9262C8E7500EC7420 /* FirestoreClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36489D8262C8E7500EC7420 /* FirestoreClient.swift */; };
 		D37871732566752300703CC4 /* EasyFirebaseFirestoreSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D37871692566752300703CC4 /* EasyFirebaseFirestoreSwift.framework */; };
 		D37871782566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37871772566752300703CC4 /* EasyFirebaseFirestoreSwiftTests.swift */; };
 		D378717A2566752300703CC4 /* EasyFirebaseFirestoreSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = D378716C2566752300703CC4 /* EasyFirebaseFirestoreSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,7 +30,7 @@
 		3B28550987A4BA28FBFDCD5D /* Pods_EasyFirebaseFirestoreSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyFirebaseFirestoreSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7755756D7BEEE381491EF0B7 /* Pods-EasyFirebaseFirestoreSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift.release.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift/Pods-EasyFirebaseFirestoreSwift.release.xcconfig"; sourceTree = "<group>"; };
 		D06E0E967D5CDDAD882C067C /* Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests/Pods-EasyFirebaseFirestoreSwift-EasyFirebaseFirestoreSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D35A05AB25667647006A46B0 /* EasyFirebaseFirestoreSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyFirebaseFirestoreSwift.swift; sourceTree = "<group>"; };
+		D36489D8262C8E7500EC7420 /* FirestoreClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirestoreClient.swift; sourceTree = "<group>"; };
 		D37871692566752300703CC4 /* EasyFirebaseFirestoreSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EasyFirebaseFirestoreSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D378716C2566752300703CC4 /* EasyFirebaseFirestoreSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EasyFirebaseFirestoreSwift.h; sourceTree = "<group>"; };
 		D378716D2566752300703CC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -105,9 +105,9 @@
 		D378716B2566752300703CC4 /* EasyFirebaseFirestoreSwift */ = {
 			isa = PBXGroup;
 			children = (
+				D36489D8262C8E7500EC7420 /* FirestoreClient.swift */,
 				D378716C2566752300703CC4 /* EasyFirebaseFirestoreSwift.h */,
 				D378716D2566752300703CC4 /* Info.plist */,
-				D35A05AB25667647006A46B0 /* EasyFirebaseFirestoreSwift.swift */,
 			);
 			path = EasyFirebaseFirestoreSwift;
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				TargetAttributes = {
 					D37871682566752300703CC4 = {
 						CreatedOnToolsVersion = 12.2;
-						LastSwiftMigration = 1220;
+						LastSwiftMigration = 1240;
 					};
 					D37871712566752300703CC4 = {
 						CreatedOnToolsVersion = 12.2;
@@ -297,7 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D35A05AC25667647006A46B0 /* EasyFirebaseFirestoreSwift.swift in Sources */,
+				D36489D9262C8E7500EC7420 /* FirestoreClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
