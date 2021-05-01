@@ -1,4 +1,4 @@
-// swift-tools-versions:5.3
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -10,7 +10,7 @@ let package = Package(
     products: [
         .library(
             name: "EasyFirebaseFirestoreSwift",
-            "targets": ["EasyFirebaseFirestoreSwift"]
+            targets: ["EasyFirebaseFirestoreSwift"]
         )
     ],
     dependencies: [
