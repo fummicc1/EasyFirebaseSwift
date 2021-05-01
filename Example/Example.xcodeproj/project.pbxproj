@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		D33159D1263D409D0061211B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159CF263D409D0061211B /* Main.storyboard */; };
 		D33159D3263D409E0061211B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D33159D2263D409E0061211B /* Assets.xcassets */; };
 		D33159D6263D409E0061211B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159D4263D409E0061211B /* LaunchScreen.storyboard */; };
+		D3FF616E263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3FF616E263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,9 @@
 			dependencies = (
 			);
 			name = Example;
+			packageProductDependencies = (
+				D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */,
+			);
 			productName = Example;
 			productReference = D33159C6263D409D0061211B /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +115,9 @@
 				Base,
 			);
 			mainGroup = D33159BD263D409D0061211B;
+			packageReferences = (
+				D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */,
+			);
 			productRefGroup = D33159C7263D409D0061211B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -341,6 +349,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fummicc1/EasyFirebaseFirestoreSwift/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */;
+			productName = EasyFirebaseFirestoreSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D33159BE263D409D0061211B /* Project object */;
 }

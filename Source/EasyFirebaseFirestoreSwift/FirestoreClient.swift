@@ -46,7 +46,7 @@ public struct FirestoreOrderModelImpl: FirestoreOrderModel {
     public var fieldPath: String
     public var isAscending: Bool
     
-    func build(from: Query) -> Query {
+    public func build(from: Query) -> Query {
         from.order(by: fieldPath, descending: !isAscending)
     }
 }
@@ -294,7 +294,7 @@ public class FirestoreClient {
         }
     }
     
-    public private func createQuery<Model: FirestoreModel>(
+    private func createQuery<Model: FirestoreModel>(
         modelType: Model.Type,
         filter: [FirestoreFilterModel]
     ) -> Query {
