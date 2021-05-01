@@ -20,10 +20,9 @@ let package = Package(
         .target(
             name: "EasyFirebaseFirestoreSwift",
             dependencies: [
-                "FirebaseFirestore",
-                "FirebaseFirestoreSwift-Beta"
-            ],
-            path: "EasyFirebaseFirestoreSwift"
+                .product(name: "FirebaseFirestore", package: "Firebase"),
+                .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase")
+            ]
         )
     ]
 )
