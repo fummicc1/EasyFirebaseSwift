@@ -85,6 +85,8 @@ public class FirestoreClient {
     private let firestore = Firestore.firestore()
     private var listeners: [String: ListenerRegistration] = [:]
     
+    public init() { }
+    
     public func writeTransaction<Model: FirestoreModel, FieldValue>(
         _ model: Model,
         fieldPath: WritableKeyPath<Model, FieldValue>,
