@@ -23,9 +23,9 @@
         "package": "EasyFirebaseFirestoreSwift",
         "repositoryURL": "https://github.com/fummicc1/EasyFirebaseFirestoreSwift/",
         "state": {
-          "branch": null,
-          "revision": "f3aaf2fbd8fe5f3cac3e0b62ca905e70ce1bc37c",
-          "version": "0.1.5"
+          "branch": "main",
+          "revision": "7e216998f818d1cd978ba04340afb3963815ea46",
+          "version": null
         }
       },
       {

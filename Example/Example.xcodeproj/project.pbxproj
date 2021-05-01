@@ -13,7 +13,8 @@
 		D33159D1263D409D0061211B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159CF263D409D0061211B /* Main.storyboard */; };
 		D33159D3263D409E0061211B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D33159D2263D409E0061211B /* Assets.xcassets */; };
 		D33159D6263D409E0061211B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159D4263D409E0061211B /* LaunchScreen.storyboard */; };
-		D3FF616E263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */; };
+		D3FF6171263D4D0000DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */; };
+		D3FF6173263D4E5400DF88DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		D33159D2263D409E0061211B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D33159D5263D409E0061211B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D33159D7263D409E0061211B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3FF616E263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */,
+				D3FF6171263D4D0000DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +63,7 @@
 				D33159C9263D409D0061211B /* AppDelegate.swift */,
 				D33159CB263D409D0061211B /* SceneDelegate.swift */,
 				D33159CD263D409D0061211B /* ViewController.swift */,
+				D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */,
 				D33159CF263D409D0061211B /* Main.storyboard */,
 				D33159D2263D409E0061211B /* Assets.xcassets */,
 				D33159D4263D409E0061211B /* LaunchScreen.storyboard */,
@@ -86,7 +89,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */,
+				D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */,
 			);
 			productName = Example;
 			productReference = D33159C6263D409D0061211B /* Example.app */;
@@ -116,7 +119,7 @@
 			);
 			mainGroup = D33159BD263D409D0061211B;
 			packageReferences = (
-				D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */,
+				D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */,
 			);
 			productRefGroup = D33159C7263D409D0061211B /* Products */;
 			projectDirPath = "";
@@ -135,6 +138,7 @@
 				D33159D6263D409E0061211B /* LaunchScreen.storyboard in Resources */,
 				D33159D3263D409E0061211B /* Assets.xcassets in Resources */,
 				D33159D1263D409D0061211B /* Main.storyboard in Resources */,
+				D3FF6173263D4E5400DF88DF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +301,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -316,6 +321,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -351,20 +357,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */ = {
+		D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fummicc1/EasyFirebaseFirestoreSwift/";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D3FF616D263D4A3D00DF88DF /* EasyFirebaseFirestoreSwift */ = {
+		D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D3FF616C263D4A3D00DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */;
+			package = D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */;
 			productName = EasyFirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
