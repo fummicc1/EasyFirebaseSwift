@@ -8,7 +8,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-protocol FirestoreModel: Codable {
+public protocol FirestoreModel: Codable {
     static var singleIdentifier: String { get }
     static var arrayIdentifier: String { get }
     static var collectionName: String { get }
@@ -18,44 +18,44 @@ protocol FirestoreModel: Codable {
     var updatedAt: Timestamp? { get set }
 }
 
-extension FirestoreModel {
+public extension FirestoreModel {
     var uid: String? {
         ref?.documentID
     }
 }
 
-protocol SubCollectionModel {
+public protocol SubCollectionModel {
     static var parentModelType: FirestoreModel.Type { get }
 }
 
-protocol FirestoreFilterModel {
+public protocol FirestoreFilterModel {
     var fieldPath: String? { get }
     var value: Any { get }
     
     func build(from: Query) -> Query
 }
 
-protocol FirestoreOrderModel {
+public protocol FirestoreOrderModel {
     var fieldPath: String { get }
     var isAscending: Bool { get }
     
     func build(from: Query) -> Query
 }
 
-struct FirestoreOrderModelImpl: FirestoreOrderModel {
-    var fieldPath: String
-    var isAscending: Bool
+public struct FirestoreOrderModelImpl: FirestoreOrderModel {
+    public var fieldPath: String
+    public var isAscending: Bool
     
     func build(from: Query) -> Query {
         from.order(by: fieldPath, descending: !isAscending)
     }
 }
 
-struct FirestoreFilterRangeModel: FirestoreFilterModel {
-    var fieldPath: String?
-    var value: Any
+public struct FirestoreFilterRangeModel: FirestoreFilterModel {
+    public var fieldPath: String?
+    public var value: Any
     
-    func build(from: Query) -> Query {
+    public func build(from: Query) -> Query {
         guard let fieldPath = fieldPath, let value = value as? [Any] else {
             return from
         }
@@ -63,11 +63,11 @@ struct FirestoreFilterRangeModel: FirestoreFilterModel {
     }
 }
 
-struct FirestoreFilterEqualModel: FirestoreFilterModel {
-    var fieldPath: String?
-    var value: Any
+public struct FirestoreFilterEqualModel: FirestoreFilterModel {
+    public var fieldPath: String?
+    public var value: Any
     
-    func build(from: Query) -> Query {
+    public func build(from: Query) -> Query {
         
         guard let fieldPath = fieldPath else {
             return from
@@ -76,11 +76,11 @@ struct FirestoreFilterEqualModel: FirestoreFilterModel {
     }
 }
 
-enum FirestoreClientError: Error {
+public enum FirestoreClientError: Error {
     case failedToDecode(data: [String: Any]?)
 }
 
-class FirestoreClient {
+public class FirestoreClient {
     
     private let firestore = Firestore.firestore()
     private var listeners: [String: ListenerRegistration] = [:]
@@ -122,7 +122,7 @@ class FirestoreClient {
     }
     
     
-    func write<Model: FirestoreModel>(
+    public func write<Model: FirestoreModel>(
         _ model: Model,
         merge: Bool,
         success: @escaping (DocumentReference) -> Void,
@@ -149,7 +149,7 @@ class FirestoreClient {
         }
     }
     
-    func listen<Model: FirestoreModel>(
+    public func listen<Model: FirestoreModel>(
         uid: String,
         includeCache: Bool = true,
         success: @escaping (Model) -> Void,
@@ -181,7 +181,7 @@ class FirestoreClient {
         listeners[Model.singleIdentifier] = listener
     }
     
-    func listen<Model: FirestoreModel>(
+    public func listen<Model: FirestoreModel>(
         filter: [FirestoreFilterModel],
         includeCache: Bool = true,
         order: [FirestoreOrderModel],
@@ -216,7 +216,7 @@ class FirestoreClient {
         listeners[Model.arrayIdentifier] = listener
     }
     
-    func get<Model: FirestoreModel>(
+    public func get<Model: FirestoreModel>(
         uid: String,
         includeCache: Bool = true,
         success: @escaping (Model) -> Void,
@@ -244,7 +244,7 @@ class FirestoreClient {
         }
     }
     
-    func get<Model: FirestoreModel>(
+    public func get<Model: FirestoreModel>(
         filter: [FirestoreFilterModel],
         includeCache: Bool = true,
         order: [FirestoreOrderModel],
@@ -277,7 +277,7 @@ class FirestoreClient {
         }
     }
     
-    func delete<Model: FirestoreModel>(
+    public func delete<Model: FirestoreModel>(
         _ model: Model,
         success: @escaping () -> Void,
         failure: @escaping (Error) -> Void
@@ -294,7 +294,7 @@ class FirestoreClient {
         }
     }
     
-    private func createQuery<Model: FirestoreModel>(
+    public private func createQuery<Model: FirestoreModel>(
         modelType: Model.Type,
         filter: [FirestoreFilterModel]
     ) -> Query {
@@ -305,12 +305,12 @@ class FirestoreClient {
         return query
     }
     
-    func stopListening<Model: FirestoreModel>(type: Model.Type) {
+    public func stopListening<Model: FirestoreModel>(type: Model.Type) {
         listeners[Model.arrayIdentifier]?.remove()
         listeners[Model.singleIdentifier]?.remove()
     }
     
-    func delete<Model: FirestoreModel>(
+    public func delete<Model: FirestoreModel>(
         id: String,
         type: Model.Type,
         completion: ((Error?) -> Void)? = nil
@@ -321,7 +321,7 @@ class FirestoreClient {
 
 // MARK: SubCollection
 extension FirestoreClient {
-    func write<Model: FirestoreModel & SubCollectionModel>(
+    public func write<Model: FirestoreModel & SubCollectionModel>(
         _ model: Model,
         parent parentUid: String,
         superParent superParentUid: String?,
@@ -353,7 +353,7 @@ extension FirestoreClient {
         }
     }
     
-    func get<Model: FirestoreModel & SubCollectionModel>(
+    public func get<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         superParent superParentUid: String?,
         filter: [FirestoreFilterModel],
@@ -396,7 +396,7 @@ extension FirestoreClient {
         }
     }
     
-    func get<Model: FirestoreModel & SubCollectionModel>(
+    public func get<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         superParent superParentUid: String?,
         docId: String,
@@ -442,7 +442,7 @@ extension FirestoreClient {
         }
     }
     
-    func listen<Model: FirestoreModel & SubCollectionModel>(
+    public func listen<Model: FirestoreModel & SubCollectionModel>(
         parent parentUID: String,
         uid: String,
         includeCache: Bool = true,
@@ -473,7 +473,7 @@ extension FirestoreClient {
         listeners[Model.singleIdentifier] = listener
     }
     
-    func listen<Model: FirestoreModel & SubCollectionModel>(
+    public func listen<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         superParent superParentUid: String?,
         filter: [FirestoreFilterModel],
@@ -544,7 +544,7 @@ extension FirestoreClient {
 
 // MARK: CollectionGroup
 extension FirestoreClient {
-    func getCollectionGroup<Model: FirestoreModel>(
+    public func getCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
         filter: FirestoreFilterModel,
         includeCache: Bool,
@@ -584,7 +584,7 @@ extension FirestoreClient {
         }
     }
     
-    func listenCollectionGroup<Model: FirestoreModel>(
+    public func listenCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
         filter: FirestoreFilterModel,
         includeCache: Bool,

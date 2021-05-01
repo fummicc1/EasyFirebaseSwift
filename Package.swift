@@ -13,11 +13,15 @@ let package = Package(
             "targets": ["EasyFirebaseFirestoreSwift"]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMinor(from: "7.11.0"))
+    ],
     targets: [
         .target(
             name: "EasyFirebaseFirestoreSwift",
             dependencies: [
-                .package(url: )
+                "FirebaseFirestore",
+                "FirebaseFirestoreSwift-Beta"
             ],
             path: "EasyFirebaseFirestoreSwift"
         )
