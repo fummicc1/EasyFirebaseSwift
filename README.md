@@ -1,5 +1,5 @@
-# EasyFirebaseFirestoreSwift
-An Easy CloudFirestore Library written in Swift.
+# EasyFirebaseSwift
+An Easy Firebase (Auth / Firestore) Library written in Swift.
 
 # Usage
 
