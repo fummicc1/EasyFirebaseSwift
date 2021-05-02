@@ -18,7 +18,7 @@ public protocol FirestoreModel: Codable {
     var updatedAt: Timestamp? { get set }
 }
 
-public extension FirestoreModel {
+extension FirestoreModel {
     var uid: String? {
         ref?.documentID
     }

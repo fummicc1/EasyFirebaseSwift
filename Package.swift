@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "EasyFirebaseFirestoreSwift",
+    name: "EasyFirebaseSwift",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "EasyFirebaseFirestoreSwift",
-            targets: ["EasyFirebaseFirestoreSwift"]
+            name: "EasyFirebaseSwift",
+            targets: ["EasyFirebaseSwift"]
         )
     ],
     dependencies: [
@@ -18,10 +18,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "EasyFirebaseFirestoreSwift",
+            name: "EasyFirebaseSwift",
             dependencies: [
                 .product(name: "FirebaseFirestore", package: "Firebase"),
-                .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase")
+                .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase"),
+                    .product(name: "FirebaseAuth", package: "Firebase")
             ]
         )
     ]
