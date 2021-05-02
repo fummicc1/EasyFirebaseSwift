@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import EasyFirebaseFirestoreSwift
+import EasyFirebaseSwift
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 

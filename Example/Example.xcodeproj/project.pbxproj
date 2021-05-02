@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D31715C2263EEC5600298FF4 /* EasyFirebaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D31715C1263EEC5600298FF4 /* EasyFirebaseSwift */; };
 		D33159CA263D409D0061211B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159C9263D409D0061211B /* AppDelegate.swift */; };
 		D33159CC263D409D0061211B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159CB263D409D0061211B /* SceneDelegate.swift */; };
 		D33159CE263D409D0061211B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159CD263D409D0061211B /* ViewController.swift */; };
 		D33159D1263D409D0061211B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159CF263D409D0061211B /* Main.storyboard */; };
 		D33159D3263D409E0061211B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D33159D2263D409E0061211B /* Assets.xcassets */; };
 		D33159D6263D409E0061211B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159D4263D409E0061211B /* LaunchScreen.storyboard */; };
-		D3FF6171263D4D0000DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */; };
 		D3FF6173263D4E5400DF88DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -34,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3FF6171263D4D0000DF88DF /* EasyFirebaseFirestoreSwift in Frameworks */,
+				D31715C2263EEC5600298FF4 /* EasyFirebaseSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +89,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */,
+				D31715C1263EEC5600298FF4 /* EasyFirebaseSwift */,
 			);
 			productName = Example;
 			productReference = D33159C6263D409D0061211B /* Example.app */;
@@ -119,7 +119,7 @@
 			);
 			mainGroup = D33159BD263D409D0061211B;
 			packageReferences = (
-				D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */,
+				D31715C0263EEC5600298FF4 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */,
 			);
 			productRefGroup = D33159C7263D409D0061211B /* Products */;
 			projectDirPath = "";
@@ -357,9 +357,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */ = {
+		D31715C0263EEC5600298FF4 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/fummicc1/EasyFirebaseFirestoreSwift/";
+			repositoryURL = "https://github.com/fummicc1/EasyFirebaseSwift";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -368,10 +368,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D3FF6170263D4D0000DF88DF /* EasyFirebaseFirestoreSwift */ = {
+		D31715C1263EEC5600298FF4 /* EasyFirebaseSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D3FF616F263D4D0000DF88DF /* XCRemoteSwiftPackageReference "EasyFirebaseFirestoreSwift" */;
-			productName = EasyFirebaseFirestoreSwift;
+			package = D31715C0263EEC5600298FF4 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
