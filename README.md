@@ -1,6 +1,14 @@
 # EasyFirebaseSwift
 An Easy Firebase (Auth / Firestore) Library written in Swift.
 
+# Installation
+
+Supporting SwiftPackageManager (SPM).
+
+```swift
+.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMinor(from: "1.1.0"))
+```
+
 # Usage
 
 ## Model
@@ -9,7 +17,7 @@ First of all, create Model layer extending FirestoreModel protocol.
 
 ```swift
 
-import EasyFirebaseFirestoreSwift
+import EasyFirebaseSwift
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 
@@ -60,7 +68,7 @@ client.write(model, merge: true) { reference in
 
 If we want to get snapshots once, we should use `get` method, on the other hand, if we want to fetch the latest data whenever database is updated, we should use `listen` method.
 
-Both `get` and `listen` specifies which model we want by giving concrete type at closure parameter like the following.
+Both `get` and `listen` specify which model we want by giving concrete type at closure parameter like the following.
 
 ```swift
 client.listen(
@@ -77,3 +85,6 @@ client.listen(
 ```
 
 
+# Contributing
+
+Pull requests, bug reports and feature requests are welcome 🚀
