@@ -13,7 +13,7 @@ Supporting SwiftPackageManager (SPM).
 
 ## Model
 
-First of all, create Model layer extending FirestoreModel protocol.
+First of all, create Model layer inheriting `FirestoreModel` protocol.
 
 ```swift
 
@@ -49,20 +49,49 @@ struct Model: FirestoreModel {
 }
 ```
 
-## Create / Update
+## Create
 
-Both create and update can achieve by using `write` method.
+`Create` can be used like the following.
 
 ```swift
 let client = FirestoreClient()
+
+// Note: - new model must guarantee `createdAt`, `updatedAt` and `ref` are nil.
 let model = Model(ref: nil, createdAt: nil, updatedAt: nil, message: "Test")
 
-client.write(model, merge: true) { reference in
+client.create(model) { reference in
     model.ref = reference
 } failure: { error in
     print(error)
 }
 ```
+
+## Update 
+
+`Update` can be used in this way.
+
+```swift
+let client = FirestoreClient()
+
+// In this case, we fetch an exsisting data from Firestore.
+client.get(uid: "example_1234567890") { model in
+    var model = model
+    model.message = "Update Test"
+
+    // Note: - updated model must guarantee `createdAt`, `updatedAt` and `ref` are NOT nil.
+    client.update(model) { reference in
+        model.ref = reference
+    } failure: { error in
+        print(error)
+    }
+} failure: { error in
+    print(error)
+}
+```
+
+### Write
+
+`Write` is actually either `create` or `update` method. according to `merge` parameter.
 
 ## Read
 
@@ -83,6 +112,38 @@ client.listen(
     print(error)
 }
 ```
+
+### Listen
+
+We can achieve both **single observation** and **query observation** of a certain collection at the same time!
+
+#### Single Observation
+
+Doc is in work in progress...
+
+### Query (CollectionReference) Observation
+
+Doc is in work in progress...
+
+## Ordering
+
+Doc is in work in progress...
+
+## Filtering
+
+Doc is in work in progress...
+
+## Limiting
+
+Doc is in work in progress...
+
+## SubCollection
+
+Doc is in work in progress...
+
+## SubCollection in SubCollection
+
+Doc is in work in progress...
 
 
 # Contributing
