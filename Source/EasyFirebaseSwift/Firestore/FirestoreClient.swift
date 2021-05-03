@@ -46,6 +46,11 @@ public struct FirestoreOrderModelImpl: FirestoreOrderModel {
     public var fieldPath: String
     public var isAscending: Bool
     
+    public init(fieldPath: String, isAscending: Bool) {
+        self.fieldPath = fieldPath
+        self.isAscending = isAscending
+    }
+    
     public func build(from: Query) -> Query {
         from.order(by: fieldPath, descending: !isAscending)
     }
@@ -54,6 +59,11 @@ public struct FirestoreOrderModelImpl: FirestoreOrderModel {
 public struct FirestoreFilterRangeModel: FirestoreFilterModel {
     public var fieldPath: String?
     public var value: Any
+    
+    public init(fieldPath: String?, value: Any) {
+        self.fieldPath = fieldPath
+        self.value = value
+    }
     
     public func build(from: Query) -> Query {
         guard let fieldPath = fieldPath, let value = value as? [Any] else {
@@ -66,6 +76,11 @@ public struct FirestoreFilterRangeModel: FirestoreFilterModel {
 public struct FirestoreFilterEqualModel: FirestoreFilterModel {
     public var fieldPath: String?
     public var value: Any
+    
+    public init(fieldPath: String?, value: Any) {
+        self.fieldPath = fieldPath
+        self.value = value
+    }
     
     public func build(from: Query) -> Query {
         
@@ -370,6 +385,68 @@ public class FirestoreClient {
         completion: ((Error?) -> Void)? = nil
     ) {
         firestore.collection(Model.collectionName).document(id).delete(completion: completion)
+    }
+    
+    // MARK: Internal
+    func listen<Model: FirestoreModel>(
+        ref: DocumentReference,
+        includeCache: Bool = true,
+        success: @escaping (Model) -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
+        let listener = ref.addSnapshotListener { snapshot, error in
+            if let error = error {
+                failure(error)
+                return
+            }
+            guard let snapshot = snapshot else {
+                return
+            }
+            if snapshot.metadata.isFromCache, includeCache == false {
+                return
+            }
+            do {
+                guard let model = try snapshot.data(as: Model.self) else {
+                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
+                }
+                success(model)
+            } catch {
+                failure(error)
+            }
+        }
+        listeners[Model.singleIdentifier]?.remove()
+        listeners[Model.singleIdentifier] = listener
+    }
+    
+    func listen<Model: FirestoreModel>(
+        ref: Query,
+        includeCache: Bool = true,
+        success: @escaping ([Model]) -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
+        let listener = ref.addSnapshotListener { snapshots, error in
+            if let error = error {
+                failure(error)
+                return
+            }
+            guard let snapshots = snapshots else {
+                return
+            }
+            if snapshots.metadata.isFromCache, includeCache == false {
+                return
+            }
+            let documents = snapshots.documents
+            var models: [Model] = []
+            for document in documents {
+                guard let model = try? document.data(as: Model.self) else {
+                    continue
+                }
+                models.append(model)
+            }
+            success(models)
+        }
+        listeners[Model.arrayIdentifier]?.remove()
+        listeners[Model.arrayIdentifier] = listener
     }
 }
 
