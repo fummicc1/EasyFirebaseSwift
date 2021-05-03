@@ -6,7 +6,7 @@ An Easy Firebase (Auth / Firestore) Library written in Swift.
 Supporting SwiftPackageManager (SPM).
 
 ```swift
-.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMinor(from: "1.1.0"))
+.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMajor(from: "1.2.0"))
 ```
 
 # Usage
