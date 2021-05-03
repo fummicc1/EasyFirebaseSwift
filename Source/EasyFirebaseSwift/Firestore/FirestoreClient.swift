@@ -77,7 +77,16 @@ public struct FirestoreFilterEqualModel: FirestoreFilterModel {
 }
 
 public enum FirestoreClientError: Error {
+    // Decode/Encode
     case failedToDecode(data: [String: Any]?)
+    
+    // Ref
+    case alreadyExistsDocumentReferenceInCreateModel
+    case notExistsDocumentReferenceInUpdateModel
+    
+    // Timestamp
+    case occureTimestampExceptionInCreateModel
+    case occureTimestampExceptionInUpdateModel
 }
 
 public class FirestoreClient {
@@ -123,29 +132,72 @@ public class FirestoreClient {
         
     }
     
-    
     public func write<Model: FirestoreModel>(
         _ model: Model,
         merge: Bool,
         success: @escaping (DocumentReference) -> Void,
         failure: @escaping (Error) -> Void
     ) {
+        if merge {
+            update(model, success: { success(model.ref!) }, failure: failure)
+        } else {
+            create(model, success: success, failure: failure)
+        }
+    }
+    
+    public func create<Model: FirestoreModel>(
+        _ model: Model,
+        success: @escaping (DocumentReference) -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
         do {
-            let ref: DocumentReference
-            if let modelRef = model.ref {
-                ref = modelRef
-            } else {
-                ref = firestore.collection(Model.collectionName).document()
+            if model.ref != nil {
+                failure(FirestoreClientError.alreadyExistsDocumentReferenceInCreateModel)
+                return
             }
-            var model = model
-            model.updatedAt = nil
-            try ref.setData(from: model, merge: merge) { (error) in
+            
+            if model.createdAt != nil || model.updatedAt != nil {
+                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
+                return
+            }
+            
+            let ref = firestore.collection(Model.collectionName).document()
+            try ref.setData(from: model, merge: false) { error in
                 if let error = error {
                     failure(error)
                     return
                 }
                 success(ref)
             }
+        } catch {
+            failure(error)
+        }
+    }
+    
+    public func update<Model: FirestoreModel>(
+        _ model: Model,
+        success: @escaping () -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
+        do {
+            guard let ref = model.ref else {
+                failure(FirestoreClientError.notExistsDocumentReferenceInUpdateModel)
+                return
+            }
+            
+            if model.createdAt == nil {
+                failure(FirestoreClientError.occureTimestampExceptionInUpdateModel)
+                return
+            }
+            
+            try ref.setData(from: model, merge: true) { error in
+                if let error = error {
+                    failure(error)
+                    return
+                }
+                success()
+            }
+            
         } catch {
             failure(error)
         }
@@ -331,24 +383,94 @@ extension FirestoreClient {
         success: @escaping (DocumentReference) -> Void,
         failure: @escaping (Error) -> Void
     ) {
+        if merge {
+            update(
+                model,
+                parent: parentUid,
+                superParent: superParentUid,
+                success: { success(model.ref!) },
+                failure: failure
+            )
+        } else {
+            create(model, success: success, failure: failure)
+        }
+    }
+    
+    public func create<Model: FirestoreModel & SubCollectionModel>(
+        _ model: Model,
+        parent parentUid: String,
+        superParent superParentUid: String?,
+        success: @escaping (DocumentReference) -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
         do {
+            
+            if model.ref != nil {
+                failure(FirestoreClientError.alreadyExistsDocumentReferenceInCreateModel)
+                return
+            }
+            
             let ref: DocumentReference
-            if let modelRef = model.ref {
-                ref = modelRef
-            } else if let superParentUid = superParentUid, let superParentType = Model.parentModelType as? SubCollectionModel.Type {
+            
+            if let superParentUid = superParentUid, let superParentType = Model.parentModelType as? SubCollectionModel.Type {
                 let superCollectionName = superParentType.parentModelType.collectionName
                 let parentCollectionName = Model.parentModelType.collectionName
                 let collectionName = Model.collectionName
-                ref = firestore.collection(superCollectionName).document(superParentUid).collection(parentCollectionName).document(parentUid).collection(collectionName).document()
+                ref = firestore.collection(superCollectionName).document(superParentUid)
+                    .collection(parentCollectionName)
+                    .document(parentUid)
+                    .collection(collectionName)
+                    .document()
             } else {
-                ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid).collection(Model.collectionName).document()
+                ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid)
+                    .collection(Model.collectionName)
+                    .document()
             }
-            try ref.setData(from: model, merge: merge) { (error) in
+            
+            if model.updatedAt != nil || model.createdAt != nil {
+                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
+                return
+            }
+            
+            try ref.setData(from: model, merge: false) { (error) in
                 if let error = error {
                     failure(error)
                     return
                 }
                 success(ref)
+            }
+        } catch {
+            failure(error)
+        }
+    }
+    
+    public func update<Model: FirestoreModel & SubCollectionModel>(
+        _ model: Model,
+        parent parentUid: String,
+        superParent superParentUid: String?,
+        success: @escaping () -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
+        do {
+            var model = model
+            guard let ref = model.ref else {
+                failure(FirestoreClientError.notExistsDocumentReferenceInUpdateModel)
+                return
+            }
+            
+            if model.updatedAt == nil || model.createdAt == nil {
+                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
+                return
+            }
+            
+            model.updatedAt = nil
+            
+            try ref.setData(from: model, merge: true) { (error) in
+                if let error = error {
+                    failure(error)
+                    return
+                }
+                success()
             }
         } catch {
             failure(error)
