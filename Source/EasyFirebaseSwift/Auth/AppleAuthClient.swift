@@ -15,7 +15,7 @@ import FirebaseAuth
 public final class AppleAuthClient: NSObject {
 
     // Unhashed nonce.
-    private(set) var currentNonce: String?
+    public private(set) var currentNonce: String?
     public weak var delegate: ASAuthorizationControllerDelegate?
 
     public func startSignInWithAppleFlow(with authRequest: ASAuthorizationAppleIDRequest? = nil) {
