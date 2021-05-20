@@ -27,7 +27,6 @@ struct Model: FirestoreModel {
     var updatedAt: Timestamp?
     
     var message: String
-    
 }
 
 class ViewController: UIViewController {
@@ -52,17 +51,16 @@ class ViewController: UIViewController {
             print(error)
         }
         
-        client.write(model, merge: true) { reference in
+        client.create(model) { reference in
             self.model.ref = reference
         } failure: { error in
             print(error)
         }
     }
 
-    
     @IBAction func update() {
         model.message = "Update Test"
-        client.write(model, merge: true, success: { _ in }, failure: { _ in })
+        client.update(model, success: {  }, failure: { _ in })
     }
 }
 

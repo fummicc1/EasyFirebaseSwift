@@ -238,9 +238,7 @@ public class FirestoreClient {
                 return
             }
             do {
-                guard let model = try snapshot.data(as: Model.self) else {
-                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
-                }
+                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
                 success(model)
             } catch {
                 failure(error)
@@ -261,26 +259,23 @@ public class FirestoreClient {
         let listener = createQuery(modelType: Model.self, filter: filter)
             .build(order: order, limit: limit)
             .addSnapshotListener { (snapshots, error) in
-            if let error = error {
-                failure(error)
-                return
-            }
-            guard let snapshots = snapshots else {
-                return
-            }
-            if snapshots.metadata.isFromCache, includeCache == false {
-                return
-            }
-            let documents = snapshots.documents
-            var models: [Model] = []
-            for document in documents {
-                guard let model = try? document.data(as: Model.self) else {
-                    continue
+                if let error = error {
+                    failure(error)
+                    return
                 }
-                models.append(model)
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if snapshots.metadata.isFromCache, includeCache == false {
+                    return
+                }
+                do {
+                    let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
+                    success(models)
+                } catch {
+                    failure(error)
+                }
             }
-            success(models)
-        }
         listeners[Model.arrayIdentifier]?.remove()
         listeners[Model.arrayIdentifier] = listener
     }
@@ -303,9 +298,7 @@ public class FirestoreClient {
                 return
             }
             do {
-                guard let model = try snapshot.data(as: Model.self) else {
-                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
-                }
+                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
                 success(model)
             } catch {
                 failure(error)
@@ -324,26 +317,23 @@ public class FirestoreClient {
         createQuery(modelType: Model.self, filter: filter)
             .build(order: order, limit: limit)
             .getDocuments { (snapshots, error) in
-            if let error = error {
-                failure(error)
-                return
-            }
-            guard let snapshots = snapshots else {
-                return
-            }
-            if snapshots.metadata.isFromCache, includeCache == false {
-                return
-            }
-            let documents = snapshots.documents
-            var models: [Model] = []
-            for document in documents {
-                guard let model = try? document.data(as: Model.self) else {
-                    continue
+                if let error = error {
+                    failure(error)
+                    return
                 }
-                models.append(model)
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if snapshots.metadata.isFromCache, includeCache == false {
+                    return
+                }
+                do {
+                    let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
+                    success(models)
+                } catch {
+                    failure(error)
+                }
             }
-            success(models)
-        }
     }
     
     public func delete<Model: FirestoreModel>(
@@ -406,9 +396,7 @@ public class FirestoreClient {
                 return
             }
             do {
-                guard let model = try snapshot.data(as: Model.self) else {
-                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
-                }
+                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
                 success(model)
             } catch {
                 failure(error)
@@ -435,15 +423,12 @@ public class FirestoreClient {
             if snapshots.metadata.isFromCache, includeCache == false {
                 return
             }
-            let documents = snapshots.documents
-            var models: [Model] = []
-            for document in documents {
-                guard let model = try? document.data(as: Model.self) else {
-                    continue
-                }
-                models.append(model)
+            do {
+                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
+                success(models)
+            } catch {
+                failure(error)
             }
-            success(models)
         }
         listeners[Model.arrayIdentifier]?.remove()
         listeners[Model.arrayIdentifier] = listener
@@ -582,14 +567,8 @@ extension FirestoreClient {
             if snapshots.metadata.isFromCache, includeCache == false {
                 return
             }
-            let documents = snapshots.documents
             do {
-                let models = try documents.map { document -> Model in
-                    guard let model = try document.data(as: Model.self) else {
-                        throw FirestoreClientError.failedToDecode(data: document.data())
-                    }
-                    return model
-                }
+                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
                 success(models)
             } catch {
                 failure(error)
@@ -633,9 +612,7 @@ extension FirestoreClient {
                 return
             }
             do {
-                guard let model = try snapshot.data(as: Model.self) else {
-                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
-                }
+                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
                 success(model)
             } catch {
                 failure(error)
@@ -662,9 +639,7 @@ extension FirestoreClient {
                 return
             }
             do {
-                guard let model = try snapshot.data(as: Model.self) else {
-                    throw FirestoreClientError.failedToDecode(data: snapshot.data())
-                }
+                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
                 success(model)
             } catch {
                 failure(error)
@@ -702,14 +677,8 @@ extension FirestoreClient {
             if snapshots.metadata.isFromCache, includeCache == false {
                 return
             }
-            let documents = snapshots.documents
             do {
-                let models = try documents.map { document -> Model in
-                    guard let model = try document.data(as: Model.self) else {
-                        throw FirestoreClientError.failedToDecode(data: document.data())
-                    }
-                    return model
-                }
+                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
                 success(models)
             } catch {
                 failure(error)
@@ -732,9 +701,17 @@ extension FirestoreClient {
             let superCollectionName = superParentType.parentModelType.collectionName
             let parentCollectionName = Model.parentModelType.collectionName
             let collectionName = Model.collectionName
-            query = firestore.collection(superCollectionName).document(superParentUid).collection(parentCollectionName).document(parentUid).collection(collectionName)
+            query = firestore
+                .collection(superCollectionName)
+                .document(superParentUid)
+                .collection(parentCollectionName)
+                .document(parentUid)
+                .collection(collectionName)
         } else {
-            query = firestore.collection(modelType.parentModelType.collectionName).document(parentUid).collection(modelType.collectionName)
+            query = firestore
+                .collection(modelType.parentModelType.collectionName)
+                .document(parentUid)
+                .collection(modelType.collectionName)
         }
         for element in filter {
             query = element.build(from: query)
@@ -770,14 +747,8 @@ extension FirestoreClient {
             if snapshots.metadata.isFromCache, includeCache == false {
                 return
             }
-            let documents = snapshots.documents
             do {
-                let models = try documents.map { document -> Model in
-                    guard let model = try document.data(as: Model.self) else {
-                        throw FirestoreClientError.failedToDecode(data: document.data())
-                    }
-                    return model
-                }
+                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
                 success(models)
             } catch {
                 failure(error)
@@ -811,14 +782,8 @@ extension FirestoreClient {
             if snapshots.metadata.isFromCache, includeCache == false {
                 return
             }
-            let documents = snapshots.documents
             do {
-                let models = try documents.map { document -> Model in
-                    guard let model = try document.data(as: Model.self) else {
-                        throw FirestoreClientError.failedToDecode(data: document.data())
-                    }
-                    return model
-                }
+                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
                 success(models)
             } catch {
                 failure(error)
@@ -846,5 +811,27 @@ extension Query {
             return ref.limit(to: limit)
         }
         return ref
+    }
+}
+
+// MARK: internal common methods
+extension FirestoreClient {
+    
+    static func putSnaphotsTogether<Model: FirestoreModel>(_ snapshots: QuerySnapshot) throws -> [Model] {
+        let documents = snapshots.documents
+        let models = try documents.map { document -> Model in
+            guard let model = try document.data(as: Model.self) else {
+                throw FirestoreClientError.failedToDecode(data: document.data())
+            }
+            return model
+        }
+        return models
+    }
+    
+    static func putSnaphotTogether<Model: FirestoreModel>(_ snapshot: DocumentSnapshot) throws -> Model {
+        guard let model = try snapshot.data(as: Model.self) else {
+            throw FirestoreClientError.failedToDecode(data: snapshot.data())
+        }
+        return model
     }
 }
