@@ -161,6 +161,36 @@ client.listen(uid: "1234567890") { (model: Model) in
 }
 ```
 
+## Combine
+
+Supporting Combine! 
+
+See [example](https://github.com/fummicc1/EasyFirebaseSwift/blob/18fed270daf6c58721b67b1584c2976f893e933d/Example/Example/ViewController.swift#L81-L101) to check the usage.
+
+```swift
+// MARK: Combine
+
+// Create
+model.publisher(for: .create).sink { error in
+    print(error)
+} receiveValue: { }
+.store(in: &cancellables)
+        
+// Get
+let ref = Firestore.firestore().collection("models").document("sample")
+Model.publisher(for: .get(ref: ref)).sink { completion in
+    switch completion {
+    case .failure(let error):
+        print(error)
+    case .finished:
+        break
+    }
+} receiveValue: { model in
+    print(model.message)
+}
+.store(in: &cancellables)
+```
+
 # Contributing
 
 Pull requests, bug reports and feature requests are welcome 🚀
