@@ -93,7 +93,7 @@ client.get(uid: "example_1234567890") { model in
 
 `Write` is actually either `create` or `update` method. according to `merge` parameter.
 
-## Read
+## Read(Get)
 
 If we want to get snapshots once, we should use `get` method, on the other hand, if we want to fetch the latest data whenever database is updated, we should use `listen` method.
 
@@ -113,38 +113,9 @@ client.listen(
 }
 ```
 
-### Listen
+### Listen(Snapshot)
 
 We can achieve both **single observation** and **query observation** of a certain collection at the same time!
-
-#### Single Observation
-
-Doc is in work in progress...
-
-### Query (CollectionReference) Observation
-
-Doc is in work in progress...
-
-## Ordering
-
-Doc is in work in progress...
-
-## Filtering
-
-Doc is in work in progress...
-
-## Limiting
-
-Doc is in work in progress...
-
-## SubCollection
-
-Doc is in work in progress...
-
-## SubCollection in SubCollection
-
-Doc is in work in progress...
-
 
 # Contributing
 
