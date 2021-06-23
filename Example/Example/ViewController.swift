@@ -56,6 +56,8 @@ class ViewController: UIViewController {
         } failure: { error in
             print(error)
         }
+        
+        model.publisher(for: )
     }
 
     @IBAction func update() {

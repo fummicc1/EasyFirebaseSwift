@@ -13,28 +13,28 @@ public enum FirestoreModelCombine {
     public final class Subscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Model, SubscriberType.Failure == Swift.Error {
         
         private var subscriber: SubscriberType?
+        private let model: Model
         private let action: FirestoreModelAction<Model>
         private let client: FirestoreClient
         
-        public init(subscriber: SubscriberType, action: FirestoreModelAction<Model>, firestoreClient client: FirestoreClient) {
+        public init(subscriber: SubscriberType, model: Model, action: FirestoreModelAction<Model>, firestoreClient client: FirestoreClient) {
             self.subscriber = subscriber
+            self.model = model
             self.action = action
             self.client = client
             
             switch action {
-            case .create(let model):
+            case .create:
                 create(model: model)
                 
-            case .update(let model):
+            case .update:
                 update(model: model)
                 
-            case .get(let ref):
-                get(ref: ref)
-                
-            case .snapshot(let ref):
-                snapshot(ref: ref)
-                
-            case .delete(let ref):
+            case .delete:
+                guard let ref = model.ref else {
+                    assertionFailure()
+                    return
+                }
                 delete(ref: ref)
                 
             default:
@@ -148,6 +148,7 @@ public enum FirestoreModelCombine {
         public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Model == S.Input {
             let subscription = Subscription(
                 subscriber: subscriber,
+                model: model,
                 action: action,
                 firestoreClient: firestoreClient
             )
