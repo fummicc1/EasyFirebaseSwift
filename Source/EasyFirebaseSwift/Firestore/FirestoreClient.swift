@@ -8,7 +8,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-public protocol FirestoreModel: Codable {
+public protocol FirestoreModel: Codable, CombineCompatible {
     static var singleIdentifier: String { get }
     static var arrayIdentifier: String { get }
     static var collectionName: String { get }
