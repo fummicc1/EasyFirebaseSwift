@@ -29,7 +29,7 @@ public extension CombineCompatible where Self: FirestoreModel {
         FirestoreModelCombine.WritePublisher(model: self, action: action)
     }
     
-    func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.GetPublisher<Self> {
+    static func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.GetPublisher<Self> {
         FirestoreModelCombine.GetPublisher(action: action)
     }
 }
