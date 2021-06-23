@@ -10,7 +10,11 @@ import FirebaseFirestore
 import Combine
 
 public enum FirestoreModelCombine {
-    public final class Subscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Model, SubscriberType.Failure == Swift.Error {
+}
+
+// MARK: Single Write
+public extension FirestoreModelCombine {
+    final class WriteSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Void, SubscriberType.Failure == Swift.Error {
         
         private var subscriber: SubscriberType?
         private let model: Model
@@ -36,6 +40,91 @@ public enum FirestoreModelCombine {
                     return
                 }
                 delete(ref: ref)
+            }
+            
+        }
+        public func request(_ demand: Subscribers.Demand) {
+        }
+        
+        public func cancel() {
+            subscriber = nil
+        }
+        
+        private func create(model: Model) {
+            client.create(model) { [weak self] _ in
+                self?.subscriber?.receive(completion: .finished)
+            } failure: { [weak self] error in
+                self?.subscriber?.receive(completion: .failure(error))
+            }
+        }
+        
+        private func update(model: Model) {
+            client.update(model) { [weak self] in
+                self?.subscriber?.receive(completion: .finished)
+            } failure: { [weak self] error in
+                self?.subscriber?.receive(completion: .finished)
+            }
+            
+        }
+        
+        private func delete(ref: DocumentReference) {
+            client.delete(id: ref.documentID, type: Model.self) { [weak self] error in
+                if let error = error {
+                    self?.subscriber?.receive(completion: .failure(error))
+                } else {
+                    self?.subscriber?.receive(completion: .finished)
+                }
+            }
+            
+        }
+    }
+    
+    struct WritePublisher<Model: FirestoreModel>: Combine.Publisher {
+        public typealias Output = Void
+        
+        public typealias Failure = Error
+        
+        let model: Model
+        let action: FirestoreModelAction<Model>
+        let firestoreClient: FirestoreClient
+        
+        init(model: Model, action: FirestoreModelAction<Model>, firestoreClient: FirestoreClient = FirestoreClient()) {
+            self.model = model
+            self.action = action
+            self.firestoreClient = firestoreClient
+        }
+        
+        public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Void == S.Input {
+            let subscription = WriteSubscription(
+                subscriber: subscriber,
+                model: model,
+                action: action,
+                firestoreClient: firestoreClient
+            )
+            subscriber.receive(subscription: subscription)
+        }
+    }
+}
+
+// MARK: Single Get
+public extension FirestoreModelCombine {
+    final class GetSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Model, SubscriberType.Failure == Swift.Error {
+        
+        private var subscriber: SubscriberType?
+        private let action: FirestoreModelTypeAction<Model>
+        private let client: FirestoreClient
+        
+        public init(subscriber: SubscriberType, action: FirestoreModelTypeAction<Model>, firestoreClient client: FirestoreClient) {
+            self.subscriber = subscriber
+            self.action = action
+            self.client = client
+            
+            switch action {
+            case let .get(ref):
+                get(ref: ref)
+                
+            case let .snapshot(ref):
+                snapshot(ref: ref)
                 
             default:
                 assertionFailure()
@@ -66,92 +155,23 @@ public enum FirestoreModelCombine {
                 self?.subscriber?.receive(completion: .failure(error))
             }
         }
-        
-        private func create(model: Model) {
-            client.create(model) { [weak self] _ in
-                self?.subscriber?.receive(completion: .finished)
-            } failure: { [weak self] error in
-                self?.subscriber?.receive(completion: .failure(error))
-            }
-        }
-        
-        private func update(model: Model) {
-            client.update(model) { [weak self] in
-                self?.subscriber?.receive(completion: .finished)
-            } failure: { [weak self] error in
-                self?.subscriber?.receive(completion: .finished)
-            }
-
-        }
-        
-        private func delete(ref: DocumentReference) {
-            client.delete(id: ref.documentID, type: Model.self) { [weak self] error in
-                if let error = error {
-                    self?.subscriber?.receive(completion: .failure(error))
-                } else {
-                    self?.subscriber?.receive(completion: .finished)
-                }
-            }
-
-        }
     }
     
-    public final class ListSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == [Model], SubscriberType.Failure == Swift.Error {
-        
-        private var subscriber: SubscriberType?
-        private let action: FirestoreModelAction<Model>
-        private let client: FirestoreClient
-        
-        public init(subscriber: SubscriberType, action: FirestoreModelAction<Model>, firestoreClient client: FirestoreClient) {
-            self.subscriber = subscriber
-            self.action = action
-            self.client = client
-        }
-        
-        public func request(_ demand: Subscribers.Demand) {
-        }
-        
-        public func cancel() {
-            subscriber = nil
-        }
-        
-        private func snapshot() {
-            client.listen(
-                filter: [],
-                order: [],
-                limit: nil
-            ) { (models: [Model]) in
-                
-            } failure: { error in
-                
-            }
-
-        }
-        
-    }
-    
-    public struct Publisher<Model: FirestoreModel>: Combine.Publisher {
+    struct GetPublisher<Model: FirestoreModel>: Combine.Publisher {
         public typealias Output = Model
         
         public typealias Failure = Error
         
-        let model: Model
-        let action: FirestoreModelAction<Model>
+        let action: FirestoreModelTypeAction<Model>
         let firestoreClient: FirestoreClient
         
-        init(model: Model, action: FirestoreModelAction<Model>, firestoreClient: FirestoreClient = FirestoreClient()) {
-            self.model = model
+        init(action: FirestoreModelTypeAction<Model>, firestoreClient: FirestoreClient = FirestoreClient()) {
             self.action = action
             self.firestoreClient = firestoreClient
         }
         
         public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Model == S.Input {
-            let subscription = Subscription(
-                subscriber: subscriber,
-                model: model,
-                action: action,
-                firestoreClient: firestoreClient
-            )
+            let subscription = GetSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
             subscriber.receive(subscription: subscription)
         }
     }

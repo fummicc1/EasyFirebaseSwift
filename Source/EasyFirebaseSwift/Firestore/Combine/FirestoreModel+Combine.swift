@@ -25,11 +25,11 @@ public enum FirestoreModelTypeAction<Model: FirestoreModel> {
 }
 
 public extension CombineCompatible where Self: FirestoreModel {
-    func publisher(for action: FirestoreModelAction<Self>) -> FirestoreModelCombine.Publisher<Self> {
-        FirestoreModelCombine.Publisher(model: self, action: action)
+    func publisher(for action: FirestoreModelAction<Self>) -> FirestoreModelCombine.WritePublisher<Self> {
+        FirestoreModelCombine.WritePublisher(model: self, action: action)
     }
     
-    func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.Publisher<Self> {
-        fatalError()
+    func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.GetPublisher<Self> {
+        FirestoreModelCombine.GetPublisher(action: action)
     }
 }
