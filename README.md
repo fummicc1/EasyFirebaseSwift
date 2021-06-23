@@ -89,15 +89,53 @@ client.get(uid: "example_1234567890") { model in
 }
 ```
 
-### Write
+## Write
 
 `Write` is actually either `create` or `update` method. according to `merge` parameter.
 
-## Read(Get)
+## Read
 
 If we want to get snapshots once, we should use `get` method, on the other hand, if we want to fetch the latest data whenever database is updated, we should use `listen` method.
 
-Both `get` and `listen` specify which model we want by giving concrete type at closure parameter like the following.
+## Get
+
+`get` is used like the following.
+
+Note: It is necessary that we specify the type of reponse model by giving concrete type at closure parameter like the following.
+
+### Collection (Multiple Documents)
+
+```swift
+client.get(
+    filter: [],
+    order: [],
+    limit: nil
+) { (models: [Model]) in // Here, we need to specify concrete type at parameter of closure.
+    for model in models {
+        print(model.message)
+    }
+} failure: { error in
+    print(error)
+}
+```
+
+### Single Document
+
+```swift
+client.get(uid: "1234567890") { (model: Model) in
+    print(model.message)
+} failure: { error in
+    print(error)
+}
+```
+
+## Listen(Snapshot)
+
+We can achieve both **single observation** and **query observation** of a certain collection at the same time!
+
+`listen` also specifies which model we want by giving concrete type at closure parameter like the following.
+
+### Collection (Multiple Documents)
 
 ```swift
 client.listen(
@@ -113,9 +151,15 @@ client.listen(
 }
 ```
 
-### Listen(Snapshot)
+### Single Document
 
-We can achieve both **single observation** and **query observation** of a certain collection at the same time!
+```swift
+client.listen(uid: "1234567890") { (model: Model) in
+    print(model.message)
+} failure: { error in
+    print(error)
+}
+```
 
 # Contributing
 
