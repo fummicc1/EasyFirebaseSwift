@@ -30,7 +30,7 @@ public protocol SubCollectionModel {
 
 public protocol FirestoreFilterModel {
     var fieldPath: String? { get }
-    var value: Any { get }
+    var value: Any? { get }
     
     func build(from: Query) -> Query
 }
@@ -58,9 +58,9 @@ public struct FirestoreOrderModelImpl: FirestoreOrderModel {
 
 public struct FirestoreFilterRangeModel: FirestoreFilterModel {
     public var fieldPath: String?
-    public var value: Any
+    public var value: Any?
     
-    public init(fieldPath: String?, value: Any) {
+    public init(fieldPath: String?, value: Any?) {
         self.fieldPath = fieldPath
         self.value = value
     }
@@ -75,9 +75,9 @@ public struct FirestoreFilterRangeModel: FirestoreFilterModel {
 
 public struct FirestoreFilterEqualModel: FirestoreFilterModel {
     public var fieldPath: String?
-    public var value: Any
+    public var value: Any?
     
-    public init(fieldPath: String?, value: Any) {
+    public init(fieldPath: String?, value: Any?) {
         self.fieldPath = fieldPath
         self.value = value
     }
