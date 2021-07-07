@@ -462,7 +462,13 @@ extension FirestoreClient {
                 failure: failure
             )
         } else {
-            create(model, success: success, failure: failure)
+            create(
+                model,
+                parent: parentUid,
+                superParent: superParentUid,
+                success: success,
+                failure: failure
+            )
         }
     }
     
