@@ -162,6 +162,7 @@ public class FirestoreClient {
     
     public func create<Model: FirestoreModel>(
         _ model: Model,
+        documentId: String? = nil,
         success: @escaping (DocumentReference) -> Void,
         failure: @escaping (Error) -> Void
     ) {
@@ -176,7 +177,14 @@ public class FirestoreClient {
                 return
             }
             
-            let ref = firestore.collection(Model.collectionName).document()
+            let ref: DocumentReference
+            
+            if let documentId = documentId {
+                ref = firestore.collection(Model.collectionName).document(documentId)
+            } else {
+                ref = firestore.collection(Model.collectionName).document()
+            }
+            
             try ref.setData(from: model, merge: false) { error in
                 if let error = error {
                     failure(error)
@@ -460,6 +468,7 @@ extension FirestoreClient {
     
     public func create<Model: FirestoreModel & SubCollectionModel>(
         _ model: Model,
+        documentId: String? = nil,
         parent parentUid: String,
         superParent superParentUid: String?,
         success: @escaping (DocumentReference) -> Void,
@@ -478,15 +487,29 @@ extension FirestoreClient {
                 let superCollectionName = superParentType.parentModelType.collectionName
                 let parentCollectionName = Model.parentModelType.collectionName
                 let collectionName = Model.collectionName
-                ref = firestore.collection(superCollectionName).document(superParentUid)
-                    .collection(parentCollectionName)
-                    .document(parentUid)
-                    .collection(collectionName)
-                    .document()
+                
+                if let documentId = documentId {
+                    ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid)
+                        .collection(Model.collectionName)
+                        .document(documentId)
+                } else {
+                    ref = firestore.collection(superCollectionName).document(superParentUid)
+                        .collection(parentCollectionName)
+                        .document(parentUid)
+                        .collection(collectionName)
+                        .document()
+                }
             } else {
-                ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid)
-                    .collection(Model.collectionName)
-                    .document()
+                
+                if let documentId = documentId {
+                    ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid)
+                        .collection(Model.collectionName)
+                        .document(documentId)
+                } else {
+                    ref = firestore.collection(Model.parentModelType.collectionName).document(parentUid)
+                        .collection(Model.collectionName)
+                        .document()
+                }
             }
             
             if model.updatedAt != nil || model.createdAt != nil {
