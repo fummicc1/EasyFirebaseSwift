@@ -96,7 +96,7 @@ public class FirebaseAuthClient {
         }.eraseToAnyPublisher()
     }
     
-    func signOut() -> AnyPublisher<Void, Error> {
+    public func signOut() -> AnyPublisher<Void, Error> {
         Future { [weak self] promise in
             do {
                 try self?.auth.signOut()
@@ -107,7 +107,7 @@ public class FirebaseAuthClient {
         }.eraseToAnyPublisher()
     }
     
-    func delete() -> AnyPublisher<Void, Error> {
+    public func delete() -> AnyPublisher<Void, Error> {
         Future { [weak self] promise in
             self?.auth.currentUser?.delete(completion: { error in
                 if let error = error {
