@@ -89,10 +89,6 @@ client.get(uid: "example_1234567890") { model in
 }
 ```
 
-## Write
-
-`Write` is actually either `create` or `update` method. according to `merge` parameter.
-
 ## Read
 
 If we want to get snapshots once, we should use `get` method, on the other hand, if we want to fetch the latest data whenever database is updated, we should use `listen` method.

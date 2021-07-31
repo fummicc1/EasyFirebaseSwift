@@ -147,19 +147,6 @@ public class FirestoreClient {
         
     }
     
-    public func write<Model: FirestoreModel>(
-        _ model: Model,
-        merge: Bool,
-        success: @escaping (DocumentReference) -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        if merge {
-            update(model, success: { success(model.ref!) }, failure: failure)
-        } else {
-            create(model, success: success, failure: failure)
-        }
-    }
-    
     public func create<Model: FirestoreModel>(
         _ model: Model,
         documentId: String? = nil,
@@ -445,32 +432,6 @@ public class FirestoreClient {
 
 // MARK: SubCollection
 extension FirestoreClient {
-    public func write<Model: FirestoreModel & SubCollectionModel>(
-        _ model: Model,
-        parent parentUid: String,
-        superParent superParentUid: String?,
-        merge: Bool,
-        success: @escaping (DocumentReference) -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        if merge {
-            update(
-                model,
-                parent: parentUid,
-                superParent: superParentUid,
-                success: { success(model.ref!) },
-                failure: failure
-            )
-        } else {
-            create(
-                model,
-                parent: parentUid,
-                superParent: superParentUid,
-                success: success,
-                failure: failure
-            )
-        }
-    }
     
     public func create<Model: FirestoreModel & SubCollectionModel>(
         _ model: Model,
