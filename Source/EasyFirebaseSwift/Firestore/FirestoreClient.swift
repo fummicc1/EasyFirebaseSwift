@@ -184,6 +184,39 @@ public class FirestoreClient {
         }
     }
     
+    /// Update document's data or Create new document if `model.ref` is nil.
+    public func write<Model: FirestoreModel>(
+        _ model: Model,
+        documentId: String? = nil,
+        success: @escaping () -> Void,
+        failure: @escaping (Error) -> Void
+    ) {
+        let ref: DocumentReference
+        
+        if let _ref = model.ref {
+            ref = _ref
+        } else {
+            if let documentId = documentId {
+                ref = firestore.collection(Model.collectionName).document(documentId)
+            } else {
+                ref = firestore.collection(Model.collectionName).document()
+            }
+        }
+        
+        do {
+            try ref.setData(from: model, merge: true) { error in
+                if let error = error {
+                    failure(error)
+                    return
+                }
+                success()
+            }
+        } catch {
+            failure(error)
+        }
+        
+    }
+    
     public func update<Model: FirestoreModel>(
         _ model: Model,
         success: @escaping () -> Void,
