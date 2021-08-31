@@ -12,9 +12,6 @@ import Combine
 import UIKit
 
 struct Model: FirestoreModel {
-    static var singleIdentifier: String = "model"
-    
-    static var arrayIdentifier: String = "models"
     
     static var collectionName: String = "models"
     
@@ -40,9 +37,54 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // MARK: Closure
+        // Create New Document
+        create()
         
-        // Snapshot for Collection
+        // Observe
+        
+        // All Collection
+        snapshots()
+        
+        // With Filter
+        filter()
+        
+    }
+    
+    // MARK: Update
+    @IBAction func update() {
+        model.message = "Update Test"
+        client.update(model, success: {  }, failure: { _ in })
+    }
+    
+    // MARK: GET
+    func get() {
+        
+        // Using Closure
+        // Get single Document
+        client.get(uid: "1234567890") { (model: Model) in
+            print(model.message)
+        } failure: { error in
+            print(error)
+        }
+        
+        // Using Combine
+        let ref = Firestore.firestore().collection("models").document("sample")
+        Model.publisher(for: .get(ref: ref)).sink { completion in
+            switch completion {
+            case .failure(let error):
+                print(error)
+            case .finished:
+                break
+            }
+        } receiveValue: { model in
+            print(model.message)
+        }
+        .store(in: &cancellables)
+    }
+    
+    // MARK: Snapshots
+    func snapshots() {
+        // MARK: Collection (by empty filter)
         client.listen(
             filter: [],
             order: [],
@@ -56,55 +98,33 @@ class ViewController: UIViewController {
         } failure: { error in
             print(error)
         }
-        
-        // Create
-        client.create(model) { reference in
-            self.model.ref = reference
+    }
+    
+    // MARK: Filter
+    func filter() {
+        let equalFilter = FirestoreEqualFilter(fieldPath: "message", value: "Update Text")
+        client.listen(
+            filter: [equalFilter],
+            order: [],
+            limit: nil)
+        { (models: [Model]) in
+            let messageChecking = models.allSatisfy { model in
+                model.message == "Update Text"
+            }
+            // Do All models have `Update Text`?
+            assert(messageChecking)
         } failure: { error in
             print(error)
         }
-        
-        // Get single Document
-        client.get(uid: "1234567890") { (model: Model) in
-            print(model.message)
-        } failure: { error in
-            print(error)
-        }
-        
-        // Snapshot for single Document
-        client.listen(uid: "1234567890") { (model: Model) in
-            print(model.message)
-        } failure: { error in
-            print(error)
-        }
-        
-        // MARK: Combine
-        
-        // Create
+
+    }
+    
+    // MARK: Create
+    func create() {
         model.publisher(for: .create).sink { error in
             print(error)
         } receiveValue: { }
         .store(in: &cancellables)
-                
-        // Get
-        let ref = Firestore.firestore().collection("models").document("sample")
-        Model.publisher(for: .get(ref: ref)).sink { completion in
-            switch completion {
-            case .failure(let error):
-                print(error)
-            case .finished:
-                break
-            }
-        } receiveValue: { model in
-            print(model.message)
-        }
-        .store(in: &cancellables)
-        
-    }
-    
-    @IBAction func update() {
-        model.message = "Update Test"
-        client.update(model, success: {  }, failure: { _ in })
     }
 }
 
