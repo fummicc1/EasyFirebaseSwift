@@ -9,8 +9,6 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 public protocol FirestoreModel: Codable, CombineCompatible {
-    static var singleIdentifier: String { get }
-    static var arrayIdentifier: String { get }
     static var collectionName: String { get }
     var uid: String? { get }
     var ref: DocumentReference? { get }
@@ -28,21 +26,30 @@ public protocol SubCollectionModel {
     static var parentModelType: FirestoreModel.Type { get }
 }
 
-public protocol FirestoreFilterModel {
+@available(*, deprecated, renamed: "FirestoreQueryFilter")
+typealias FirestoreFilterModel = FirestoreQueryFilter
+
+public protocol FirestoreQueryFilter {
     var fieldPath: String? { get }
     var value: Any? { get }
     
     func build(from: Query) -> Query
 }
 
-public protocol FirestoreOrderModel {
+@available(*, deprecated, renamed: "FirestoreQueryOrder")
+typealias FirestoreOrderModel = FirestoreQueryOrder
+
+public protocol FirestoreQueryOrder {
     var fieldPath: String { get }
     var isAscending: Bool { get }
     
     func build(from: Query) -> Query
 }
 
-public struct FirestoreOrderModelImpl: FirestoreOrderModel {
+@available(*, deprecated, renamed: "DefaultFirestoreQueryOrder")
+typealias FirestoreOrderModelImpl = DefaultFirestoreQueryOrder
+
+public struct DefaultFirestoreQueryOrder: FirestoreQueryOrder {
     public var fieldPath: String
     public var isAscending: Bool
     
@@ -56,7 +63,10 @@ public struct FirestoreOrderModelImpl: FirestoreOrderModel {
     }
 }
 
-public struct FirestoreFilterRangeModel: FirestoreFilterModel {
+@available(*, deprecated, renamed: "FirestoreRangeFilter")
+typealias FirestoreFilterRangeModel = FirestoreRangeFilter
+
+public struct FirestoreRangeFilter: FirestoreQueryFilter {
     public var fieldPath: String?
     public var value: Any?
     
@@ -73,7 +83,10 @@ public struct FirestoreFilterRangeModel: FirestoreFilterModel {
     }
 }
 
-public struct FirestoreFilterEqualModel: FirestoreFilterModel {
+@available(*, deprecated, renamed: "FirestoreEqualFilter")
+typealias FirestoreFilterEqualModel = FirestoreEqualFilter
+
+public struct FirestoreEqualFilter: FirestoreQueryFilter {
     public var fieldPath: String?
     public var value: Any?
     
@@ -87,7 +100,7 @@ public struct FirestoreFilterEqualModel: FirestoreFilterModel {
         guard let fieldPath = fieldPath else {
             return from
         }
-        return from.whereField(fieldPath, isEqualTo: value)
+        return from.whereField(fieldPath, isEqualTo: value as Any)
     }
 }
 
@@ -107,7 +120,8 @@ public enum FirestoreClientError: Error {
 public class FirestoreClient {
     
     private let firestore = Firestore.firestore()
-    private var listeners: [String: ListenerRegistration] = [:]
+    private var documentListeners: [DocumentReference: ListenerRegistration] = [:]
+    private var queryListeners: [Query: ListenerRegistration] = [:]
     
     public init() { }
     
@@ -252,8 +266,9 @@ public class FirestoreClient {
         success: @escaping (Model) -> Void,
         failure: @escaping (Error) -> Void
     ) {
-        let listener = firestore.collection(Model.collectionName)
+        let ref = firestore.collection(Model.collectionName)
             .document(uid)
+        let listener = ref
             .addSnapshotListener { (snapshot, error) in
             if let error = error {
                 failure(error)
@@ -272,20 +287,21 @@ public class FirestoreClient {
                 failure(error)
             }
         }
-        listeners[Model.singleIdentifier]?.remove()
-        listeners[Model.singleIdentifier] = listener
+        documentListeners[ref]?.remove()
+        documentListeners[ref] = listener
     }
     
     public func listen<Model: FirestoreModel>(
-        filter: [FirestoreFilterModel],
+        filter: [FirestoreQueryFilter],
         includeCache: Bool = true,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
     ) {
-        let listener = createQuery(modelType: Model.self, filter: filter)
+        let query = createQuery(modelType: Model.self, filter: filter)
             .build(order: order, limit: limit)
+        let listener = query
             .addSnapshotListener { (snapshots, error) in
                 if let error = error {
                     failure(error)
@@ -304,8 +320,8 @@ public class FirestoreClient {
                     failure(error)
                 }
             }
-        listeners[Model.arrayIdentifier]?.remove()
-        listeners[Model.arrayIdentifier] = listener
+        queryListeners[query]?.remove()
+        queryListeners[query] = listener
     }
     
     public func get<Model: FirestoreModel>(
@@ -335,9 +351,9 @@ public class FirestoreClient {
     }
     
     public func get<Model: FirestoreModel>(
-        filter: [FirestoreFilterModel],
+        filter: [FirestoreQueryFilter],
         includeCache: Bool = true,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
@@ -383,7 +399,7 @@ public class FirestoreClient {
     
     private func createQuery<Model: FirestoreModel>(
         modelType: Model.Type,
-        filter: [FirestoreFilterModel]
+        filter: [FirestoreQueryFilter]
     ) -> Query {
         var query: Query = firestore.collection(modelType.collectionName)
         for element in filter {
@@ -393,8 +409,24 @@ public class FirestoreClient {
     }
     
     public func stopListening<Model: FirestoreModel>(type: Model.Type) {
-        listeners[Model.arrayIdentifier]?.remove()
-        listeners[Model.singleIdentifier]?.remove()
+        let query = firestore.collection(type.collectionName)
+        queryListeners[query]?.remove()
+    }
+    
+    /// Not applicable to SubCollectionModel
+    public func stopListening<Model: FirestoreModel>(type: Model.Type, documentID: String) {
+        let ref = firestore.collection(type.collectionName).document(documentID)
+        stopListening(ref: ref)
+    }
+    
+    public func stopListening(ref: DocumentReference) {
+        documentListeners[ref]?.remove()
+    }
+    
+    /// If you want to stop listening to SubCollectionModel, please use this method
+    public func stopListeningAll() {
+        documentListeners.forEach({ $0.value.remove() })
+        queryListeners.forEach({ $0.value.remove() })
     }
     
     public func delete<Model: FirestoreModel>(
@@ -430,8 +462,8 @@ public class FirestoreClient {
                 failure(error)
             }
         }
-        listeners[Model.singleIdentifier]?.remove()
-        listeners[Model.singleIdentifier] = listener
+        documentListeners[ref]?.remove()
+        documentListeners[ref] = listener
     }
     
     func listen<Model: FirestoreModel>(
@@ -458,8 +490,8 @@ public class FirestoreClient {
                 failure(error)
             }
         }
-        listeners[Model.arrayIdentifier]?.remove()
-        listeners[Model.arrayIdentifier] = listener
+        queryListeners[ref]?.remove()
+        queryListeners[ref] = listener
     }
 }
 
@@ -565,9 +597,9 @@ extension FirestoreClient {
     public func get<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         superParent superParentUid: String?,
-        filter: [FirestoreFilterModel],
+        filter: [FirestoreQueryFilter],
         includeCache: Bool = true,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
@@ -650,7 +682,8 @@ extension FirestoreClient {
         success: @escaping (Model) -> Void,
         failure: @escaping (Error) -> Void
     ) {
-        let listener = firestore.collection(Model.parentModelType.collectionName).document(parentUID).collection(Model.collectionName).document(uid).addSnapshotListener { (snapshot, error) in
+        let ref = firestore.collection(Model.parentModelType.collectionName).document(parentUID).collection(Model.collectionName).document(uid)
+        let listener = ref.addSnapshotListener { (snapshot, error) in
             if let error = error {
                 failure(error)
                 return
@@ -668,47 +701,49 @@ extension FirestoreClient {
                 failure(error)
             }
         }
-        listeners[Model.singleIdentifier]?.remove()
-        listeners[Model.singleIdentifier] = listener
+        documentListeners[ref]?.remove()
+        documentListeners[ref] = listener
     }
     
     public func listen<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         superParent superParentUid: String?,
-        filter: [FirestoreFilterModel],
+        filter: [FirestoreQueryFilter],
         includeCache: Bool = true,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
     ) {
-        let listener = createQueryOfSubCollection(
+        let query = createQueryOfSubCollection(
             parent: parentUid,
             superParent: superParentUid,
             modelType: Model.self,
             filter: filter
         )
         .build(order: order, limit: limit)
-        .addSnapshotListener { (snapshots, error) in
-            if let error = error {
-                failure(error)
-                return
+        
+        let listener = query
+            .addSnapshotListener { (snapshots, error) in
+                if let error = error {
+                    failure(error)
+                    return
+                }
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if snapshots.metadata.isFromCache, includeCache == false {
+                    return
+                }
+                do {
+                    let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
+                    success(models)
+                } catch {
+                    failure(error)
+                }
             }
-            guard let snapshots = snapshots else {
-                return
-            }
-            if snapshots.metadata.isFromCache, includeCache == false {
-                return
-            }
-            do {
-                let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
-                success(models)
-            } catch {
-                failure(error)
-            }
-        }
-        listeners[Model.arrayIdentifier]?.remove()
-        listeners[Model.arrayIdentifier] = listener
+        queryListeners[query]?.remove()
+        queryListeners[query] = listener
     }
     
     private func createQueryOfSubCollection
@@ -716,7 +751,7 @@ extension FirestoreClient {
         parent parentUid: String,
         superParent superParentUid: String?,
         modelType: Model.Type,
-        filter: [FirestoreFilterModel]
+        filter: [FirestoreQueryFilter]
     ) -> Query {
         var query: Query
         if let superParentUid = superParentUid,
@@ -747,9 +782,9 @@ extension FirestoreClient {
 extension FirestoreClient {
     public func getCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
-        filter: FirestoreFilterModel,
+        filter: FirestoreQueryFilter,
         includeCache: Bool,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
@@ -781,9 +816,9 @@ extension FirestoreClient {
     
     public func listenCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
-        filter: FirestoreFilterModel,
+        filter: FirestoreQueryFilter,
         includeCache: Bool,
-        order: [FirestoreOrderModel],
+        order: [FirestoreQueryOrder],
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
@@ -814,7 +849,7 @@ extension FirestoreClient {
         }
     }
     
-    private func createQuery(from ref: Query, filter: [FirestoreFilterModel]) -> Query {
+    private func createQuery(from ref: Query, filter: [FirestoreQueryFilter]) -> Query {
         var query: Query = ref
         for element in filter {
             query = element.build(from: query)
@@ -825,7 +860,7 @@ extension FirestoreClient {
 
 // MARK: Order
 extension Query {
-    func build(order: [FirestoreOrderModel], limit: Int?) -> Query {
+    func build(order: [FirestoreQueryOrder], limit: Int?) -> Query {
         var ref = self
         order.forEach({ order in
             ref = order.build(from: ref)
