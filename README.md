@@ -188,6 +188,10 @@ Model.publisher(for: .get(ref: ref)).sink { completion in
 .store(in: &cancellables)
 ```
 
+## Swift Concurrency (async/await)
+
+We are supporting Swift Concurrency after v1.5.0 !!
+
 ## Filter
 
 It is possible to filter documents.
