@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "EasyFirebaseSwift",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v13),
+        .macOS(.v11)
     ],
     products: [
         .library(
@@ -14,7 +15,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.0.0"))
+        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0"))
     ],
     targets: [
         .target(
