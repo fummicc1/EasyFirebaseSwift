@@ -227,3 +227,7 @@ client.listen(
 # Contributing
 
 Pull requests, bug reports and feature requests are welcome 🚀
+
+# License
+
+See [License](https://github.com/fummicc1/EasyFirebaseSwift/blob/main/LICENSE.md)
