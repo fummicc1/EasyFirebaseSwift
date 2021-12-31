@@ -12,6 +12,7 @@ import Combine
 public enum FirebaseAuthClientError: Error {
     case noAuthData
     case failedToLinkDueToNoCurrentUser
+    case noEmailToLink
 }
 
 public class FirebaseAuthClient {
@@ -92,6 +93,103 @@ public class FirebaseAuthClient {
                 if let user = result?.user {
                     promise(.success(user))
                 }
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    public func createUserWithEmailAndPassword(
+        email: String,
+        password: String,
+        needVerification: Bool,
+        actionCodeSettings: ActionCodeSettings?
+    ) -> AnyPublisher<FirebaseAuth.User, Error> {
+        Future { [weak self] promise in
+            self?.auth.createUser(withEmail: email, password: password, completion: { result, error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                guard let result = result else {
+                    promise(.failure(FirebaseAuthClientError.noAuthData))
+                    return
+                }
+                guard needVerification else {
+                    promise(.success(result.user))
+                    return
+                }
+                // TODO: want to write a cleaner code
+                if let actionCodeSettings = actionCodeSettings {
+                    result.user.sendEmailVerification(with: actionCodeSettings) { error in
+                        if let error = error {
+                            promise(.failure(error))
+                            return
+                        }
+                        promise(.success(result.user))
+                    }
+                } else {
+                    result.user.sendEmailVerification { error in
+                        if let error = error {
+                            promise(.failure(error))
+                            return
+                        }
+                        promise(.success(result.user))
+                    }
+                }
+            })
+        }.eraseToAnyPublisher()
+    }
+
+    public func sendSignInLink(
+        email: String,
+        actionCodeSettings: ActionCodeSettings,
+        shouldSaveEmail: Bool = false
+    ) -> AnyPublisher<Void, Error> {
+        Future { [weak self] promise in
+            self?.auth.sendSignInLink(
+                toEmail: email,
+                actionCodeSettings: actionCodeSettings
+            ) { error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                if shouldSaveEmail {
+                    let key = "EasyFirebaseSwift.sendSignInLink.Email"
+                    UserDefaults.standard.set(email, forKey: key)
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    public func signInWithLink(
+        link: String,
+        email: String?,
+        shouldUseSavedEmail: Bool = false
+    ) -> AnyPublisher<FirebaseAuth.User, Error> {
+        Future { [weak self] promise in
+            var email: String? = email
+            if shouldUseSavedEmail {
+                let key = "EasyFirebaseSwift.sendSignInLink.Email"
+                email = UserDefaults.standard.object(forKey: key) as? String
+            }
+            guard let email = email else {
+                promise(.failure(FirebaseAuthClientError.noEmailToLink))
+                return
+            }
+            self?.auth.signIn(
+                withEmail: email,
+                link: link
+            ) { result, error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                guard let user = result?.user else {
+                    promise(.failure(FirebaseAuthClientError.noAuthData))
+                    return
+                }
+                promise(.success(user))
             }
         }.eraseToAnyPublisher()
     }
