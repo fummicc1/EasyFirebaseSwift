@@ -23,5 +23,5 @@ jobs:
         run: | 
           xcodebuild -scheme EasyFirebaseSwift build \
            -destination "name=iPhone 12" \
-           -clonedSourcePackageDirPath SourcePackages
+           -clonedSourcePackagesDirPath SourcePackages
            | xcpretty
