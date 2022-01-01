@@ -11,9 +11,6 @@ An Easy Firebase (Auth / Firestore) Library written in Swift.
     - [x] Get / Snapshot / Create / Update / Delete
     - [x] Support Combine
     - [x] Support Async (~ iOS15)
-- [ ] FirebaseStorage
-- [ ] FirebaseDynamicLink
-
 
 # Installation
 
