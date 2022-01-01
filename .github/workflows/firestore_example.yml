@@ -25,6 +25,7 @@ jobs:
         run: gem install xcpretty
       - name: Test
         run: |
+          set -o pipefail && \
           xcodebuild -scheme FirestoreExample \
           build -destination "name=iPhone 12" \
           -clonedSourcePackagesDirPath SourcePackages \
