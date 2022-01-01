@@ -16,23 +16,14 @@ import CryptoKit
 import AuthenticationServices
 import FirebaseAuth
 
-public enum AppleAuthClientError: Error {
-    case failedToCastCredential
-    case emptyIdToken
-}
 
-
-public class AppleAuthClient: NSObject {
+public final class AppleAuthClient: NSObject {
 
     // Unhashed nonce.
     public private(set) var currentNonce: String?
-    private var delegate: ASAuthorizationControllerDelegate?
+    public weak var delegate: ASAuthorizationControllerDelegate?
 
-    public func startSignInWithAppleFlow(
-        with authRequest: ASAuthorizationAppleIDRequest? = nil,
-        delegate: ASAuthorizationControllerDelegate? = nil
-    ) {
-        var delegate = delegate
+    public func startSignInWithAppleFlow(with authRequest: ASAuthorizationAppleIDRequest? = nil) {
         let request: ASAuthorizationAppleIDRequest
         if let authRequest = authRequest {
             request = authRequest
@@ -44,11 +35,6 @@ public class AppleAuthClient: NSObject {
         currentNonce = nonce
         request.requestedScopes = [.email]
         request.nonce = sha256(nonce)
-
-        if delegate == nil {
-            delegate = Delegator(nonce: nonce)
-            self.delegate = delegate
-        }
 
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = delegate
@@ -70,7 +56,7 @@ public class AppleAuthClient: NSObject {
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainingLength = length
 
@@ -112,7 +98,6 @@ extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding
         return window
     }
 }
-
 #elseif canImport(AppKit)
 extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -124,51 +109,3 @@ extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding
     }
 }
 #endif
-
-public extension AppleAuthClient {
-    class Delegator: NSObject, ASAuthorizationControllerDelegate {
-
-
-        public init(nonce: String) {
-            self.nonce = nonce
-            super.init()
-        }
-
-        public let nonce: String
-
-        private let errorRelay: CurrentValueSubject<Error?, Never> = .init(nil)
-        private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never> = .init(nil)
-
-        public var error: AnyPublisher<Error, Never> {
-            errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
-        }
-
-        public var credential: AnyPublisher<OAuthCredential, Never> {
-            credentialRelay.compactMap({ $0 }).eraseToAnyPublisher()
-        }
-
-        public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-            errorRelay.send(error)
-        }
-
-        public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-            // MARK: STEP2: Handle Response and Create Credential for FirebaseAuth
-            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-                errorRelay.send(AppleAuthClientError.failedToCastCredential)
-                return
-            }
-            guard let appleIdToken = credential.identityToken,
-                  let idTokenString = String(data: appleIdToken, encoding: .utf8)
-            else {
-                errorRelay.send(AppleAuthClientError.emptyIdToken)
-                return
-            }
-            let firCredential = OAuthProvider.credential(
-                withProviderID: "apple.com",
-                idToken: idTokenString,
-                rawNonce: nonce
-            )
-            credentialRelay.send(firCredential)
-        }
-    }
-}
