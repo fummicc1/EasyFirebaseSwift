@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D33159C5263D409D0061211B"
-               BuildableName = "Firestore.app"
+               BuildableName = "FirestoreExample.app"
                BlueprintName = "FirestoreExample"
                ReferencedContainer = "container:Example.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D33159C5263D409D0061211B"
-            BuildableName = "Firestore.app"
+            BuildableName = "FirestoreExample.app"
             BlueprintName = "FirestoreExample"
             ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D33159C5263D409D0061211B"
-            BuildableName = "Firestore.app"
+            BuildableName = "FirestoreExample.app"
             BlueprintName = "FirestoreExample"
             ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
