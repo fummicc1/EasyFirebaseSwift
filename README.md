@@ -9,6 +9,8 @@ An Easy Firebase (Auth / Firestore) Library written in Swift.
     - [x] SignIn with Email and Link (verifiable)
 - [x] CloudFirebase
     - [x] Get / Snapshot / Create / Update / Delete
+    - [x] SubCollection
+    - [x] CollectionGroup
     - [x] Support Combine
     - [x] Support Async (~ iOS15)
 
