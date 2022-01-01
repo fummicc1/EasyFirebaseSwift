@@ -24,6 +24,10 @@
 		D3B43852277FFBE5000D6ED2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3B43850277FFBE5000D6ED2 /* Main.storyboard */; };
 		D3B43854277FFBE7000D6ED2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3B43853277FFBE7000D6ED2 /* Assets.xcassets */; };
 		D3B43857277FFBE7000D6ED2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3B43855277FFBE7000D6ED2 /* LaunchScreen.storyboard */; };
+		D3B67EFB27802C740077C6EC /* SignInWithAppleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B67EF927802C740077C6EC /* SignInWithAppleViewController.swift */; };
+		D3B67EFC27802C740077C6EC /* SignInWithAppleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3B67EFA27802C740077C6EC /* SignInWithAppleViewController.xib */; };
+		D3B67EFE27802CD60077C6EC /* EasyFirebaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D3B67EFD27802CD60077C6EC /* EasyFirebaseSwift */; };
+		D3B67F0127802D640077C6EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3B67F0027802D630077C6EC /* GoogleService-Info.plist */; };
 		D3FF6173263D4E5400DF88DF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +52,9 @@
 		D3B43853277FFBE7000D6ED2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3B43856277FFBE7000D6ED2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D3B43858277FFBE7000D6ED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3B67EF927802C740077C6EC /* SignInWithAppleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleViewController.swift; sourceTree = "<group>"; };
+		D3B67EFA27802C740077C6EC /* SignInWithAppleViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignInWithAppleViewController.xib; sourceTree = "<group>"; };
+		D3B67F0027802D630077C6EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "FirestoreExample/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		D3FF6172263D4E5400DF88DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B67EFE27802CD60077C6EC /* EasyFirebaseSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,13 +126,16 @@
 		D3B43849277FFBE5000D6ED2 /* AuthExample */ = {
 			isa = PBXGroup;
 			children = (
+				D3B67F0027802D630077C6EC /* GoogleService-Info.plist */,
+				D3B43858277FFBE7000D6ED2 /* Info.plist */,
 				D3B4384A277FFBE5000D6ED2 /* AppDelegate.swift */,
 				D3B4384C277FFBE5000D6ED2 /* SceneDelegate.swift */,
+				D3B67EF927802C740077C6EC /* SignInWithAppleViewController.swift */,
 				D3B4384E277FFBE5000D6ED2 /* ViewController.swift */,
-				D3B43850277FFBE5000D6ED2 /* Main.storyboard */,
 				D3B43853277FFBE7000D6ED2 /* Assets.xcassets */,
+				D3B67EFA27802C740077C6EC /* SignInWithAppleViewController.xib */,
 				D3B43855277FFBE7000D6ED2 /* LaunchScreen.storyboard */,
-				D3B43858277FFBE7000D6ED2 /* Info.plist */,
+				D3B43850277FFBE5000D6ED2 /* Main.storyboard */,
 			);
 			path = AuthExample;
 			sourceTree = "<group>";
@@ -165,6 +176,9 @@
 			dependencies = (
 			);
 			name = AuthExample;
+			packageProductDependencies = (
+				D3B67EFD27802CD60077C6EC /* EasyFirebaseSwift */,
+			);
 			productName = AuthExample;
 			productReference = D3B43848277FFBE5000D6ED2 /* AuthExample.app */;
 			productType = "com.apple.product-type.application";
@@ -225,8 +239,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3B43857277FFBE7000D6ED2 /* LaunchScreen.storyboard in Resources */,
+				D3B67EFC27802C740077C6EC /* SignInWithAppleViewController.xib in Resources */,
 				D3B43854277FFBE7000D6ED2 /* Assets.xcassets in Resources */,
 				D3B43852277FFBE5000D6ED2 /* Main.storyboard in Resources */,
+				D3B67F0127802D640077C6EC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +270,7 @@
 				D3B4384F277FFBE5000D6ED2 /* ViewController.swift in Sources */,
 				D3B4384B277FFBE5000D6ED2 /* AppDelegate.swift in Sources */,
 				D3B4384D277FFBE5000D6ED2 /* SceneDelegate.swift in Sources */,
+				D3B67EFB27802C740077C6EC /* SignInWithAppleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +573,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		D3465562265692B000F5E378 /* EasyFirebaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3465561265692B000F5E378 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwift;
+		};
+		D3B67EFD27802CD60077C6EC /* EasyFirebaseSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D3465561265692B000F5E378 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
 			productName = EasyFirebaseSwift;

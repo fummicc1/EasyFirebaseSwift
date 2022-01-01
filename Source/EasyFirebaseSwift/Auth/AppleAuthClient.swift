@@ -16,8 +16,14 @@ import CryptoKit
 import AuthenticationServices
 import FirebaseAuth
 
+public enum AppleAuthClientError: Error {
+    case failedToCastCredential
+    case emptyNonce
+    case emptyIdToken
+}
 
-public final class AppleAuthClient: NSObject {
+
+public class AppleAuthClient: NSObject {
 
     // Unhashed nonce.
     public private(set) var currentNonce: String?
@@ -56,7 +62,7 @@ public final class AppleAuthClient: NSObject {
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         let charset: [Character] =
-            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainingLength = length
 
@@ -98,6 +104,7 @@ extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding
         return window
     }
 }
+
 #elseif canImport(AppKit)
 extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -109,3 +116,48 @@ extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding
     }
 }
 #endif
+
+public extension AppleAuthClient {
+    class Delegator: ASAuthorizationControllerDelegate {
+
+        private let errorRelay: CurrentValueSubject<Error?, Never> = .init(nil)
+        private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never> = .init(nil)
+
+        public var error: AnyPublisher<Error, Never> {
+            errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
+        }
+
+        public var credential: AnyPublisher<OAuthCredential, Never> {
+            credentialRelay.compactMap({ $0 }).eraseToAnyPublisher()
+        }
+
+        func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+            errorRelay.send(error)
+        }
+
+        func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+            // MARK: STEP2: Handle Response and Create Credential for FirebaseAuth
+            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+                errorRelay.send(AppleAuthClientError.failedToCastCredential)
+                return
+            }
+            guard let nonce = currentNonce else {
+                errorRelay.send(AppleAuthClientError.emptyNonce)
+                return
+            }
+            guard let appleIdToken = credential.identityToken,
+                  let idTokenString = String(data: appleIdToken, encoding: .utf8)
+            else {
+                errorRelay.send(AppleAuthClientError.emptyIdToken)
+                return
+            }
+
+            let credential = OAuthProvider.credential(
+                withProviderID: "apple.com",
+                idToken: idTokenString,
+                rawNonce: nonce
+            )
+            credentialRelay.send(credential)
+        }
+    }
+}
