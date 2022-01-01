@@ -5,7 +5,7 @@ on: push
 jobs:
   test:
     name: "Test Source"
-    runs-on: macos-latest
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
       - uses: maxim-lobanov/setup-xcode@v1
