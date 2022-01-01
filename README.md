@@ -1,6 +1,20 @@
 # EasyFirebaseSwift
 An Easy Firebase (Auth / Firestore) Library written in Swift.
 
+# ✨ Features
+
+- [x] FirebaseAuth
+    - [x] Apple Authentication
+    - [x] SignIn with Email and Password (verifiable)
+    - [x] SignIn with Email and Link (verifiable)
+- [x] CloudFirebase
+    - [x] Get / Snapshot / Create / Update / Delete
+    - [x] Support Combine
+    - [x] Support Async (~ iOS15)
+- [ ] FirebaseStorage
+- [ ] FirebaseDynamicLink
+
+
 # Installation
 
 Supporting SwiftPackageManager (SPM).
