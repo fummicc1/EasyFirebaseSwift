@@ -1,12 +1,23 @@
 # EasyFirebaseSwift
 An Easy Firebase (Auth / Firestore) Library written in Swift.
 
+# ✨ Features
+
+- [x] FirebaseAuth
+    - [x] Apple Authentication
+    - [x] SignIn with Email and Password (verifiable)
+    - [x] SignIn with Email and Link (verifiable)
+- [x] CloudFirebase
+    - [x] Get / Snapshot / Create / Update / Delete
+    - [x] Support Combine
+    - [x] Support Async (~ iOS15)
+
 # Installation
 
 Supporting SwiftPackageManager (SPM).
 
 ```swift
-.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMajor(from: "1.4.0"))
+.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMajor(from: "1.6.0"))
 ```
 
 # Usage
@@ -188,6 +199,10 @@ Model.publisher(for: .get(ref: ref)).sink { completion in
 .store(in: &cancellables)
 ```
 
+## Swift Concurrency (async/await)
+
+We are supporting Swift Concurrency after v1.5.0 !!
+
 ## Filter
 
 It is possible to filter documents.
@@ -227,3 +242,7 @@ client.listen(
 # Contributing
 
 Pull requests, bug reports and feature requests are welcome 🚀
+
+# License
+
+See [License](https://github.com/fummicc1/EasyFirebaseSwift/blob/main/LICENSE.md)
