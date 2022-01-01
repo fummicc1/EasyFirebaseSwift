@@ -5,7 +5,11 @@
 //  Created by Fumiya Tanaka on 2021/05/02.
 //
 
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 import Foundation
 import Combine
 import CryptoKit
@@ -82,6 +86,7 @@ public final class AppleAuthClient: NSObject {
     }
 }
 
+#if canImport(UIKit)
 extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         guard let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }),
@@ -93,3 +98,14 @@ extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding
         return window
     }
 }
+#elseif canImport(AppKit)
+extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        guard let window = NSApplication.shared.keyWindow else {
+            assert(false)
+            return NSWindow()
+        }
+        return window
+    }
+}
+#endif
