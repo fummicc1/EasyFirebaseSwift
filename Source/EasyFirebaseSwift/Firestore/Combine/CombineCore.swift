@@ -50,8 +50,8 @@ public extension FirestoreModelCombine {
             subscriber = nil
         }
         
-        private func create(model: Model) {
-            client.create(model) { [weak self] _ in
+        private func create(model: Model, documentId: String? = nil) {
+            client.create(model, documentId: documentId) { [weak self] _ in
                 self?.subscriber?.receive(completion: .finished)
             } failure: { [weak self] error in
                 self?.subscriber?.receive(completion: .failure(error))
