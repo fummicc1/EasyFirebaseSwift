@@ -20,8 +20,8 @@ public enum FirestoreModelAction<Model: FirestoreModel> {
 public enum FirestoreModelTypeAction<Model: FirestoreModel> {
     case snapshot(ref: DocumentReference)
     case snapshots(query: Query)
-    case get(ref: DocumentReference)
-    case gets(query: Query)
+    case fetch(ref: DocumentReference)
+    case query(query: Query)
 }
 
 public extension CombineCompatible where Self: FirestoreModel {
@@ -29,7 +29,7 @@ public extension CombineCompatible where Self: FirestoreModel {
         FirestoreModelCombine.WritePublisher(model: self, action: action)
     }
     
-    static func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.GetPublisher<Self> {
-        FirestoreModelCombine.GetPublisher(action: action)
+    static func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.FetchPublisher<Self> {
+        FirestoreModelCombine.FetchPublisher(action: action)
     }
 }
