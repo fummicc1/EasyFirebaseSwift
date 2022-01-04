@@ -28,6 +28,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         create_combine(message: "Test")
         snapshots()
+        create_combine(message: getNewMessage())
     }
 
     @IBAction func update() {
@@ -58,7 +59,7 @@ class ViewController: UIViewController {
 
     func get() {
         // Get single Document
-        client.get(uid: "1234567890") { (model: Model) in
+        client.get(uid: savedDocumentId) { (model: Model) in
             print(model.message)
         } failure: { error in
             print(error)
@@ -72,7 +73,7 @@ class ViewController: UIViewController {
             limit: nil
         ) { (models: [Model]) in
             for model in models {
-                if model.ref == self.model.ref {
+                if model.uid == self.savedDocumentId {
                     self.model = model
                 }
             }
