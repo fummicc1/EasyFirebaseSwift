@@ -13,6 +13,7 @@ public protocol CombineCompatible { }
 
 public enum FirestoreModelAction<Model: FirestoreModel> {
     case create
+    case createWithDocumentId(String)
     case update
     case delete
 }

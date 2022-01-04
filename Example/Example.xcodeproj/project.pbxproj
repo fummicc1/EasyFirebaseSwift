@@ -567,8 +567,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fummicc1/EasyFirebaseSwift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.0;
+				branch = feature/example;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
