@@ -17,14 +17,17 @@ extension ViewController {
             updatedAt: nil,
             message: message
         )
-        newModel.publisher(for: .create).sink { completion in
+        newModel.publisher(for: .create()).sink { completion in
             print(completion)
         } receiveValue: { }
         .store(in: &cancellables)
     }
 
-    func getSampleDocument_combine() {
-        Model.publisher(for: .get(ref: ref)).sink { completion in
+    func fetch_combine() {
+        guard let ref = model.ref else {
+            return
+        }
+        Model.publisher(for: .fetch(ref: ref)).sink { completion in
             switch completion {
             case .failure(let error):
                 print(error)

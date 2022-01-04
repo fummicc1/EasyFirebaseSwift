@@ -30,6 +30,9 @@ public extension FirestoreModelCombine {
             switch action {
             case .create:
                 create(model: model)
+
+            case .createWithDocumentId(let id):
+                create(model: model, documentId: id)
                 
             case .update:
                 update(model: model)

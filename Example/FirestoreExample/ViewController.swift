@@ -14,7 +14,8 @@ class ViewController: UIViewController {
     
     let client = FirestoreClient()
     var cancellables: Set<AnyCancellable> = []
-    
+
+    let savedDocumentId: String = "FirestoreExample-SampleDocument"
     var model = Model(ref: nil, createdAt: nil, updatedAt: nil, message: "Test") {
         didSet {
             label.text = model.message
