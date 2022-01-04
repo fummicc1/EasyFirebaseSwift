@@ -106,9 +106,9 @@ public extension FirestoreModelCombine {
     }
 }
 
-// MARK: Single Get
+// MARK: Single Fetch
 public extension FirestoreModelCombine {
-    final class GetSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Model, SubscriberType.Failure == Swift.Error {
+    final class FetchSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Model, SubscriberType.Failure == Swift.Error {
         
         private var subscriber: SubscriberType?
         private let action: FirestoreModelTypeAction<Model>
@@ -120,8 +120,8 @@ public extension FirestoreModelCombine {
             self.client = client
             
             switch action {
-            case let .get(ref):
-                get(ref: ref)
+            case let .fetch(ref):
+                fetch(ref: ref)
                 
             case let .snapshot(ref):
                 snapshot(ref: ref)
@@ -148,7 +148,7 @@ public extension FirestoreModelCombine {
             }
         }
         
-        private func get(ref: DocumentReference) {
+        private func fetch(ref: DocumentReference) {
             client.get(uid: ref.documentID) { [weak self] (model: Model) in
                 _ = self?.subscriber?.receive(model)
             } failure: { [weak self] error in
@@ -157,7 +157,7 @@ public extension FirestoreModelCombine {
         }
     }
     
-    struct GetPublisher<Model: FirestoreModel>: Combine.Publisher {
+    struct FetchPublisher<Model: FirestoreModel>: Combine.Publisher {
         public typealias Output = Model
         
         public typealias Failure = Error
@@ -171,7 +171,7 @@ public extension FirestoreModelCombine {
         }
         
         public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Model == S.Input {
-            let subscription = GetSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
+            let subscription = FetchSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
             subscriber.receive(subscription: subscription)
         }
     }

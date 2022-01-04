@@ -15,16 +15,44 @@ class ViewController: UIViewController {
     let client = FirestoreClient()
     var cancellables: Set<AnyCancellable> = []
     
-    var model = Model(ref: nil, createdAt: nil, updatedAt: nil, message: "Test")
+    var model = Model(ref: nil, createdAt: nil, updatedAt: nil, message: "Test") {
+        didSet {
+            label.text = model.message
+        }
+    }
+
+    @IBOutlet private weak var label: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        create_combine(message: "Test")
         snapshots()
     }
 
     @IBAction func update() {
-        model.message = "Update Test"
+        model.message = getNewMessage()
         client.update(model, success: {  }, failure: { _ in })
+    }
+
+    @IBAction func update_combine() {
+        create_combine(message: getNewMessage())
+    }
+
+    @IBAction func update_async() {
+        Task {
+            do {
+                try await create_async(message: getNewMessage())
+            } catch {
+                print(error)
+            }
+        }
+    }
+
+    private func getNewMessage() -> String {
+        let now = Date()
+        let formatter = ISO8601DateFormatter()
+        let message = "Update Test at \(formatter.string(from: now))"
+        return message
     }
 
     func get() {
@@ -37,7 +65,6 @@ class ViewController: UIViewController {
     }
 
     func snapshots() {
-        // MARK: Collection (by empty filter)
         client.listen(
             filter: [],
             order: [],
@@ -51,13 +78,6 @@ class ViewController: UIViewController {
         } failure: { error in
             print(error)
         }
-    }
-    
-    func create() {
-        model.publisher(for: .create).sink { error in
-            print(error)
-        } receiveValue: { }
-        .store(in: &cancellables)
     }
 }
 

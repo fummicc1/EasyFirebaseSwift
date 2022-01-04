@@ -8,7 +8,13 @@
 import Foundation
 
 extension ViewController {
-    func create_async() {
-
+    func create_async(message: String) async throws {
+        let newModel = Model(
+            ref: nil,
+            createdAt: nil,
+            updatedAt: nil,
+            message: message
+        )
+        try await client.create(newModel)
     }
 }

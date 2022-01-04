@@ -10,15 +10,20 @@ import FirebaseFirestore
 import EasyFirebaseSwift
 
 extension ViewController {
-    func create_combine() {
-        model.publisher(for: .create).sink { error in
-            print(error)
+    func create_combine(message: String) {
+        let newModel = Model(
+            ref: nil,
+            createdAt: nil,
+            updatedAt: nil,
+            message: message
+        )
+        newModel.publisher(for: .create).sink { completion in
+            print(completion)
         } receiveValue: { }
         .store(in: &cancellables)
     }
 
-    func get_combine() {
-        let ref = Firestore.firestore().collection("models").document("sample")
+    func getSampleDocument_combine() {
         Model.publisher(for: .get(ref: ref)).sink { completion in
             switch completion {
             case .failure(let error):
