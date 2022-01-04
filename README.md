@@ -27,6 +27,7 @@ Supporting SwiftPackageManager (SPM).
 
 - [Usage of Firestore Helper Client](./FirestoreClient.md)
 - [Usage of Auth Helper Client](./AuthClient.md)
+- [Example of EasyFirebaseSwift](./Example.md)
 
 # Contributing
 
