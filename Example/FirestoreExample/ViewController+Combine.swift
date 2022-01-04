@@ -17,7 +17,7 @@ extension ViewController {
             updatedAt: nil,
             message: message
         )
-        newModel.publisher(for: .create()).sink { completion in
+        newModel.publisher(for: .createWithDocumentId(savedDocumentId)).sink { completion in
             print(completion)
         } receiveValue: { }
         .store(in: &cancellables)
