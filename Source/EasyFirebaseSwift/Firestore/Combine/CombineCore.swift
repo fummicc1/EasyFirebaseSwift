@@ -128,6 +128,13 @@ public extension FirestoreModelCombine {
                 
             case let .snapshot(ref):
                 snapshot(ref: ref)
+
+            case let .snapshots(filter, order, limit):
+                snapshots(
+                    filter: filter,
+                    order: order,
+                    limit: limit
+                )
                 
             default:
                 assertionFailure()
@@ -149,6 +156,22 @@ public extension FirestoreModelCombine {
             } failure: { [weak self] error in
                 self?.subscriber?.receive(completion: .failure(error))
             }
+        }
+
+        private func snapshots(
+            filter: [FirestoreQueryFilter],
+            order: [FirestoreQueryOrder],
+            limit: Int?
+        ) {
+            let subject: CurrentValueSubject<[Model], Error> = CurrentValueSubject([])
+            client.listen(
+                filter: filter,
+                order: order,
+                limit: limit) { (models: [Model]) in
+                    subject.send(models)
+                } failure: { error in
+                    subject.send(completion: .failure(error))
+                }
         }
         
         private func fetch(ref: DocumentReference) {

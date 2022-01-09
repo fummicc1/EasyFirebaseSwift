@@ -21,6 +21,7 @@ public enum FirestoreModelAction<Model: FirestoreModel> {
 public enum FirestoreModelTypeAction<Model: FirestoreModel> {
     case snapshot(ref: DocumentReference)
     case snapshots(query: Query)
+    case snapshots((filter: [FirestoreQueryFilter], order: [FirestoreQueryOrder], limit: Int?))
     case fetch(ref: DocumentReference)
     case query(query: Query)
 }
