@@ -19,11 +19,11 @@ jobs:
         with:
           xcode-version: latest-stable  
       - name: Install xcpretty
-        run: gem install xcpretty
+        run: bundle instal
       - name: Build
         run: |
           set -o pipefail && \
           xcodebuild -scheme EasyFirebaseSwift \
           build \
           -destination "name=iPhone 12" \
-          | xcpretty
+          | bundle exec xcpretty
