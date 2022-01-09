@@ -60,11 +60,34 @@ public enum FirestoreModelTypeAction<Model: FirestoreModel> {
 }
 
 public extension CombineCompatible where Self: FirestoreModel {
-    func publisher(for action: FirestoreModelAction<Self>) -> FirestoreModelCombine.WritePublisher<Self> {
-        FirestoreModelCombine.WritePublisher(model: self, action: action)
+    func write(
+        for action: FirestoreModelAction<Self>,
+        client: FirestoreClient = FirestoreClient()
+    ) -> FirestoreModelCombine.WritePublisher<Self> {
+        FirestoreModelCombine.WritePublisher(
+            model: self,
+            action: action,
+            firestoreClient: client
+        )
     }
     
-    static func publisher(for action: FirestoreModelTypeAction<Self>) -> FirestoreModelCombine.FetchPublisher<Self> {
-        FirestoreModelCombine.FetchPublisher(action: action)
+    static func single(
+        for action: FirestoreModelTypeAction<Self>,
+        client: FirestoreClient = FirestoreClient()
+    ) -> FirestoreModelCombine.FetchPublisher<Self> {
+        FirestoreModelCombine.FetchPublisher(
+            action: action,
+            firestoreClient: client
+        )
+    }
+
+    static func multiple(
+        for action: FirestoreModelTypeAction<Self>,
+        client: FirestoreClient = FirestoreClient()
+    ) -> FirestoreModelCombine.CollectionPublisher<Self> {
+        FirestoreModelCombine.CollectionPublisher(
+            action: action,
+            firestoreClient: client
+        )
     }
 }

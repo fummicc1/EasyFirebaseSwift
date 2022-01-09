@@ -160,7 +160,7 @@ public extension FirestoreModelCombine {
         }
     }
 
-    final class StreamSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == [Model], SubscriberType.Failure == Swift.Error {
+    final class CollectionSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == [Model], SubscriberType.Failure == Swift.Error {
 
         private var subscriber: SubscriberType?
         private let action: FirestoreModelTypeAction<Model>
@@ -246,7 +246,7 @@ public extension FirestoreModelCombine {
         }
     }
 
-    struct StreamPublisher<Model: FirestoreModel>: Combine.Publisher {
+    struct CollectionPublisher<Model: FirestoreModel>: Combine.Publisher {
         public typealias Output = [Model]
 
         public typealias Failure = Error
@@ -260,7 +260,7 @@ public extension FirestoreModelCombine {
         }
 
         public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, [Model] == S.Input {
-            let subscription = StreamSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
+            let subscription = CollectionSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
             subscriber.receive(subscription: subscription)
         }
     }
