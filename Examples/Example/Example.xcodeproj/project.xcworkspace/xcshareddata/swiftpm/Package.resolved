@@ -23,8 +23,8 @@
         "package": "EasyFirebaseSwift",
         "repositoryURL": "https://github.com/fummicc1/EasyFirebaseSwift",
         "state": {
-          "branch": "main",
-          "revision": "3a412dc7265cce354d7bad2d894acf9303afc066",
+          "branch": "feature/example",
+          "revision": "4cabe025e9006abe15f0a9def5e1b25762cd541d",
           "version": null
         }
       },
