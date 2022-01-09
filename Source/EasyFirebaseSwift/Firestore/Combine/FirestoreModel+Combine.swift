@@ -18,10 +18,43 @@ public enum FirestoreModelAction<Model: FirestoreModel> {
     case delete
 }
 
+public protocol SnapshotInputParameterType {
+}
+
+public enum SnapshotInputParameter {
+    public struct Default: SnapshotInputParameterType {
+        public init(
+            filter: [FirestoreQueryFilter] = [],
+            order: [FirestoreQueryOrder] = [],
+            limit: Int? = nil
+        ) {
+            self.filter = filter
+            self.order = order
+            self.limit = limit
+        }
+
+        public let filter: [FirestoreQueryFilter]
+        public let order: [FirestoreQueryOrder]
+        public let limit: Int?
+    }
+
+    public struct Query: SnapshotInputParameterType {
+        public init(
+            ref: FirebaseFirestore.Query,
+            includeCache: Bool = false
+        ) {
+            self.ref = ref
+            self.includeCache = includeCache
+        }
+
+        public let ref: FirebaseFirestore.Query
+        public let includeCache: Bool
+    }
+}
+
 public enum FirestoreModelTypeAction<Model: FirestoreModel> {
     case snapshot(ref: DocumentReference)
-    case snapshots(query: Query)
-    case snapshots((filter: [FirestoreQueryFilter], order: [FirestoreQueryOrder], limit: Int?))
+    case snapshots(SnapshotInputParameterType)
     case fetch(ref: DocumentReference)
     case query(query: Query)
 }

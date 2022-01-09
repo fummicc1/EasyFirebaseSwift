@@ -128,13 +128,6 @@ public extension FirestoreModelCombine {
                 
             case let .snapshot(ref):
                 snapshot(ref: ref)
-
-            case let .snapshots(filter, order, limit):
-                snapshots(
-                    filter: filter,
-                    order: order,
-                    limit: limit
-                )
                 
             default:
                 assertionFailure()
@@ -157,22 +150,6 @@ public extension FirestoreModelCombine {
                 self?.subscriber?.receive(completion: .failure(error))
             }
         }
-
-        private func snapshots(
-            filter: [FirestoreQueryFilter],
-            order: [FirestoreQueryOrder],
-            limit: Int?
-        ) {
-            let subject: CurrentValueSubject<[Model], Error> = CurrentValueSubject([])
-            client.listen(
-                filter: filter,
-                order: order,
-                limit: limit) { (models: [Model]) in
-                    subject.send(models)
-                } failure: { error in
-                    subject.send(completion: .failure(error))
-                }
-        }
         
         private func fetch(ref: DocumentReference) {
             client.get(uid: ref.documentID) { [weak self] (model: Model) in
@@ -180,6 +157,73 @@ public extension FirestoreModelCombine {
             } failure: { [weak self] error in
                 self?.subscriber?.receive(completion: .failure(error))
             }
+        }
+    }
+
+    final class StreamSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == [Model], SubscriberType.Failure == Swift.Error {
+
+        private var subscriber: SubscriberType?
+        private let action: FirestoreModelTypeAction<Model>
+        private let client: FirestoreClient
+
+        public init(subscriber: SubscriberType, action: FirestoreModelTypeAction<Model>, firestoreClient client: FirestoreClient) {
+            self.subscriber = subscriber
+            self.action = action
+            self.client = client
+
+            switch action {
+            case let .snapshots(input):
+                if let input = input as? SnapshotInputParameter.Default {
+                    snapshots(
+                        filter: input.filter,
+                        order: input.order,
+                        limit: input.limit
+                    )
+                } else if let input = input as? SnapshotInputParameter.Query {
+                    snapshots(
+                        query: input.ref,
+                        includeCache: input.includeCache
+                    )
+                }
+
+            default:
+                assertionFailure()
+                break
+            }
+
+        }
+
+        public func request(_ demand: Subscribers.Demand) {
+        }
+
+        public func cancel() {
+            subscriber = nil
+        }
+
+        private func snapshots(
+            filter: [FirestoreQueryFilter],
+            order: [FirestoreQueryOrder],
+            limit: Int?
+        ) {
+            client.listen(
+                filter: filter,
+                order: order,
+                limit: limit) { [weak self] (models: [Model]) in
+                    _ = self?.subscriber?.receive(models)
+                } failure: { [weak self] error in
+                    self?.subscriber?.receive(completion: .failure(error))
+                }
+        }
+
+        private func snapshots(
+            query: Query,
+            includeCache: Bool
+        ) {
+            client.listen(ref: query, includeCache: includeCache) { [weak self] (models: [Model]) in
+                    _ = self?.subscriber?.receive(models)
+                } failure: { [weak self] error in
+                    self?.subscriber?.receive(completion: .failure(error))
+                }
         }
     }
     
@@ -198,6 +242,25 @@ public extension FirestoreModelCombine {
         
         public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Model == S.Input {
             let subscription = FetchSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+
+    struct StreamPublisher<Model: FirestoreModel>: Combine.Publisher {
+        public typealias Output = [Model]
+
+        public typealias Failure = Error
+
+        let action: FirestoreModelTypeAction<Model>
+        let firestoreClient: FirestoreClient
+
+        init(action: FirestoreModelTypeAction<Model>, firestoreClient: FirestoreClient = FirestoreClient()) {
+            self.action = action
+            self.firestoreClient = firestoreClient
+        }
+
+        public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, [Model] == S.Input {
+            let subscription = StreamSubscription(subscriber: subscriber, action: action, firestoreClient: firestoreClient)
             subscriber.receive(subscription: subscription)
         }
     }
