@@ -11,6 +11,10 @@
 		D31E33C2278B0A610037BDEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E33C1278B0A610037BDEF /* ContentView.swift */; };
 		D31E33C4278B0A630037BDEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31E33C3278B0A630037BDEF /* Assets.xcassets */; };
 		D31E33C7278B0A630037BDEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31E33C6278B0A630037BDEF /* Preview Assets.xcassets */; };
+		D31E33CF278B0B490037BDEF /* EasyFirebaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D31E33CE278B0B490037BDEF /* EasyFirebaseSwift */; };
+		D31E33D1278B0CB90037BDEF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E33D0278B0CB90037BDEF /* Model.swift */; };
+		D31E33D3278B0D380037BDEF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31E33D2278B0D380037BDEF /* Message.swift */; };
+		D31E33D5278B13960037BDEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D31E33D4278B13960037BDEF /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,9 @@
 		D31E33C1278B0A610037BDEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D31E33C3278B0A630037BDEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D31E33C6278B0A630037BDEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D31E33D0278B0CB90037BDEF /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		D31E33D2278B0D380037BDEF /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		D31E33D4278B13960037BDEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D31E33CF278B0B490037BDEF /* EasyFirebaseSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,8 +59,11 @@
 		D31E33BE278B0A610037BDEF /* BoardApplication */ = {
 			isa = PBXGroup;
 			children = (
+				D31E33D4278B13960037BDEF /* GoogleService-Info.plist */,
 				D31E33BF278B0A610037BDEF /* BoardApplicationApp.swift */,
 				D31E33C1278B0A610037BDEF /* ContentView.swift */,
+				D31E33D2278B0D380037BDEF /* Message.swift */,
+				D31E33D0278B0CB90037BDEF /* Model.swift */,
 				D31E33C3278B0A630037BDEF /* Assets.xcassets */,
 				D31E33C5278B0A630037BDEF /* Preview Content */,
 			);
@@ -83,6 +94,9 @@
 			dependencies = (
 			);
 			name = BoardApplication;
+			packageProductDependencies = (
+				D31E33CE278B0B490037BDEF /* EasyFirebaseSwift */,
+			);
 			productName = BoardApplication;
 			productReference = D31E33BC278B0A610037BDEF /* BoardApplication.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +125,9 @@
 				Base,
 			);
 			mainGroup = D31E33B3278B0A610037BDEF;
+			packageReferences = (
+				D31E33CD278B0B490037BDEF /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */,
+			);
 			productRefGroup = D31E33BD278B0A610037BDEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -126,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D31E33C7278B0A630037BDEF /* Preview Assets.xcassets in Resources */,
+				D31E33D5278B13960037BDEF /* GoogleService-Info.plist in Resources */,
 				D31E33C4278B0A630037BDEF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +156,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D31E33C2278B0A610037BDEF /* ContentView.swift in Sources */,
+				D31E33D3278B0D380037BDEF /* Message.swift in Sources */,
+				D31E33D1278B0CB90037BDEF /* Model.swift in Sources */,
 				D31E33C0278B0A610037BDEF /* BoardApplicationApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +297,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -306,6 +327,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -341,6 +363,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D31E33CD278B0B490037BDEF /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fummicc1/EasyFirebaseSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D31E33CE278B0B490037BDEF /* EasyFirebaseSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D31E33CD278B0B490037BDEF /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D31E33B4278B0A610037BDEF /* Project object */;
 }
