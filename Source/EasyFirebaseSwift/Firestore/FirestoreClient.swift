@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 public protocol FirestoreModel: Codable, CombineCompatible {
     static var collectionName: String { get }
     var uid: String? { get }
-    var ref: DocumentReference? { get }
+    var ref: DocumentReference? { get set }
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
 }
@@ -890,6 +890,16 @@ extension FirestoreClient {
         guard let model = try snapshot.data(as: Model.self) else {
             throw FirestoreClientError.failedToDecode(data: snapshot.data())
         }
+        return model
+    }
+}
+
+// MARK: Utility
+public extension FirestoreClient {
+    func updateDocumentID<Model: FirestoreModel>(of model: Model, newId: String) throws -> Model {
+        var model = model
+        let parent = model.ref?.parent
+        model.ref = parent?.document(newId)
         return model
     }
 }
