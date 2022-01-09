@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-11
     defaults:
       run:
-        working-directory: BoardApplication
+        working-directory: Examples/Practical/BoardApplication
         shell: bash
     steps:
       - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
             restore-keys: ${{ runner.os }}-spm-
       - name: Install xcpretty
         run:  bundle install
-        working-directory: ../../../
+        working-directory: ./
       - name: Build
         run: |
           set -o pipefail && \
