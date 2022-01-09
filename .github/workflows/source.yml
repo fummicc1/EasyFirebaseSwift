@@ -19,7 +19,7 @@ jobs:
         with:
           xcode-version: latest-stable  
       - name: Install xcpretty
-        run: bundle instal
+        run: bundle install
       - name: Build
         run: |
           set -o pipefail && \

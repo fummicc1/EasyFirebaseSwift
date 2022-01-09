@@ -33,7 +33,8 @@ jobs:
             key: ${{ runner.os }}-spm-${{ hashFiles('*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
             restore-keys: ${{ runner.os }}-spm-
       - name: Install xcpretty
-        run:  bundle instal
+        run:  bundle install
+        working-directory: ../../../
       - name: Build
         run: |
           set -o pipefail && \
