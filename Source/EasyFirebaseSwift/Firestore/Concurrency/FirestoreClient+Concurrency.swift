@@ -145,6 +145,8 @@ public extension FirestoreClient {
 }
 
 // MARK: SubCollection
+@available(iOS 15, *)
+@available(macOS 12, *)
 public extension FirestoreClient {
 
     func create<Model: FirestoreModel & SubCollectionModel>(
@@ -231,6 +233,8 @@ public extension FirestoreClient {
 
 
 // MARK: CollectionGroup
+@available(iOS 15, *)
+@available(macOS 12, *)
 public extension FirestoreClient {
     public func getCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
