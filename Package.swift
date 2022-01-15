@@ -23,7 +23,8 @@ let package = Package(
             dependencies: [
                 .product(name: "FirebaseFirestore", package: "Firebase"),
                 .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase"),
-                    .product(name: "FirebaseAuth", package: "Firebase")
+                .product(name: "FirebaseAuth", package: "Firebase"),
+                .product(name: "FirebaseStorage", package: "Firebase")
             ]
         ),
         .testTarget(
