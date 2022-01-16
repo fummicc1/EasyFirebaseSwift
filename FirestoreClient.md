@@ -1,6 +1,6 @@
 # FirestoreClient
 
-FirestoreClient is a client that helps us use a firestore interface with ease.
+FirestoreClient is a client that helps me use a firestore interface with ease.
 
 ## Model
 
