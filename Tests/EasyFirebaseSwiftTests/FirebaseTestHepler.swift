@@ -19,15 +19,24 @@ private let dateFormatter: DateFormatter = {
 }()
 
 enum FirebaseTestHelper {
+
+    static var gsBucket: String {
+        "gs://easyfirebasefirestoreswift.appspot.com/"
+    }
+
     static func setupFirebaseApp() {
         if FirebaseApp.app() == nil {
             let options = FirebaseOptions(googleAppID: "1:123:ios:123abc", gcmSenderID: "sender_id")
             options.projectID = "test-" + dateFormatter.string(from: Date())
             FirebaseApp.configure(options: options)
             let settings = Firestore.firestore().settings
-            settings.host = "localhost:8080"
+            let host = "127.0.0.1"
+            let firestorePort = 8080
+            let storagePort = 8081
+            settings.host = "\(host):\(firestorePort)"
             settings.isSSLEnabled = false
             Firestore.firestore().settings = settings
+            Storage.storage(url: gsBucket).useEmulator(withHost: host, port: storagePort)
             print("FirebaseApp has been configured")
         }
     }

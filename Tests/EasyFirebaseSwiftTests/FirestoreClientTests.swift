@@ -27,7 +27,7 @@ struct TestModel: FirestoreModel {
 
 class FirestoreClientTests: XCTestCase {
 
-    private var client: FirestoreClient?
+    private var client: FirestoreClient!
     private var cancellables: Set<AnyCancellable> = []
 
     override func setUpWithError() throws {
@@ -38,7 +38,6 @@ class FirestoreClientTests: XCTestCase {
     @available(iOS 15, *)
     @available(macOS 12, *)
     func test_create_async() async throws {
-        let client = self.client!
         let newModel = TestModel(message: "Async Test")
         let ref = try await client.create(newModel)
         let fetched: TestModel = try await client.get(uid: ref.documentID)
@@ -46,7 +45,6 @@ class FirestoreClientTests: XCTestCase {
     }
 
     func test_create_combine() {
-        let client = self.client!
         let newModel = TestModel(message: "Combine Test")
         let exp = XCTestExpectation(description: "Test_Create_Combine")
         newModel.write(for: .create, client: client)
