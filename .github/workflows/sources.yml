@@ -23,6 +23,8 @@ jobs:
       - name: Setup Firebase Emulator
         working-directory: ./firebase
         run: ./emulator_setup.sh
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Build
         run: |
           set -o pipefail && \
