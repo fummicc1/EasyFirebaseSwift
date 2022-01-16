@@ -25,6 +25,10 @@ let package = Package(
                 .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase"),
                     .product(name: "FirebaseAuth", package: "Firebase")
             ]
+        ),
+        .testTarget(
+            name: "EasyFirebaseSwiftTests",
+            dependencies: [.target(name: "EasyFirebaseSwift")]
         )
     ]
 )
