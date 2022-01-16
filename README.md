@@ -1,6 +1,9 @@
-![アートボード 1](https://user-images.githubusercontent.com/44002126/148083151-421bab9c-5d28-41db-8e51-1e35e0145b49.png)
-
 # EasyFirebaseSwift
+
+[![Build and Test Sources](https://github.com/fummicc1/EasyFirebaseSwift/actions/workflows/sources.yml/badge.svg)](https://github.com/fummicc1/EasyFirebaseSwift/actions/workflows/sources.yml)
+[![Test Practical Examples](https://github.com/fummicc1/EasyFirebaseSwift/actions/workflows/practical_examples.yml/badge.svg)](https://github.com/fummicc1/EasyFirebaseSwift/actions/workflows/practical_examples.yml)
+
+![アートボード 1](https://user-images.githubusercontent.com/44002126/148083151-421bab9c-5d28-41db-8e51-1e35e0145b49.png)
 
 An Easy Firebase Library written in Swift.
 
