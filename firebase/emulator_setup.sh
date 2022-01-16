@@ -6,9 +6,10 @@ set -e
 set -x
 
 # check whether firebase has been installed or not.
-if [! type firebase >/dev/null 2>&1]; then
+if ! command -v firebase &> /dev/null
+then
     # download firebase
-    curl -sL https://firebase.tools | bash
+    curl -sL https://firebase.tools | bash 
 fi
 # setup firebase emulator only for firestore
 firebase login:ci --token "$FIREBASE_TOKEN"
