@@ -40,12 +40,12 @@ public extension FirestoreClient {
     func create<Model: FirestoreModel>(
         _ model: Model,
         documentId: String? = nil
-    ) async throws {
+    ) async throws -> DocumentReference {
         try await withCheckedThrowingContinuation({ continuation in
             create(
                 model,
-                documentId: documentId) { _ in
-                    continuation.resume()
+                documentId: documentId) { reference in
+                    continuation.resume(returning: reference)
                 } failure: { error in
                     continuation.resume(throwing: error)
                 }
