@@ -26,9 +26,9 @@ public class Folder {
 }
 
 public class Resource {
-    public let name: String
-    public let metadata: Metadata?
-    public let data: Data?
+    public var name: String
+    public var metadata: Metadata?
+    public var data: Data?
 
     public init(
         name: String,
@@ -39,12 +39,17 @@ public class Resource {
         self.metadata = metadata
         self.data = data
     }
+
+    public func reference(from parent: Folder) -> StorageReference {
+        let format = metadata?.contentType.format ?? ""
+        return parent.reference.child(name + "." + format)
+    }
 }
 
 public extension Resource {
 
     struct Metadata {
-        public let contentType: ContentType
+        public var contentType: ContentType
 
         public enum ContentType: String {
             case plain = "text/plain"
@@ -112,8 +117,8 @@ public class StorageClient {
         resource: Resource,
         folder: Folder,
         parent: StorageReference
-    ) -> AnyPublisher<Resource.Task, Error> {
-        let subject: CurrentValueSubject<Resource.Task, Error> = .init(
+    ) -> AnyPublisher<Resource.Task, Never> {
+        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
             .init(
                 status: .progress(0),
                 resource: resource
@@ -126,13 +131,14 @@ public class StorageClient {
             storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
             let progress = base.putFile(
                 from: url,
-                metadata: storageMetadata) { metadata, error in
-                    if let error = error {
-                        subject.send(completion: .failure(error))
-                        return
-                    }
-                    subject.send(completion: .finished)
+                metadata: storageMetadata
+            ) { metadata, error in
+                if let error = error {
+                    subject.send(.init(status: .fail(error), resource: resource))
+                    return
                 }
+                subject.send(completion: .finished)
+            }
             progress.observe(.progress) { snapshot in
                 if let completedRate = snapshot.progress?.fractionCompleted {
                     let task = Resource.Task(
@@ -143,9 +149,77 @@ public class StorageClient {
                 }
             }
         } catch {
-            subject.send(completion: .failure(error))
+            subject.send(.init(status: .fail(error), resource: resource))
         }
         return subject.eraseToAnyPublisher()
+    }
+
+    public func download(
+        resource: Resource,
+        folder: Folder,
+        maxSize: Int64 = 1024 * 1024 * 10 // 10MB
+    ) -> AnyPublisher<Resource.Task, Never> {
+        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
+            .init(
+                status: .progress(0),
+                resource: resource
+            )
+        )
+        let target = resource.reference(from: folder)
+        let storageTask = target.getData(
+            maxSize: maxSize
+        ) { data, error in
+            if let error = error {
+                subject.send(.init(status: .fail(error), resource: resource))
+                return
+            }
+            resource.data = data
+            subject.send(.init(status: .success, resource: resource))
+        }
+        storageTask.observe(.progress) { snapshot in
+            if let completeRate = snapshot.progress?.fractionCompleted {
+                let task = Resource.Task(
+                    status: .progress(completeRate),
+                    resource: resource
+                )
+                subject.send(task)
+            }
+        }
+        return subject.eraseToAnyPublisher()
+    }
+
+    public func fetchDownloadURL(
+        of resource: Resource,
+        folder: Folder
+    ) -> AnyPublisher<URL, Error> {
+        Future { promise in
+            let reference = resource.reference(from: folder)
+            reference.downloadURL { url, error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                if let url = url {
+                    promise(.success(url))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    public func delete(
+        resource: Resource,
+        folder: Folder
+    ) -> AnyPublisher<Void, Error> {
+        Future { promise in
+            resource.reference(from: folder).delete { error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
     }
 
     func generateFileURL(resource: Resource, isTemporary: Bool = true) throws -> URL {
