@@ -12,6 +12,6 @@ then
     curl -sL https://firebase.tools | bash 
 fi
 # setup firebase emulator only for firestore
-firebase login:ci --token "$FIREBASE_TOKEN"
+firebase login
 firebase setup:emulators:firestore
 firebase emulators:start --only firestore
