@@ -10,7 +10,7 @@ fi
 nodebrew use v16.13.1
 
 # check whether firebase has been installed or not.
-if [! type nodebrew >/dev/null 2>&1]; then
+if [! type firebase >/dev/null 2>&1]; then
     npm install -g firebase-tools
 fi
 firebase setup:emulators:firestore
