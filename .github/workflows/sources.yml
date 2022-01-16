@@ -22,10 +22,10 @@ jobs:
         run: bundle install
       - name: Setup Firebase Emulator
         working-directory: ./firebase
-        run: ./emulator_setup.sh
+        run: ./emulator_setup.sh &
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Build
+      - name: Build and Test
         run: |
           set -o pipefail && \
           xcodebuild -scheme EasyFirebaseSwift \
