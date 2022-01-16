@@ -1,6 +1,6 @@
 # FirebaseAuthClient
 
-FirebaseAuthClient is a client that helps us use a firebase-auth interface with ease.
+FirebaseAuthClient is a client that helps me use a firebase-auth interface with ease.
 
 ## Features
 

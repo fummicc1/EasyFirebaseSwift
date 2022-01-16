@@ -7,11 +7,9 @@
 
 An Easy Firebase Library written in Swift.
 
-
-|Simple Example|BoardApplication Example|
-|---|---|
-|<img src="https://user-images.githubusercontent.com/44002126/148690765-8d19c655-c0ec-4995-9c7b-f7b9cf647dc9.png" width=320px>|<img src="https://user-images.githubusercontent.com/44002126/148689901-fd442941-fad6-4434-a354-861b0ecffc3d.PNG" width=320px>|
-
+| Simple Example                                                                                                                | BoardApplication Example                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/44002126/148690765-8d19c655-c0ec-4995-9c7b-f7b9cf647dc9.png" width=320px> | <img src="https://user-images.githubusercontent.com/44002126/148689901-fd442941-fad6-4434-a354-861b0ecffc3d.PNG" width=320px> |
 
 # ✨ Features
 
@@ -38,6 +36,7 @@ Supporting SwiftPackageManager (SPM).
 
 - [Usage of Firestore Helper Client](./FirestoreClient.md)
 - [Usage of Auth Helper Client](./AuthClient.md)
+- [Usage of Storage Helper Client](./StorageClient.md)
 - [Example of EasyFirebaseSwift](./Example.md)
 
 # Contributing
