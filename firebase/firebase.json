@@ -1,0 +1,11 @@
+{
+    "firestore": {
+      "rules": "firestore.rules"
+    },
+    "emulators": {
+        "firestore": {
+            "hotst": "127.0.0.1",
+            "port": "8080"
+        }
+    }
+  }
