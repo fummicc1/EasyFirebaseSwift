@@ -1,11 +1,25 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
     "firestore": {
-      "rules": "firestore.rules"
+      "host": "127.0.0.1",
+      "port": 8080
     },
-    "emulators": {
-        "firestore": {
-            "hotst": "127.0.0.1",
-            "port": "8080"
-        }
+    "storage": {
+      "host": "127.0.0.1",
+      "port": 8081
+    },
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true
     }
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
+}

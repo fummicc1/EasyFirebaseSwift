@@ -16,7 +16,7 @@ public class Folder {
 
     public init(
         name: String,
-        parent: StorageReference = Storage.storage().reference(),
+        parent: StorageReference = StorageClient.defaultStorage.reference(),
         resources: [Resource] = []
     ) {
         self.name = name
@@ -108,15 +108,23 @@ public enum StorageClientError: Swift.Error {
 
 public class StorageClient {
     private let storage: Storage
+    private var uploads: [StorageUploadTask] = []
 
-    public init(storage: Storage = Storage.storage()) {
+    public static var defaultStorage: Storage = Storage.storage()
+
+    public init(storage: Storage = defaultStorage) {
         self.storage = storage
+    }
+
+    deinit {
+        uploads.forEach { task in
+            task.cancel()
+        }
     }
 
     public func upload(
         resource: Resource,
-        folder: Folder,
-        parent: StorageReference
+        folder: Folder
     ) -> AnyPublisher<Resource.Task, Never> {
         let subject: CurrentValueSubject<Resource.Task, Never> = .init(
             .init(
@@ -129,7 +137,7 @@ public class StorageClient {
             let base = folder.reference
             let storageMetadata = StorageMetadata()
             storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
-            let progress = base.putFile(
+            let task = base.putFile(
                 from: url,
                 metadata: storageMetadata
             ) { metadata, error in
@@ -139,7 +147,8 @@ public class StorageClient {
                 }
                 subject.send(completion: .finished)
             }
-            progress.observe(.progress) { snapshot in
+            uploads.append(task)
+            task.observe(.progress) { snapshot in
                 if let completedRate = snapshot.progress?.fractionCompleted {
                     let task = Resource.Task(
                         status: .progress(completedRate),
