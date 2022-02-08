@@ -49,6 +49,10 @@ public class Resource {
 public extension Resource {
 
     struct Metadata {
+        public init(contentType: Resource.Metadata.ContentType) {
+            self.contentType = contentType
+        }
+
         public var contentType: ContentType
 
         public enum ContentType: String {
@@ -91,6 +95,14 @@ public extension Resource {
     }
 
     struct Task {
+        public init(
+            status: Resource.Status,
+            resource: Resource
+        ) {
+            self.status = status
+            self.resource = resource
+        }
+
         public let status: Status
         public let resource: Resource
     }
@@ -107,14 +119,14 @@ public enum StorageClientError: Swift.Error {
 }
 
 public class StorageClient {
-    private let storage: Storage
+    private var storage: Storage {
+        Self.defaultStorage
+    }
     private var uploads: [StorageUploadTask] = []
 
     public static var defaultStorage: Storage = Storage.storage()
 
-    public init(storage: Storage = defaultStorage) {
-        self.storage = storage
-    }
+    public init() { }
 
     deinit {
         uploads.forEach { task in
