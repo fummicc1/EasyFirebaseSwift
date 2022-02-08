@@ -14,10 +14,10 @@ class StorageClientTests: XCTestCase {
 
     private var client: StorageClient!
     private var cancellables: Set<AnyCancellable> = []
-    private let defaultStorage: Storage = Storage.storage(url: FirebaseTestHelper.gsBucket)
 
     override func setUpWithError() throws {
         FirebaseTestHelper.setupFirebaseApp()
+        let defaultStorage: Storage = Storage.storage(url: FirebaseTestHelper.gsBucket)
         StorageClient.defaultStorage = defaultStorage
         client = StorageClient()
     }
@@ -40,6 +40,7 @@ class StorageClientTests: XCTestCase {
                     exp.fulfill()
                 case .fail(let error):
                     XCTFail(error.localizedDescription)
+                    exp.fulfill()
                 default:
                     break
                 }

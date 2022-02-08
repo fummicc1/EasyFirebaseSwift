@@ -124,7 +124,7 @@ public class StorageClient {
     }
     private var uploads: [StorageUploadTask] = []
 
-    public static var defaultStorage: Storage = Storage.storage()
+    public static var defaultStorage: Storage!
 
     public init() { }
 
@@ -243,7 +243,11 @@ public class StorageClient {
         }.eraseToAnyPublisher()
     }
 
-    func generateFileURL(resource: Resource, isTemporary: Bool = true) throws -> URL {
+    func generateFileURL(
+        resource: Resource,
+        isTemporary: Bool = true
+    ) throws -> URL {
+        // Generate file-url.
         let base: URL?
         if isTemporary {
             base = FileManager.default.temporaryDirectory
@@ -258,6 +262,10 @@ public class StorageClient {
         let format = resource.metadata?.contentType.format ?? ""
         let path = fileName + "." + format
         let target = base.appendingPathComponent(path)
+
+        // Write data to file.
+        try resource.data?.write(to: target)
+
         return target
     }
 }
