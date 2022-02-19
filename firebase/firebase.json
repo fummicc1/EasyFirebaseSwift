@@ -3,6 +3,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "storage": {
+    "rules": "storage.rules"
+  },
   "emulators": {
     "firestore": {
       "host": "127.0.0.1",
@@ -18,8 +21,5 @@
     "ui": {
       "enabled": true
     }
-  },
-  "storage": {
-    "rules": "storage.rules"
   }
 }
