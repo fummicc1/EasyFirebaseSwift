@@ -29,7 +29,7 @@ An Easy Firebase Library written in Swift.
 Supporting SwiftPackageManager (SPM).
 
 ```swift
-.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMajor(from: "2.0.0"))
+.package(url: "https://github.com/fummicc1/EasyFirebaseSwift", .upToNextMajor(from: "2.1.1"))
 ```
 
 # Usage
