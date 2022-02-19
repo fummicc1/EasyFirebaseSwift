@@ -23,7 +23,7 @@ class StorageClientTests: XCTestCase {
     }
 
     // TODO: Work TestCase
-    func test_upload() {
+    func test_upload_data() {
         let folder = Folder(name: "Tests")
         let text: String = "Test Test Test Test Text!!"
         let data = text.data(using: .utf8)!
@@ -33,7 +33,7 @@ class StorageClientTests: XCTestCase {
             data: data
         )
         let exp = XCTestExpectation(description: "Test")
-        client.upload(resource: resource, folder: folder)
+        client.uploadWithData(resource: resource, folder: folder)
             .sink { task in
                 switch task.status {
                 case .success:

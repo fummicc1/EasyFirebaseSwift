@@ -116,6 +116,7 @@ public extension Resource {
 
 public enum StorageClientError: Swift.Error {
     case failedToGenerateFile
+    case noResourceData
 }
 
 public class StorageClient {
@@ -135,6 +136,23 @@ public class StorageClient {
     }
 
     public func upload(
+        generateFile: Bool = false,
+        resource: Resource,
+        folder: Folder
+    ) -> AnyPublisher<Resource.Task, Never> {
+        if generateFile {
+            return uploadViaFile(
+                resource: resource,
+                folder: folder
+            )
+        }
+        return uploadWithData(
+            resource: resource,
+            folder: folder
+        )
+    }
+
+    func uploadViaFile(
         resource: Resource,
         folder: Folder
     ) -> AnyPublisher<Resource.Task, Never> {
@@ -146,7 +164,7 @@ public class StorageClient {
         )
         do {
             let url = try generateFileURL(resource: resource)
-            let base = folder.reference
+            let base = folder.reference.child(resource.name)
             let storageMetadata = StorageMetadata()
             storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
             let task = base.putFile(
@@ -161,16 +179,74 @@ public class StorageClient {
             }
             uploads.append(task)
             task.observe(.progress) { snapshot in
+                let task: Resource.Task
                 if let completedRate = snapshot.progress?.fractionCompleted {
-                    let task = Resource.Task(
-                        status: .progress(completedRate),
-                        resource: resource
-                    )
+                    if completedRate != 1 {
+                        task = Resource.Task(
+                            status: .progress(completedRate),
+                            resource: resource
+                        )
+                    } else {
+                        task = Resource.Task(
+                            status: .success,
+                            resource: resource
+                        )
+                    }
                     subject.send(task)
                 }
             }
         } catch {
             subject.send(.init(status: .fail(error), resource: resource))
+        }
+        return subject.eraseToAnyPublisher()
+    }
+
+    func uploadWithData(
+        resource: Resource,
+        folder: Folder
+    ) -> AnyPublisher<Resource.Task, Never> {
+        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
+            .init(
+                status: .progress(0),
+                resource: resource
+            )
+        )
+        guard let data = resource.data else {
+            assertionFailure("Resource has no data.")
+            return Just(
+                Resource.Task(
+                    status: .fail(StorageClientError.noResourceData),
+                    resource: resource
+                )
+            ).eraseToAnyPublisher()
+        }
+        let storageMetadata = StorageMetadata()
+        storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
+        let ref = folder.reference.child(resource.name)
+        let task = ref.putData(data, metadata: storageMetadata) { (_, error) in
+            if let error = error {
+                subject.send(.init(status: .fail(error), resource: resource))
+                return
+            }
+            subject.send(completion: .finished)
+        }
+        uploads.append(task)
+        task.observe(.progress) { snapshot in
+            if let completedRate = snapshot.progress?.fractionCompleted {
+                let task: Resource.Task
+                if completedRate != 1 {
+                    task = Resource.Task(
+                        status: .progress(completedRate),
+                        resource: resource
+                    )
+                } else {
+                    task = Resource.Task(
+                        status: .success,
+                        resource: resource
+                    )
+                }
+                subject.send(task)
+            }
         }
         return subject.eraseToAnyPublisher()
     }
@@ -243,28 +319,25 @@ public class StorageClient {
         }.eraseToAnyPublisher()
     }
 
-    func generateFileURL(
-        resource: Resource,
-        isTemporary: Bool = true
-    ) throws -> URL {
+    func generateFileURL(resource: Resource) throws -> URL {
         // Generate file-url.
-        let base: URL?
-        if isTemporary {
-            base = FileManager.default.temporaryDirectory
-        } else {
-            base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-        }
+        let base: URL? = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
         guard let base = base else {
             throw StorageClientError.failedToGenerateFile
         }
-        let uuid: String = UUID().uuidString
+        let uuid: String = String(UUID().uuidString.prefix(8))
         let fileName = uuid
-        let format = resource.metadata?.contentType.format ?? ""
-        let path = fileName + "." + format
+        let format = resource.metadata?.contentType.format
+        var path = fileName
+        if let format = format {
+            path = fileName + "." + format
+        }
         let target = base.appendingPathComponent(path)
 
         // Write data to file.
         try resource.data?.write(to: target)
+
+        print(target.absoluteString)
 
         return target
     }
