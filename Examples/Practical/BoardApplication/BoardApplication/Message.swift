@@ -29,10 +29,5 @@ struct Message: FirestoreModel {
 
 // MARK: Identifiable for SwiftUI
 extension Message: Identifiable {
-    var id: String {
-        guard let id = ref?.documentID else {
-            return ""
-        }
-        return id
-    }
+    typealias ID = String?
 }
