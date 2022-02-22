@@ -15,6 +15,6 @@ extension ViewController {
             updatedAt: nil,
             message: message
         )
-        try await client.create(newModel, documentId: savedDocumentId)
+        _ = try await client.create(newModel, documentId: savedDocumentId)
     }
 }
