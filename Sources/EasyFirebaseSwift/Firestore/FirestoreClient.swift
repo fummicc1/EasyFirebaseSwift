@@ -10,14 +10,14 @@ import FirebaseFirestoreSwift
 
 public protocol FirestoreModel: Codable, CombineCompatible {
     static var collectionName: String { get }
-    var uid: String? { get }
+    var id: String? { get }
     var ref: DocumentReference? { get set }
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
 }
 
 public extension FirestoreModel {
-    var uid: String? {
+    var id: String? {
         ref?.documentID
     }
 }
