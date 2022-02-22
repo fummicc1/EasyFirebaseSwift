@@ -17,7 +17,7 @@ extension ViewController {
             updatedAt: nil,
             message: message
         )
-        newModel.publisher(for: .createWithDocumentId(savedDocumentId)).sink { completion in
+        newModel.write(for: .createWithDocumentId(savedDocumentId)).sink { completion in
             print(completion)
         } receiveValue: { }
         .store(in: &cancellables)
@@ -27,7 +27,7 @@ extension ViewController {
         guard let ref = model.ref else {
             return
         }
-        Model.publisher(for: .fetch(ref: ref)).sink { completion in
+        Model.single(for: .fetch(ref: ref)).sink { completion in
             switch completion {
             case .failure(let error):
                 print(error)

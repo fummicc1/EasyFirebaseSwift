@@ -73,7 +73,7 @@ class ViewController: UIViewController {
             limit: nil
         ) { (models: [Model]) in
             for model in models {
-                if model.uid == self.savedDocumentId {
+                if model.id == self.savedDocumentId {
                     self.model = model
                 }
             }
