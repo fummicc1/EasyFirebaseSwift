@@ -9,7 +9,8 @@ import XCTest
 import Combine
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-@testable import EasyFirebaseSwift
+@testable import EasyFirebaseSwiftFirestore
+@testable import TestCore
 
 struct TestModel: FirestoreModel {
     // MARK: Protocol Requirement

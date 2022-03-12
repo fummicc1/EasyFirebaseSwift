@@ -140,9 +140,7 @@ public class FirestoreClient {
         firestore.runTransaction { (transaction, errorPointeer) -> Any? in
             do {
                 let snapshot = try transaction.getDocument(ref)
-                guard let data = try snapshot.data(as: Model.self) else {
-                    return nil
-                }
+                let data = try snapshot.data(as: Model.self)
                 let currentFieldValue = data[keyPath: fieldPath]
                 let newFieldValue = handler((currentFieldValue, fieldValue))
                 model[keyPath: fieldPath] = newFieldValue
@@ -878,18 +876,14 @@ extension FirestoreClient {
     static func putSnaphotsTogether<Model: FirestoreModel>(_ snapshots: QuerySnapshot) throws -> [Model] {
         let documents = snapshots.documents
         let models = try documents.map { document -> Model in
-            guard let model = try document.data(as: Model.self) else {
-                throw FirestoreClientError.failedToDecode(data: document.data())
-            }
+            let model = try document.data(as: Model.self)
             return model
         }
         return models
     }
     
     static func putSnaphotTogether<Model: FirestoreModel>(_ snapshot: DocumentSnapshot) throws -> Model {
-        guard let model = try snapshot.data(as: Model.self) else {
-            throw FirestoreClientError.failedToDecode(data: snapshot.data())
-        }
+        let model = try snapshot.data(as: Model.self)
         return model
     }
 }

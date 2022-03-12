@@ -6,7 +6,10 @@
 //
 
 import Foundation
-import Firebase
+import FirebaseCore
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
 
 // Reference
 // https://techblog.sgr-ksmt.dev/2019/09/28/180821/
