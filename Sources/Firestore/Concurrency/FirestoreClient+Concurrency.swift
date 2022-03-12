@@ -236,7 +236,7 @@ public extension FirestoreClient {
 @available(iOS 15, *)
 @available(macOS 12, *)
 public extension FirestoreClient {
-    public func getCollectionGroup<Model: FirestoreModel>(
+    func getCollectionGroup<Model: FirestoreModel>(
         collectionName: String,
         filter: FirestoreQueryFilter,
         includeCache: Bool,

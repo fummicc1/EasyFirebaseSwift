@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		D32E5BDE27DCD18400088B60 /* EasyFirebaseSwiftAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D32E5BDD27DCD18400088B60 /* EasyFirebaseSwiftAuth */; };
 		D32E5BE027DCD18800088B60 /* EasyFirebaseSwiftFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D32E5BDF27DCD18800088B60 /* EasyFirebaseSwiftFirestore */; };
+		D32E5BE827DCD65200088B60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32E5BE727DCD65200088B60 /* AppDelegate.swift */; };
+		D32E5BEA27DCD65200088B60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32E5BE927DCD65200088B60 /* SceneDelegate.swift */; };
+		D32E5BEC27DCD65200088B60 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32E5BEB27DCD65200088B60 /* ViewController.swift */; };
+		D32E5BEF27DCD65200088B60 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D32E5BED27DCD65200088B60 /* Main.storyboard */; };
+		D32E5BF127DCD65300088B60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D32E5BF027DCD65300088B60 /* Assets.xcassets */; };
+		D32E5BF427DCD65300088B60 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D32E5BF227DCD65300088B60 /* LaunchScreen.storyboard */; };
+		D32E5BFA27DCD66100088B60 /* EasyFirebaseSwiftStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D32E5BF927DCD66100088B60 /* EasyFirebaseSwiftStorage */; };
 		D33159CA263D409D0061211B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159C9263D409D0061211B /* AppDelegate.swift */; };
 		D33159CC263D409D0061211B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159CB263D409D0061211B /* SceneDelegate.swift */; };
 		D33159CE263D409D0061211B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33159CD263D409D0061211B /* ViewController.swift */; };
@@ -32,6 +39,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D32E5BE527DCD65200088B60 /* StorageExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorageExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D32E5BE727DCD65200088B60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D32E5BE927DCD65200088B60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		D32E5BEB27DCD65200088B60 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D32E5BEE27DCD65200088B60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D32E5BF027DCD65300088B60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D32E5BF327DCD65300088B60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D32E5BF527DCD65300088B60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D33159C6263D409D0061211B /* FirestoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirestoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D33159C9263D409D0061211B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D33159CB263D409D0061211B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +74,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D32E5BE227DCD65200088B60 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D32E5BFA27DCD66100088B60 /* EasyFirebaseSwiftStorage in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D33159C3263D409D0061211B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,11 +101,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D32E5BE627DCD65200088B60 /* StorageExample */ = {
+			isa = PBXGroup;
+			children = (
+				D32E5BE727DCD65200088B60 /* AppDelegate.swift */,
+				D32E5BE927DCD65200088B60 /* SceneDelegate.swift */,
+				D32E5BEB27DCD65200088B60 /* ViewController.swift */,
+				D32E5BED27DCD65200088B60 /* Main.storyboard */,
+				D32E5BF027DCD65300088B60 /* Assets.xcassets */,
+				D32E5BF227DCD65300088B60 /* LaunchScreen.storyboard */,
+				D32E5BF527DCD65300088B60 /* Info.plist */,
+			);
+			path = StorageExample;
+			sourceTree = "<group>";
+		};
 		D33159BD263D409D0061211B = {
 			isa = PBXGroup;
 			children = (
 				D33159C8263D409D0061211B /* FirestoreExample */,
 				D3B43849277FFBE5000D6ED2 /* AuthExample */,
+				D32E5BE627DCD65200088B60 /* StorageExample */,
 				D33159C7263D409D0061211B /* Products */,
 				D346555E2656922900F5E378 /* Frameworks */,
 			);
@@ -93,6 +131,7 @@
 			children = (
 				D33159C6263D409D0061211B /* FirestoreExample.app */,
 				D3B43848277FFBE5000D6ED2 /* AuthExample.app */,
+				D32E5BE527DCD65200088B60 /* StorageExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,6 +182,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D32E5BE427DCD65200088B60 /* StorageExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D32E5BF627DCD65300088B60 /* Build configuration list for PBXNativeTarget "StorageExample" */;
+			buildPhases = (
+				D32E5BE127DCD65200088B60 /* Sources */,
+				D32E5BE227DCD65200088B60 /* Frameworks */,
+				D32E5BE327DCD65200088B60 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StorageExample;
+			packageProductDependencies = (
+				D32E5BF927DCD66100088B60 /* EasyFirebaseSwiftStorage */,
+			);
+			productName = StorageExample;
+			productReference = D32E5BE527DCD65200088B60 /* StorageExample.app */;
+			productType = "com.apple.product-type.application";
+		};
 		D33159C5263D409D0061211B /* FirestoreExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D33159DA263D409E0061211B /* Build configuration list for PBXNativeTarget "FirestoreExample" */;
@@ -192,6 +251,9 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
+					D32E5BE427DCD65200088B60 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 					D33159C5263D409D0061211B = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -218,11 +280,22 @@
 			targets = (
 				D33159C5263D409D0061211B /* FirestoreExample */,
 				D3B43847277FFBE5000D6ED2 /* AuthExample */,
+				D32E5BE427DCD65200088B60 /* StorageExample */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D32E5BE327DCD65200088B60 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D32E5BF427DCD65300088B60 /* LaunchScreen.storyboard in Resources */,
+				D32E5BF127DCD65300088B60 /* Assets.xcassets in Resources */,
+				D32E5BEF27DCD65200088B60 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D33159C4263D409D0061211B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -249,6 +322,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D32E5BE127DCD65200088B60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D32E5BEC27DCD65200088B60 /* ViewController.swift in Sources */,
+				D32E5BE827DCD65200088B60 /* AppDelegate.swift in Sources */,
+				D32E5BEA27DCD65200088B60 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D33159C2263D409D0061211B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -277,6 +360,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		D32E5BED27DCD65200088B60 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D32E5BEE27DCD65200088B60 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D32E5BF227DCD65300088B60 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D32E5BF327DCD65300088B60 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		D33159CF263D409D0061211B /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -312,6 +411,66 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D32E5BF727DCD65300088B60 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S8WBNKMKYU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StorageExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.StorageExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D32E5BF827DCD65300088B60 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S8WBNKMKYU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StorageExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.StorageExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D33159D8263D409E0061211B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -437,13 +596,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = "$(SRCROOT)/FirestoreExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.FirestoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -458,13 +617,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = "$(SRCROOT)/FirestoreExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.FirestoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -486,13 +645,13 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.AuthExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -516,13 +675,13 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.fummicc1.EasyFirebaseSwift.AuthExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -533,6 +692,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D32E5BF627DCD65300088B60 /* Build configuration list for PBXNativeTarget "StorageExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D32E5BF727DCD65300088B60 /* Debug */,
+				D32E5BF827DCD65300088B60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D33159C1263D409D0061211B /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -583,6 +751,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D3465561265692B000F5E378 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
 			productName = EasyFirebaseSwiftFirestore;
+		};
+		D32E5BF927DCD66100088B60 /* EasyFirebaseSwiftStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3465561265692B000F5E378 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwiftStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

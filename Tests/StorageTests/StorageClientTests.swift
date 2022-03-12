@@ -9,6 +9,7 @@ import XCTest
 import Combine
 import FirebaseStorage
 @testable import EasyFirebaseSwiftStorage
+@testable import TestCore
 
 class StorageClientTests: XCTestCase {
 

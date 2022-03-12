@@ -26,7 +26,7 @@ let package = Package(
         .package(
             name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk",
-            .upToNextMajor(from: "8.10.0")
+            .upToNextMajor(from: "8.13.0")
         )
     ],
     targets: [
@@ -58,19 +58,36 @@ let package = Package(
             ],
             path: "Sources/Storage"
         ),
-        .testTarget(name: "CoreTests", path: "Tests/Core"),
+        .target(
+            name: "TestCore",
+            dependencies: [
+                .product(
+                    name: "FirebaseAuth",
+                    package: "Firebase"
+                ),
+                .product(
+                    name: "FirebaseFirestore",
+                    package: "Firebase"
+                ),
+                .product(
+                    name: "FirebaseStorage",
+                    package: "Firebase"
+                )
+            ],
+            path: "Sources/TestCore"
+        ),
         .testTarget(
             name: "FirestoreTests",
             dependencies: [
                 .target(name: "EasyFirebaseSwiftFirestore"),
-                .target(name: "CoreTests")
+                .target(name: "TestCore")
             ]
         ),
         .testTarget(
             name: "StorageTests",
             dependencies: [
                 .target(name: "EasyFirebaseSwiftStorage"),
-                .target(name: "CoreTests")
+                .target(name: "TestCore")
             ]
         )
     ]
