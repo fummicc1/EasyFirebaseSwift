@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>34227848610-3siqnra1mntiuqgg2p05nlm84tt4c08c.apps.googleusercontent.com</string>
+	<string>34227848610-qji303le0m04qo0ropehiicjp525t9rl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.34227848610-3siqnra1mntiuqgg2p05nlm84tt4c08c</string>
+	<string>com.googleusercontent.apps.34227848610-qji303le0m04qo0ropehiicjp525t9rl</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBMKFx9PbgziGd2dMi4FQio1BFue2Hvj4k</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>dev.fummicc1.EasyFirebaseSwift.FirestoreExample</string>
+	<string>dev.fummicc1.EasyFirebaseSwift.StorageExample</string>
 	<key>PROJECT_ID</key>
 	<string>easyfirebasefirestoreswift</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:34227848610:ios:ce0b5bcf6a0b89e5c71efb</string>
+	<string>1:34227848610:ios:59ac844170a88b78c71efb</string>
 </dict>
 </plist>
