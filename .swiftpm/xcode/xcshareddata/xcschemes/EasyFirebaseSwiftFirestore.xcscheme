@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EasyFirebaseSwiftStorage"
-               BuildableName = "EasyFirebaseSwiftStorage"
-               BlueprintName = "EasyFirebaseSwiftStorage"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "StorageTests"
-               BuildableName = "StorageTests"
-               BlueprintName = "StorageTests"
+               BlueprintIdentifier = "EasyFirebaseSwiftFirestore"
+               BuildableName = "EasyFirebaseSwiftFirestore"
+               BlueprintName = "EasyFirebaseSwiftFirestore"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CoreTests"
-               BuildableName = "CoreTests"
-               BlueprintName = "CoreTests"
+               BlueprintIdentifier = "FirestoreTests"
+               BuildableName = "FirestoreTests"
+               BlueprintName = "FirestoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -56,9 +42,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "StorageTests"
-               BuildableName = "StorageTests"
-               BlueprintName = "StorageTests"
+               BlueprintIdentifier = "CoreTests"
+               BuildableName = "CoreTests"
+               BlueprintName = "CoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -84,9 +70,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EasyFirebaseSwiftStorage"
-            BuildableName = "EasyFirebaseSwiftStorage"
-            BlueprintName = "EasyFirebaseSwiftStorage"
+            BlueprintIdentifier = "EasyFirebaseSwiftFirestore"
+            BuildableName = "EasyFirebaseSwiftFirestore"
+            BlueprintName = "EasyFirebaseSwiftFirestore"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
