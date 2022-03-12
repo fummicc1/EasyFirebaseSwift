@@ -14,17 +14,27 @@ public protocol Folder {
     var reference: StorageReference { get }
 }
 
-public class RootFolder: Folder {
+public struct HomeFolder: Folder {
+    public var name: String
+    public var reference: StorageReference
+
+    public init() {
+        self.name = ""
+        reference = StorageClient.shared.storage.reference()
+    }
+}
+
+public struct RootFolder: Folder {
     public var name: String
     public var reference: StorageReference
 
     public init(name: String) {
         self.name = name
-        reference = StorageClient.defaultStorage.reference().child(name)
+        reference = StorageClient.shared.storage.reference().child(name)
     }
 }
 
-public class SubFolder: Folder {
+public struct SubFolder: Folder {
     public var name: String
     public var reference: StorageReference
 
@@ -36,22 +46,209 @@ public class SubFolder: Folder {
 
 public class Resource {
     public var name: String
+    public var folder: Folder
     public var metadata: Metadata?
     public var data: Data?
 
     public init(
         name: String,
+        folder: Folder,
         metadata: Metadata?,
         data: Data?
     ) {
         self.name = name
+        self.folder = folder
         self.metadata = metadata
         self.data = data
     }
 
-    public func reference(from folder: Folder) -> StorageReference {
+    public func reference() -> StorageReference {
         let format = metadata?.contentType.format ?? ""
         return folder.reference.child(name + "." + format)
+    }
+
+    public func upload(generateFile: Bool = false) -> AnyPublisher<Resource.Task, Never> {
+        if generateFile {
+            return uploadViaFile()
+        }
+        return uploadWithData()
+    }
+
+    public func uploadViaFile() -> AnyPublisher<Task, Never> {
+        let subject: CurrentValueSubject<Task, Never> = .init(
+            .init(
+                status: .progress(0),
+                resource: self
+            )
+        )
+        do {
+            let url = try generateFileURL(resource: self)
+            let base = folder.reference.child(name)
+            let storageMetadata = StorageMetadata()
+            storageMetadata.contentType = metadata?.contentType.rawValue ?? ""
+            let task = base.putFile(
+                from: url,
+                metadata: storageMetadata
+            ) { metadata, error in
+                if let error = error {
+                    subject.send(
+                        .init(
+                            status: .fail(error),
+                            resource: self
+                        )
+                    )
+                    return
+                }
+                subject.send(completion: .finished)
+            }
+            StorageClient.shared.uploads.append(task)
+            task.observe(.progress) { snapshot in
+                let task: Resource.Task
+                if let completedRate = snapshot.progress?.fractionCompleted {
+                    if completedRate != 1 {
+                        task = Resource.Task(
+                            status: .progress(completedRate),
+                            resource: self
+                        )
+                    } else {
+                        task = Resource.Task(
+                            status: .success,
+                            resource: self
+                        )
+                    }
+                    subject.send(task)
+                }
+            }
+        } catch {
+            subject.send(
+                .init(
+                    status: .fail(error),
+                    resource: self
+                )
+            )
+        }
+        return subject.eraseToAnyPublisher()
+    }
+
+    func uploadWithData() -> AnyPublisher<Task, Never> {
+        let subject: CurrentValueSubject<Task, Never> = .init(
+            .init(
+                status: .progress(0),
+                resource: self
+            )
+        )
+        guard let data = data else {
+            assertionFailure("Resource has no data.")
+            return Just(
+                Resource.Task(
+                    status: .fail(StorageClientError.noResourceData),
+                    resource: self
+                )
+            ).eraseToAnyPublisher()
+        }
+        let storageMetadata = StorageMetadata()
+        storageMetadata.contentType = metadata?.contentType.rawValue ?? ""
+        let ref = folder.reference.child(name)
+        let task = ref.putData(data, metadata: storageMetadata) { (_, error) in
+            if let error = error {
+                subject.send(
+                    .init(
+                        status: .fail(error),
+                        resource: self
+                    )
+                )
+                return
+            }
+            subject.send(completion: .finished)
+        }
+        StorageClient.shared.uploads.append(task)
+        task.observe(.progress) { snapshot in
+            if let completedRate = snapshot.progress?.fractionCompleted {
+                let task: Resource.Task
+                if completedRate != 1 {
+                    task = Resource.Task(
+                        status: .progress(completedRate),
+                        resource: self
+                    )
+                } else {
+                    task = Resource.Task(
+                        status: .success,
+                        resource: self
+                    )
+                }
+                subject.send(task)
+            }
+        }
+        return subject.eraseToAnyPublisher()
+    }
+
+    public func download(
+        maxSize: Int64 = 1024 * 1024 * 10 // 10MB
+    ) -> AnyPublisher<Task, Never> {
+        let subject: CurrentValueSubject<Task, Never> = .init(
+            .init(
+                status: .progress(0),
+                resource: self
+            )
+        )
+        let target = reference()
+        let storageTask = target.getData(
+            maxSize: maxSize
+        ) { data, error in
+            if let error = error {
+                subject.send(
+                    .init(
+                        status: .fail(error),
+                        resource: self
+                    )
+                )
+                return
+            }
+            self.data = data
+            subject.send(
+                .init(
+                    status: .success,
+                    resource: self
+                )
+            )
+        }
+        storageTask.observe(.progress) { snapshot in
+            if let completeRate = snapshot.progress?.fractionCompleted {
+                let task = Resource.Task(
+                    status: .progress(completeRate),
+                    resource: self
+                )
+                subject.send(task)
+            }
+        }
+        return subject.eraseToAnyPublisher()
+    }
+
+    public func fetchDownloadURL() -> AnyPublisher<URL, Error> {
+        Future { [weak self] promise in
+            self?.reference().downloadURL { url, error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                if let url = url {
+                    promise(.success(url))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    public func delete() -> AnyPublisher<Void, Error> {
+        Future { [weak self] promise in
+            self?.reference().delete { error in
+                if let error = error {
+                    promise(.failure(error))
+                    return
+                }
+                promise(.success(()))
+            }
+        }.eraseToAnyPublisher()
     }
 }
 
@@ -129,225 +326,39 @@ public enum StorageClientError: Swift.Error {
 }
 
 public class StorageClient {
-    private var storage: Storage {
-        Self.defaultStorage
-    }
-    private var uploads: [StorageUploadTask] = []
+    public var storage: Storage!
+    var uploads: [StorageUploadTask] = []
 
-    public static var defaultStorage: Storage!
+    public static let shared: StorageClient = StorageClient()
 
     private init() { }
 
-    deinit {
+    public func cancel() {
         uploads.forEach { task in
             task.cancel()
         }
     }
+}
 
-    public func upload(
-        generateFile: Bool = false,
-        resource: Resource,
-        folder: Folder
-    ) -> AnyPublisher<Resource.Task, Never> {
-        if generateFile {
-            return uploadViaFile(
-                resource: resource,
-                folder: folder
-            )
-        }
-        return uploadWithData(
-            resource: resource,
-            folder: folder
-        )
+func generateFileURL(resource: Resource) throws -> URL {
+    // Generate file-url.
+    let base: URL? = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+    guard let base = base else {
+        throw StorageClientError.failedToGenerateFile
     }
-
-    func uploadViaFile(
-        resource: Resource,
-        folder: Folder
-    ) -> AnyPublisher<Resource.Task, Never> {
-        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
-            .init(
-                status: .progress(0),
-                resource: resource
-            )
-        )
-        do {
-            let url = try generateFileURL(resource: resource)
-            let base = folder.reference.child(resource.name)
-            let storageMetadata = StorageMetadata()
-            storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
-            let task = base.putFile(
-                from: url,
-                metadata: storageMetadata
-            ) { metadata, error in
-                if let error = error {
-                    subject.send(.init(status: .fail(error), resource: resource))
-                    return
-                }
-                subject.send(completion: .finished)
-            }
-            uploads.append(task)
-            task.observe(.progress) { snapshot in
-                let task: Resource.Task
-                if let completedRate = snapshot.progress?.fractionCompleted {
-                    if completedRate != 1 {
-                        task = Resource.Task(
-                            status: .progress(completedRate),
-                            resource: resource
-                        )
-                    } else {
-                        task = Resource.Task(
-                            status: .success,
-                            resource: resource
-                        )
-                    }
-                    subject.send(task)
-                }
-            }
-        } catch {
-            subject.send(.init(status: .fail(error), resource: resource))
-        }
-        return subject.eraseToAnyPublisher()
+    let uuid: String = String(UUID().uuidString.prefix(8))
+    let fileName = uuid
+    let format = resource.metadata?.contentType.format
+    var path = fileName
+    if let format = format {
+        path = fileName + "." + format
     }
+    let target = base.appendingPathComponent(path)
 
-    func uploadWithData(
-        resource: Resource,
-        folder: Folder
-    ) -> AnyPublisher<Resource.Task, Never> {
-        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
-            .init(
-                status: .progress(0),
-                resource: resource
-            )
-        )
-        guard let data = resource.data else {
-            assertionFailure("Resource has no data.")
-            return Just(
-                Resource.Task(
-                    status: .fail(StorageClientError.noResourceData),
-                    resource: resource
-                )
-            ).eraseToAnyPublisher()
-        }
-        let storageMetadata = StorageMetadata()
-        storageMetadata.contentType = resource.metadata?.contentType.rawValue ?? ""
-        let ref = folder.reference.child(resource.name)
-        let task = ref.putData(data, metadata: storageMetadata) { (_, error) in
-            if let error = error {
-                subject.send(.init(status: .fail(error), resource: resource))
-                return
-            }
-            subject.send(completion: .finished)
-        }
-        uploads.append(task)
-        task.observe(.progress) { snapshot in
-            if let completedRate = snapshot.progress?.fractionCompleted {
-                let task: Resource.Task
-                if completedRate != 1 {
-                    task = Resource.Task(
-                        status: .progress(completedRate),
-                        resource: resource
-                    )
-                } else {
-                    task = Resource.Task(
-                        status: .success,
-                        resource: resource
-                    )
-                }
-                subject.send(task)
-            }
-        }
-        return subject.eraseToAnyPublisher()
-    }
+    // Write data to file.
+    try resource.data?.write(to: target)
 
-    public func download(
-        resource: Resource,
-        folder: Folder,
-        maxSize: Int64 = 1024 * 1024 * 10 // 10MB
-    ) -> AnyPublisher<Resource.Task, Never> {
-        let subject: CurrentValueSubject<Resource.Task, Never> = .init(
-            .init(
-                status: .progress(0),
-                resource: resource
-            )
-        )
-        let target = resource.reference(from: folder)
-        let storageTask = target.getData(
-            maxSize: maxSize
-        ) { data, error in
-            if let error = error {
-                subject.send(.init(status: .fail(error), resource: resource))
-                return
-            }
-            resource.data = data
-            subject.send(.init(status: .success, resource: resource))
-        }
-        storageTask.observe(.progress) { snapshot in
-            if let completeRate = snapshot.progress?.fractionCompleted {
-                let task = Resource.Task(
-                    status: .progress(completeRate),
-                    resource: resource
-                )
-                subject.send(task)
-            }
-        }
-        return subject.eraseToAnyPublisher()
-    }
+    print(target.absoluteString)
 
-    public func fetchDownloadURL(
-        of resource: Resource,
-        folder: Folder
-    ) -> AnyPublisher<URL, Error> {
-        Future { promise in
-            let reference = resource.reference(from: folder)
-            reference.downloadURL { url, error in
-                if let error = error {
-                    promise(.failure(error))
-                    return
-                }
-                if let url = url {
-                    promise(.success(url))
-                }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-
-    public func delete(
-        resource: Resource,
-        folder: Folder
-    ) -> AnyPublisher<Void, Error> {
-        Future { promise in
-            resource.reference(from: folder).delete { error in
-                if let error = error {
-                    promise(.failure(error))
-                    return
-                }
-                promise(.success(()))
-            }
-        }.eraseToAnyPublisher()
-    }
-
-    func generateFileURL(resource: Resource) throws -> URL {
-        // Generate file-url.
-        let base: URL? = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-        guard let base = base else {
-            throw StorageClientError.failedToGenerateFile
-        }
-        let uuid: String = String(UUID().uuidString.prefix(8))
-        let fileName = uuid
-        let format = resource.metadata?.contentType.format
-        var path = fileName
-        if let format = format {
-            path = fileName + "." + format
-        }
-        let target = base.appendingPathComponent(path)
-
-        // Write data to file.
-        try resource.data?.write(to: target)
-
-        print(target.absoluteString)
-
-        return target
-    }
+    return target
 }
