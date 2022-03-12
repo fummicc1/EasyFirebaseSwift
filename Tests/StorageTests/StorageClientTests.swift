@@ -21,7 +21,7 @@ class StorageClientTests: XCTestCase {
         let defaultStorage: Storage = Storage.storage(
             url: FirebaseTestHelper.gsBucket
         )
-        StorageClient.defaultStorage = defaultStorage
+        StorageClient.shared.storage = defaultStorage
     }
 
     // TODO: Work TestCase
@@ -31,11 +31,12 @@ class StorageClientTests: XCTestCase {
         let data = text.data(using: .utf8)!
         let resource = Resource(
             name: "test",
+            folder: folder,
             metadata: Resource.Metadata(contentType: .plain),
             data: data
         )
         let exp = XCTestExpectation(description: "Test")
-        client.uploadWithData(resource: resource, folder: folder)
+        resource.uploadWithData()
             .sink { task in
                 switch task.status {
                 case .success:
