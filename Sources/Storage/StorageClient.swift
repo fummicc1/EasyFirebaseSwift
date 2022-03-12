@@ -130,7 +130,7 @@ public class Resource {
         return subject.eraseToAnyPublisher()
     }
 
-    func uploadWithData() -> AnyPublisher<Task, Never> {
+    public func uploadWithData() -> AnyPublisher<Task, Never> {
         let subject: CurrentValueSubject<Task, Never> = .init(
             .init(
                 status: .progress(0),
