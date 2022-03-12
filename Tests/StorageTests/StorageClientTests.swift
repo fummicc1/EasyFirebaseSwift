@@ -18,14 +18,15 @@ class StorageClientTests: XCTestCase {
 
     override func setUpWithError() throws {
         FirebaseTestHelper.setupFirebaseApp()
-        let defaultStorage: Storage = Storage.storage(url: FirebaseTestHelper.gsBucket)
+        let defaultStorage: Storage = Storage.storage(
+            url: FirebaseTestHelper.gsBucket
+        )
         StorageClient.defaultStorage = defaultStorage
-        client = StorageClient()
     }
 
     // TODO: Work TestCase
     func test_upload_data() {
-        let folder = Folder(name: "Tests")
+        let folder = RootFolder(name: "Tests")
         let text: String = "Test Test Test Test Text!!"
         let data = text.data(using: .utf8)!
         let resource = Resource(
