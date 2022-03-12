@@ -7,7 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
-import EasyFirebaseSwift
+import EasyFirebaseSwiftFirestore
 import FirebaseFirestoreSwift
 
 struct Model: FirestoreModel {

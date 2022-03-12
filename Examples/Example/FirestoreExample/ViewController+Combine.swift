@@ -7,7 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
-import EasyFirebaseSwift
+import EasyFirebaseSwiftFirestore
 
 extension ViewController {
     func create_combine(message: String) {

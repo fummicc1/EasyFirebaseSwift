@@ -5,7 +5,7 @@
 //  Created by Fumiya Tanaka on 2021/05/01.
 //
 
-import EasyFirebaseSwift
+import EasyFirebaseSwiftFirestore
 import FirebaseFirestore
 import Combine
 import UIKit
