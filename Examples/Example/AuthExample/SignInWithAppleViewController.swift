@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import EasyFirebaseSwift
+import EasyFirebaseSwift_Auth
 import AuthenticationServices
 
 class SignInWithAppleViewController: UIViewController {
