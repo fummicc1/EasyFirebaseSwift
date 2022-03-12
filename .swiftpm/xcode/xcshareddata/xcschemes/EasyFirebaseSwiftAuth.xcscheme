@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EasyFirebaseSwiftStorage"
-               BuildableName = "EasyFirebaseSwiftStorage"
-               BlueprintName = "EasyFirebaseSwiftStorage"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "StorageTests"
-               BuildableName = "StorageTests"
-               BlueprintName = "StorageTests"
+               BlueprintIdentifier = "EasyFirebaseSwiftAuth"
+               BuildableName = "EasyFirebaseSwiftAuth"
+               BlueprintName = "EasyFirebaseSwiftAuth"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -49,16 +35,6 @@
                BlueprintIdentifier = "CoreTests"
                BuildableName = "CoreTests"
                BlueprintName = "CoreTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "StorageTests"
-               BuildableName = "StorageTests"
-               BlueprintName = "StorageTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -84,9 +60,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EasyFirebaseSwiftStorage"
-            BuildableName = "EasyFirebaseSwiftStorage"
-            BlueprintName = "EasyFirebaseSwiftStorage"
+            BlueprintIdentifier = "EasyFirebaseSwiftAuth"
+            BuildableName = "EasyFirebaseSwiftAuth"
+            BlueprintName = "EasyFirebaseSwiftAuth"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
