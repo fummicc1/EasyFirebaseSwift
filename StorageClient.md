@@ -14,7 +14,22 @@ Although Resource is content, Resouce is stored in `Folder` as one of a resouce 
 
 ## Folder
 
-[`Folder`]() stores multiple `Resource`s.
+All of `Resource`s are in `Folder`.
+There are three kinds of `Folder`.
+
+### HomeFolder
+
+`HomeFolder` is at the real root of folder.
+
+### RootFolder
+
+`RootFolder` is a child of `HomeFolder`.
+Although `HomeFolder` is ensured to be single, `RootFolder` can be multiple.
+So, this is root `Folder` created by developers.
+
+### SubFolder
+
+`SubFolder` is a child of `RootFolder`.
 
 ## Usage
 
