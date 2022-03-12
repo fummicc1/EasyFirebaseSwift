@@ -18,12 +18,17 @@ An Easy Firebase Library written in Swift.
   - [x] Apple Authentication
   - [x] SignIn with Email and Password (verifiable)
   - [x] SignIn with Email and Link
-- [x] CloudFirebase
+- [x] CloudFirestore
   - [x] Get / Snapshot / Create / Update / Delete
   - [x] SubCollection
   - [x] CollectionGroup
   - [x] Support Combine
   - [x] Support Async (~ iOS15)
+- [x] FirebaseStorage
+  - [x] Upload new file
+  - [x] Download exsisting file
+  - [x] Delete exsisting file
+  - [ ] Get all files in single folder. 
 
 # Installation
 
