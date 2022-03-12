@@ -9,19 +9,28 @@ import Combine
 import Foundation
 import FirebaseStorage
 
-public class Folder {
-    public let name: String
-    public let resources: [Resource]
-    public let reference: StorageReference
+public protocol Folder {
+    var name: String { get set }
+    var reference: StorageReference { get }
+}
 
-    public init(
-        name: String,
-        parent: StorageReference = StorageClient.defaultStorage.reference(),
-        resources: [Resource] = []
-    ) {
+public class RootFolder: Folder {
+    public var name: String
+    public var reference: StorageReference
+
+    public init(name: String) {
         self.name = name
-        self.resources = resources
-        self.reference = parent.child(name)
+        reference = StorageClient.defaultStorage.reference().child(name)
+    }
+}
+
+public class SubFolder: Folder {
+    public var name: String
+    public var reference: StorageReference
+
+    public init(name: String, parent: StorageReference) {
+        self.name = name
+        reference = parent.child(name)
     }
 }
 
@@ -40,9 +49,9 @@ public class Resource {
         self.data = data
     }
 
-    public func reference(from parent: Folder) -> StorageReference {
+    public func reference(from folder: Folder) -> StorageReference {
         let format = metadata?.contentType.format ?? ""
-        return parent.reference.child(name + "." + format)
+        return folder.reference.child(name + "." + format)
     }
 }
 
@@ -127,7 +136,7 @@ public class StorageClient {
 
     public static var defaultStorage: Storage!
 
-    public init() { }
+    private init() { }
 
     deinit {
         uploads.forEach { task in
