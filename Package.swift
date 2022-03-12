@@ -10,26 +10,58 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "EasyFirebaseSwift",
-            targets: ["EasyFirebaseSwift"]
+            name: "EasyFirebaseSwift-Auth",
+            targets: ["EasyFirebaseSwift-Auth"]
+        ),
+        .library(
+            name: "EasyFirebaseSwift-Firestore",
+            targets: ["EasyFirebaseSwift-Firestore"]
+        ),
+        .library(
+            name: "EasyFirebaseSwift-Storage",
+            targets: ["EasyFirebaseSwift-Storage"]
         )
     ],
     dependencies: [
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0"))
+        .package(
+            name: "Firebase",
+            url: "https://github.com/firebase/firebase-ios-sdk",
+            .upToNextMajor(from: "8.10.0")
+        )
     ],
     targets: [
         .target(
-            name: "EasyFirebaseSwift",
+            name: "EasyFirebaseSwift-Auth",
             dependencies: [
-                .product(name: "FirebaseFirestore", package: "Firebase"),
-                .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase"),
-                .product(name: "FirebaseAuth", package: "Firebase"),
+                .product(name: "FirebaseAuth", package: "Firebase")
+            ]
+        ),
+        .target(
+            name: "EasyFirebaseSwift-Firestore",
+            dependencies: [
+                .product(
+                    name: "FirebaseFirestore",
+                    package: "Firebase"
+                ),
+                .product(
+                    name: "FirebaseFirestoreSwift-Beta",
+                    package: "Firebase"
+                )
+            ]
+        ),
+        .target(
+            name: "EasyFirebaseSwift-Storage",
+            dependencies: [
                 .product(name: "FirebaseStorage", package: "Firebase")
             ]
         ),
         .testTarget(
             name: "EasyFirebaseSwiftTests",
-            dependencies: [.target(name: "EasyFirebaseSwift")]
+            dependencies: [
+                .target(name: "EasyFirebaseSwift-Auth"),
+                .target(name: "EasyFirebaseSwift-Firestore"),
+                .target(name: "EasyFirebaseSwift-Storage")
+            ]
         )
     ]
 )
