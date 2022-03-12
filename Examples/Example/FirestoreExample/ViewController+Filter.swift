@@ -6,11 +6,14 @@
 //
 
 import Foundation
-import EasyFirebaseSwift
+import EasyFirebaseSwiftFirestore
 
 extension ViewController {
     func filter() {
-        let equalFilter = FirestoreEqualFilter(fieldPath: "message", value: "Update Text")
+        let equalFilter = FirestoreEqualFilter(
+            fieldPath: "message",
+            value: "Update Text"
+        )
         client.listen(
             filter: [equalFilter],
             order: [],
@@ -20,6 +23,7 @@ extension ViewController {
                 model.message == "Update Text"
             }
             // Do All models have `Update Text`?
+            // fail if condition is false.
             assert(messageChecking)
         } failure: { error in
             print(error)

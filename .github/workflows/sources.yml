@@ -27,17 +27,14 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Build and Test
         run: |
-          set -o pipefail && \
           xcodebuild -scheme EasyFirebaseSwiftAuth \
           clean build test \
           -destination "name=iPhone 12" \
-          | bundle exec xcpretty
-          set -o pipefail && \
+          | bundle exec xcpretty && \
           xcodebuild -scheme EasyFirebaseSwiftFirestore \
           clean build test \
           -destination "name=iPhone 12" \
-          | bundle exec xcpretty
-          set -o pipefail && \
+          | bundle exec xcpretty && \
           xcodebuild -scheme EasyFirebaseSwiftStorage \
           clean build test \
           -destination "name=iPhone 12" \
