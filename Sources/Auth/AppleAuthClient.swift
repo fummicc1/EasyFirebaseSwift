@@ -31,12 +31,12 @@ public class AppleAuthClient: NSObject {
     private let errorRelay: CurrentValueSubject<Error?, Never> = .init(nil)
     private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never> = .init(nil)
 
-    public var error: AnyPublisher<Error, Never> {
-        errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
+    public var error: AnyPublisher<Error?, Never> {
+        errorRelay.eraseToAnyPublisher()
     }
 
-    public var credential: AnyPublisher<OAuthCredential, Never> {
-        credentialRelay.compactMap({  $0 }).eraseToAnyPublisher()
+    public var credential: AnyPublisher<OAuthCredential?, Never> {
+        credentialRelay.eraseToAnyPublisher()
     }
 
     public func startSignInWithAppleFlow(
@@ -158,12 +158,12 @@ public extension AppleAuthClient {
         private let errorRelay: CurrentValueSubject<Error?, Never>
         private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never>
 
-        public var error: AnyPublisher<Error, Never> {
-            errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
+        public var error: AnyPublisher<Error?, Never> {
+            errorRelay.eraseToAnyPublisher()
         }
 
-        public var credential: AnyPublisher<OAuthCredential, Never> {
-            credentialRelay.compactMap({ $0 }).eraseToAnyPublisher()
+        public var credential: AnyPublisher<OAuthCredential?, Never> {
+            credentialRelay.eraseToAnyPublisher()
         }
 
         public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
