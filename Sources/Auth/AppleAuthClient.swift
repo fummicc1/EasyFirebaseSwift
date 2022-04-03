@@ -28,10 +28,20 @@ public class AppleAuthClient: NSObject {
     public private(set) var currentNonce: String?
     private var delegate: Delegator?
 
+    private let errorRelay: CurrentValueSubject<Error?, Never> = .init(nil)
+    private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never> = .init(nil)
+
+    public var error: AnyPublisher<Error, Never> {
+        errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
+    }
+
+    public var credential: AnyPublisher<OAuthCredential, Never> {
+        credentialRelay.compactMap({  $0 }).eraseToAnyPublisher()
+    }
+
     public func startSignInWithAppleFlow(
-        with authRequest: ASAuthorizationAppleIDRequest? = nil,
-        delegate: ASAuthorizationControllerDelegate? = nil
-    ) -> AnyPublisher<OAuthCredential, Error>? {
+        with authRequest: ASAuthorizationAppleIDRequest? = nil
+    ) {
         let request: ASAuthorizationAppleIDRequest
         if let authRequest = authRequest {
             request = authRequest
@@ -44,7 +54,11 @@ public class AppleAuthClient: NSObject {
         request.requestedScopes = [.email]
         request.nonce = sha256(nonce)
 
-        var delegator = Delegator(nonce: nonce, delegate: delegate)
+        let delegator = Delegator(
+            nonce: nonce,
+            credentialRelay: credentialRelay,
+            errorRelay: errorRelay
+        )
         self.delegate = delegator
 
         let authorizationController = ASAuthorizationController(
@@ -53,8 +67,6 @@ public class AppleAuthClient: NSObject {
         authorizationController.delegate = delegator
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
-
-
     }
 
     private func sha256(_ input: String) -> String {
@@ -132,18 +144,19 @@ public extension AppleAuthClient {
 
         public init(
             nonce: String,
-            delegate: ASAuthorizationControllerDelegate? = nil
+            credentialRelay: CurrentValueSubject<OAuthCredential?, Never>,
+            errorRelay: CurrentValueSubject<Error?, Never>
         ) {
             self.nonce = nonce
-            self.delegate = delegate
+            self.credentialRelay = credentialRelay
+            self.errorRelay = errorRelay
             super.init()
         }
 
         public let nonce: String
-        private let delegate: ASAuthorizationControllerDelegate?
 
-        private let errorRelay: CurrentValueSubject<Error?, Never> = .init(nil)
-        private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never> = .init(nil)
+        private let errorRelay: CurrentValueSubject<Error?, Never>
+        private let credentialRelay: CurrentValueSubject<OAuthCredential?, Never>
 
         public var error: AnyPublisher<Error, Never> {
             errorRelay.compactMap({ $0 }).eraseToAnyPublisher()
@@ -154,26 +167,10 @@ public extension AppleAuthClient {
         }
 
         public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-            if let delegate = delegate {
-                delegate.authorizationController?(
-                    controller: controller,
-                    didCompleteWithError: error
-                )
-                return
-            }
             errorRelay.send(error)
         }
 
         public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-
-            if let delegate = delegate {
-                delegate.authorizationController(
-                    controller: controller,
-                    didCompleteWithAuthorization: authorization
-                )
-                return
-            }
-
             // MARK: STEP2: Handle Response and Create Credential for FirebaseAuth
             guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
                 errorRelay.send(AppleAuthClientError.failedToCastCredential)
