@@ -104,6 +104,25 @@ public struct FirestoreEqualFilter: FirestoreQueryFilter {
     }
 }
 
+public struct FirestoreContainFilter: FirestoreQueryFilter {
+
+    public var fieldPath: String?
+    public var value: Any?
+
+    public init(fieldPath: String?, value: Any?) {
+        self.fieldPath = fieldPath
+        self.value = value
+    }
+
+    public func build(from: Query) -> Query {
+        guard let fieldPath = fieldPath, let value = value as? [Any] else {
+            assertionFailure("Invalid Data")
+            return from
+        }
+        return from.whereField(fieldPath, in: value)
+    }
+}
+
 public enum FirestoreClientError: Error {
     // Decode/Encode
     case failedToDecode(data: [String: Any]?)
