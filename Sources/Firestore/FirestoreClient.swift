@@ -14,11 +14,20 @@ public protocol FirestoreModel: Codable, CombineCompatible {
     var ref: DocumentReference? { get set }
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
+
+    func buildRef() -> DocumentReference?
 }
 
 public extension FirestoreModel {
     var id: String? {
         ref?.documentID
+    }
+
+    func buildRef() -> DocumentReference? {
+        if let id = id {
+            return Firestore.firestore().collection(Self.collectionName).document(id)
+        }
+        return Firestore.firestore().collection(Self.collectionName).document()
     }
 }
 
