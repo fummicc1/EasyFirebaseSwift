@@ -15,7 +15,7 @@ public protocol FirestoreModel: Codable, CombineCompatible {
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
 
-    static func buildRef() -> DocumentReference?
+    static func buildRef(id: String) -> DocumentReference
 }
 
 public extension FirestoreModel {
