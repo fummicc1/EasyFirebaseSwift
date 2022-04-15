@@ -23,7 +23,7 @@ public extension FirestoreModel {
         ref?.documentID
     }
 
-    func buildRef(id: String) -> DocumentReference {
+    static func buildRef(id: String) -> DocumentReference {
         Firestore.firestore().collection(Self.collectionName).document(id)
     }
 }
