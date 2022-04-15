@@ -34,6 +34,7 @@ public protocol FirestoreQueryFilter {
     var value: Any? { get }
     
     func build(from: Query) -> Query
+    func build<Model: FirestoreModel>(type: Model.Type) -> Query
 }
 
 @available(*, deprecated, renamed: "FirestoreQueryOrder")
@@ -81,6 +82,14 @@ public struct FirestoreRangeFilter: FirestoreQueryFilter {
         }
         return from.whereField(fieldPath, in: value)
     }
+
+    public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
+        let from = Firestore.firestore().collection(type.collectionName)
+        guard let fieldPath = fieldPath, let value = value as? [Any] else {
+            return from
+        }
+        return from.whereField(fieldPath, in: value)
+    }
 }
 
 @available(*, deprecated, renamed: "FirestoreEqualFilter")
@@ -102,6 +111,14 @@ public struct FirestoreEqualFilter: FirestoreQueryFilter {
         }
         return from.whereField(fieldPath, isEqualTo: value as Any)
     }
+
+    public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
+        let from = Firestore.firestore().collection(type.collectionName)
+        guard let fieldPath = fieldPath else {
+            return from
+        }
+        return from.whereField(fieldPath, isEqualTo: value as Any)
+    }
 }
 
 public struct FirestoreContainFilter: FirestoreQueryFilter {
@@ -115,11 +132,19 @@ public struct FirestoreContainFilter: FirestoreQueryFilter {
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath, let value = value as? [Any] else {
+        guard let fieldPath = fieldPath, let value = value else {
             assertionFailure("Invalid Data")
             return from
         }
-        return from.whereField(fieldPath, in: value)
+        return from.whereField(fieldPath, arrayContains: value)
+    }
+
+    public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
+        let from = Firestore.firestore().collection(type.collectionName)
+        guard let fieldPath = fieldPath, let value = value else {
+            return from
+        }
+        return from.whereField(fieldPath, arrayContains: value)
     }
 }
 
