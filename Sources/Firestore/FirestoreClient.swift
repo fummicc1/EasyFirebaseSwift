@@ -23,11 +23,8 @@ public extension FirestoreModel {
         ref?.documentID
     }
 
-    func buildRef() -> DocumentReference? {
-        if let id = id {
-            return Firestore.firestore().collection(Self.collectionName).document(id)
-        }
-        return Firestore.firestore().collection(Self.collectionName).document()
+    func buildRef(id: String) -> DocumentReference {
+        Firestore.firestore().collection(Self.collectionName).document(id)
     }
 }
 
