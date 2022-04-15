@@ -14,7 +14,7 @@ public enum FirestoreModelCombine {
 
 // MARK: Single Write
 public extension FirestoreModelCombine {
-    final class WriteSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == Void, SubscriberType.Failure == Swift.Error {
+    final class WriteSubscription<SubscriberType: Subscriber, Model: FirestoreModel>: Combine.Subscription where SubscriberType.Input == DocumentReference, SubscriberType.Failure == Swift.Error {
         
         private var subscriber: SubscriberType?
         private let model: Model
@@ -54,7 +54,8 @@ public extension FirestoreModelCombine {
         }
         
         private func create(model: Model, documentId: String? = nil) {
-            client.create(model, documentId: documentId) { [weak self] _ in
+            client.create(model, documentId: documentId) { [weak self] ref in
+                _ = self?.subscriber?.receive(ref)
                 self?.subscriber?.receive(completion: .finished)
             } failure: { [weak self] error in
                 self?.subscriber?.receive(completion: .failure(error))
@@ -83,7 +84,7 @@ public extension FirestoreModelCombine {
     }
     
     struct WritePublisher<Model: FirestoreModel>: Combine.Publisher {
-        public typealias Output = Void
+        public typealias Output = DocumentReference
         
         public typealias Failure = Error
         
@@ -97,7 +98,7 @@ public extension FirestoreModelCombine {
             self.firestoreClient = firestoreClient
         }
         
-        public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, Void == S.Input {
+        public func receive<S>(subscriber: S) where S : Subscriber, Error == S.Failure, DocumentReference == S.Input {
             let subscription = WriteSubscription(
                 subscriber: subscriber,
                 model: model,
