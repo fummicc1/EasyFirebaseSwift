@@ -7,21 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D37C5D33281195AF004E77C2 /* MessageAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D23281195AE004E77C2 /* MessageAppApp.swift */; };
-		D37C5D34281195AF004E77C2 /* MessageAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D23281195AE004E77C2 /* MessageAppApp.swift */; };
-		D37C5D35281195AF004E77C2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D24281195AE004E77C2 /* ContentView.swift */; };
-		D37C5D36281195AF004E77C2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D24281195AE004E77C2 /* ContentView.swift */; };
+		D37C5D33281195AF004E77C2 /* MessageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D23281195AE004E77C2 /* MessageApp.swift */; };
+		D37C5D34281195AF004E77C2 /* MessageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D23281195AE004E77C2 /* MessageApp.swift */; };
+		D37C5D35281195AF004E77C2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D24281195AE004E77C2 /* RootView.swift */; };
+		D37C5D36281195AF004E77C2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37C5D24281195AE004E77C2 /* RootView.swift */; };
 		D37C5D37281195AF004E77C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D37C5D25281195AF004E77C2 /* Assets.xcassets */; };
 		D37C5D38281195AF004E77C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D37C5D25281195AF004E77C2 /* Assets.xcassets */; };
+		D39C66742811971500340606 /* EasyFirebaseSwiftAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D39C66732811971500340606 /* EasyFirebaseSwiftAuth */; };
+		D39C66762811971500340606 /* EasyFirebaseSwiftFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D39C66752811971500340606 /* EasyFirebaseSwiftFirestore */; };
+		D39C66782811971500340606 /* EasyFirebaseSwiftStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D39C66772811971500340606 /* EasyFirebaseSwiftStorage */; };
+		D39C667A2811972900340606 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66792811972900340606 /* Message.swift */; };
+		D39C667B2811972900340606 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66792811972900340606 /* Message.swift */; };
+		D39C667D2811975000340606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D39C667C2811975000340606 /* GoogleService-Info.plist */; };
+		D39C667E2811975000340606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D39C667C2811975000340606 /* GoogleService-Info.plist */; };
+		D39C66802811986600340606 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C667F2811986600340606 /* Repository.swift */; };
+		D39C66812811986600340606 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C667F2811986600340606 /* Repository.swift */; };
+		D39C66832811A14A00340606 /* MessageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66822811A14A00340606 /* MessageListView.swift */; };
+		D39C66842811A14A00340606 /* MessageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66822811A14A00340606 /* MessageListView.swift */; };
+		D39C66872811A18300340606 /* MessageListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66862811A18300340606 /* MessageListModel.swift */; };
+		D39C66882811A18300340606 /* MessageListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39C66862811A18300340606 /* MessageListModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D37C5D23281195AE004E77C2 /* MessageAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAppApp.swift; sourceTree = "<group>"; };
-		D37C5D24281195AE004E77C2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D37C5D23281195AE004E77C2 /* MessageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageApp.swift; sourceTree = "<group>"; };
+		D37C5D24281195AE004E77C2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D37C5D25281195AF004E77C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D37C5D2A281195AF004E77C2 /* MessageApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MessageApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37C5D30281195AF004E77C2 /* MessageApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MessageApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37C5D32281195AF004E77C2 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		D39C66792811972900340606 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		D39C667C2811975000340606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D39C667F2811986600340606 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		D39C66822811A14A00340606 /* MessageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageListView.swift; sourceTree = "<group>"; };
+		D39C66862811A18300340606 /* MessageListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageListModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D39C66742811971500340606 /* EasyFirebaseSwiftAuth in Frameworks */,
+				D39C66762811971500340606 /* EasyFirebaseSwiftFirestore in Frameworks */,
+				D39C66782811971500340606 /* EasyFirebaseSwiftStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,8 +75,12 @@
 		D37C5D22281195AE004E77C2 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				D37C5D23281195AE004E77C2 /* MessageAppApp.swift */,
-				D37C5D24281195AE004E77C2 /* ContentView.swift */,
+				D39C66852811A17200340606 /* Pages */,
+				D39C667C2811975000340606 /* GoogleService-Info.plist */,
+				D39C66792811972900340606 /* Message.swift */,
+				D37C5D23281195AE004E77C2 /* MessageApp.swift */,
+				D37C5D24281195AE004E77C2 /* RootView.swift */,
+				D39C667F2811986600340606 /* Repository.swift */,
 				D37C5D25281195AF004E77C2 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -78,6 +103,15 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
+		D39C66852811A17200340606 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				D39C66822811A14A00340606 /* MessageListView.swift */,
+				D39C66862811A18300340606 /* MessageListModel.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -94,6 +128,11 @@
 			dependencies = (
 			);
 			name = "MessageApp (iOS)";
+			packageProductDependencies = (
+				D39C66732811971500340606 /* EasyFirebaseSwiftAuth */,
+				D39C66752811971500340606 /* EasyFirebaseSwiftFirestore */,
+				D39C66772811971500340606 /* EasyFirebaseSwiftStorage */,
+			);
 			productName = "MessageApp (iOS)";
 			productReference = D37C5D2A281195AF004E77C2 /* MessageApp.app */;
 			productType = "com.apple.product-type.application";
@@ -142,6 +181,9 @@
 				Base,
 			);
 			mainGroup = D37C5D1D281195AE004E77C2;
+			packageReferences = (
+				D39C66722811971500340606 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */,
+			);
 			productRefGroup = D37C5D2B281195AF004E77C2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -158,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D37C5D37281195AF004E77C2 /* Assets.xcassets in Resources */,
+				D39C667D2811975000340606 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D37C5D38281195AF004E77C2 /* Assets.xcassets in Resources */,
+				D39C667E2811975000340606 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,8 +220,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D37C5D35281195AF004E77C2 /* ContentView.swift in Sources */,
-				D37C5D33281195AF004E77C2 /* MessageAppApp.swift in Sources */,
+				D39C667A2811972900340606 /* Message.swift in Sources */,
+				D37C5D35281195AF004E77C2 /* RootView.swift in Sources */,
+				D37C5D33281195AF004E77C2 /* MessageApp.swift in Sources */,
+				D39C66832811A14A00340606 /* MessageListView.swift in Sources */,
+				D39C66802811986600340606 /* Repository.swift in Sources */,
+				D39C66872811A18300340606 /* MessageListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,8 +233,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D37C5D36281195AF004E77C2 /* ContentView.swift in Sources */,
-				D37C5D34281195AF004E77C2 /* MessageAppApp.swift in Sources */,
+				D39C667B2811972900340606 /* Message.swift in Sources */,
+				D37C5D36281195AF004E77C2 /* RootView.swift in Sources */,
+				D37C5D34281195AF004E77C2 /* MessageApp.swift in Sources */,
+				D39C66842811A14A00340606 /* MessageListView.swift in Sources */,
+				D39C66812811986600340606 /* Repository.swift in Sources */,
+				D39C66882811A18300340606 /* MessageListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +502,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D39C66722811971500340606 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fummicc1/EasyFirebaseSwift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D39C66732811971500340606 /* EasyFirebaseSwiftAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D39C66722811971500340606 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwiftAuth;
+		};
+		D39C66752811971500340606 /* EasyFirebaseSwiftFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D39C66722811971500340606 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwiftFirestore;
+		};
+		D39C66772811971500340606 /* EasyFirebaseSwiftStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D39C66722811971500340606 /* XCRemoteSwiftPackageReference "EasyFirebaseSwift" */;
+			productName = EasyFirebaseSwiftStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D37C5D1E281195AE004E77C2 /* Project object */;
 }
