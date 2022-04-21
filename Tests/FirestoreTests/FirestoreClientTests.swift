@@ -56,7 +56,7 @@ class FirestoreClientTests: XCTestCase {
                 case .failure(let error):
                     XCTFail(error.localizedDescription)
                 }
-            } receiveValue: { }
+            } receiveValue: { _ in }
             .store(in: &cancellables)
         wait(for: [exp], timeout: 5)
     }
