@@ -836,7 +836,7 @@ extension FirestoreClient {
         limit: Int?,
         success: @escaping ([Model]) -> Void,
         failure: @escaping (Error) -> Void
-    ) {        
+    ) {
         createQuery(
             from: firestore.collectionGroup(collectionName),
             filter: [filter]
@@ -872,12 +872,12 @@ extension FirestoreClient {
         failure: @escaping (Error) -> Void
     ) {
         
-        createQuery(
+        let query = createQuery(
             from: firestore.collectionGroup(collectionName),
             filter: [filter]
-        )
-        .build(order: order, limit: limit)
-        .addSnapshotListener { (snapshots, error) in
+        ).build(order: order, limit: limit)
+
+        let listener = query.addSnapshotListener { (snapshots, error) in
             if let error = error {
                 failure(error)
                  return
@@ -895,6 +895,8 @@ extension FirestoreClient {
                 failure(error)
             }
         }
+        queryListeners[query]?.remove()
+        queryListeners[query] = listener
     }
     
     private func createQuery(from ref: Query, filter: [FirestoreQueryFilter]) -> Query {
