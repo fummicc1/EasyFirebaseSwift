@@ -29,7 +29,10 @@ enum FirebaseTestHelper {
 
     static func setupFirebaseApp() {
         if FirebaseApp.app() == nil {
-            let options = FirebaseOptions(googleAppID: "1:123:ios:123abc", gcmSenderID: "sender_id")
+            let options = FirebaseOptions(
+                googleAppID: "1:123:ios:123abc",
+                gcmSenderID: "sender_id"
+            )
             options.projectID = "test-" + dateFormatter.string(from: Date())
             FirebaseApp.configure(options: options)
             let settings = Firestore.firestore().settings

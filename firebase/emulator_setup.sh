@@ -9,8 +9,10 @@ set -x
 if ! command -v firebase &> /dev/null
 then
     # download firebase
-    curl -sL https://firebase.tools | bash 
+    curl -sL https://firebase.tools | bash     
 fi
+echo "FirebasePath:" 
+`echo which firebase`
 # setup firebase emulator only for firestore
 firebase setup:emulators:firestore
 firebase setup:emulators:storage
