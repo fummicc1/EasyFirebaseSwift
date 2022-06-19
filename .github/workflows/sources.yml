@@ -31,7 +31,7 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       - name: Wait firebase_emulator_setup
-        working-directory: .github/workflows
+        working-directory: ./firebase
         run: ./wait_firebase_emulator_setup.sh
       - name: Build and Test
         run: |
