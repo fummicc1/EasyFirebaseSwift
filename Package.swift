@@ -45,7 +45,7 @@ let package = Package(
                     package: "Firebase"
                 ),
                 .product(
-                    name: "FirebaseFirestoreSwift-Beta",
+                    name: "FirebaseFirestoreSwift",
                     package: "Firebase"
                 )
             ],
