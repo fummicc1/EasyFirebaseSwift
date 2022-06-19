@@ -48,3 +48,5 @@ jobs:
           clean build test \
           -destination "name=iPhone 12" \
           | bundle exec xcpretty
+      - name: Kill firebase_emulator process
+        run: kill `cat /tmp/firebase_emulator_pid.pid` &>/dev/null
