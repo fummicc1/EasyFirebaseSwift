@@ -15,5 +15,5 @@ fi
 # setup firebase emulator only for firestore
 firebase setup:emulators:firestore
 firebase setup:emulators:storage
-firebase emulators:start
-sleep 1 &
+firebase emulators:start &
+sleep 5
