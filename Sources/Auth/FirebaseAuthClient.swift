@@ -24,8 +24,12 @@ public class FirebaseAuthClient {
         auth.currentUser?.uid
     }
     
+    public var currentUser: FirebaseAuth.User? {
+        userSubject.value
+    }
+    
     public var user: AnyPublisher<FirebaseAuth.User?, Error> {
-        userSubject.eraseToAnyPublisher()
+        userSubject.dropFirst().eraseToAnyPublisher()
     }
 
     public init(auth: Auth = Auth.auth()) {

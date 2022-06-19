@@ -26,7 +26,7 @@ let package = Package(
         .package(
             name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk",
-            .upToNextMajor(from: "8.13.0")
+            .upToNextMajor(from: "9.0.0")
         )
     ],
     targets: [
@@ -45,7 +45,7 @@ let package = Package(
                     package: "Firebase"
                 ),
                 .product(
-                    name: "FirebaseFirestoreSwift-Beta",
+                    name: "FirebaseFirestoreSwift",
                     package: "Firebase"
                 )
             ],
