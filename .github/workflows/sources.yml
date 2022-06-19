@@ -30,6 +30,9 @@ jobs:
         run: ./emulator_setup.sh
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Wait firebase_emulator_setup
+        working-directory: .github/workflows
+        run: ./wait_firebase_emulator_setup.sh
       - name: Build and Test
         run: |
           set -o pipefail && \
