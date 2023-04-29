@@ -147,7 +147,7 @@ public struct FirestoreContainFilter: FirestoreQueryFilter {
             assertionFailure("Invalid Data")
             return from
         }
-        return from.whereField(fieldPath, arrayContains: value)
+        return from.whereField(fieldPath, in: value)
     }
 
     public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
@@ -155,7 +155,7 @@ public struct FirestoreContainFilter: FirestoreQueryFilter {
         guard let fieldPath = fieldPath, !value.isEmpty else {
             return from
         }
-        return from.whereField(fieldPath, arrayContains: value)
+        return from.whereField(fieldPath, in: value)
     }
 }
 
