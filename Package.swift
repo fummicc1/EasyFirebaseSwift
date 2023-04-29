@@ -26,7 +26,7 @@ let package = Package(
         .package(
             name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk",
-            .upToNextMajor(from: "9.0.0")
+            .upToNextMajor(from: "10.0.0")
         )
     ],
     targets: [
