@@ -9,7 +9,7 @@ import XCTest
 import Combine
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-@testable import EasyFirebaseSwiftFirestore
+@testable import EasyFirebaseFirestore
 @testable import TestCore
 
 struct TestModel: FirestoreModel {
