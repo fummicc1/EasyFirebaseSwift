@@ -1,12 +1,12 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.10
 
 import PackageDescription
 
 let package = Package(
     name: "EasyFirebase",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v11)
+		.iOS(.v15),
+        .macOS(.v13),
     ],
     products: [
         .library(
@@ -24,7 +24,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk",
             .upToNextMajor(from: "10.24.0")
         )
@@ -33,7 +32,7 @@ let package = Package(
         .target(
             name: "EasyFirebaseAuth",
             dependencies: [
-                .product(name: "FirebaseAuth", package: "Firebase")
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
             path: "Sources/Auth"
         ),
@@ -42,11 +41,11 @@ let package = Package(
             dependencies: [
                 .product(
                     name: "FirebaseFirestore",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseFirestoreSwift",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 )
             ],
             path: "Sources/Firestore"
@@ -54,7 +53,7 @@ let package = Package(
         .target(
             name: "EasyFirebaseStorage",
             dependencies: [
-                .product(name: "FirebaseStorage", package: "Firebase")
+                .product(name: "FirebaseStorage", package: "firebase-ios-sdk")
             ],
             path: "Sources/Storage"
         ),
@@ -63,15 +62,15 @@ let package = Package(
             dependencies: [
                 .product(
                     name: "FirebaseAuth",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseFirestore",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseStorage",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 )
             ],
             path: "Sources/TestCore"
