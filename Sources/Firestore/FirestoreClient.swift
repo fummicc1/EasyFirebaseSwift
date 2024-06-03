@@ -72,7 +72,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath, minValue > maxValue else {
+        guard let fieldPath = fieldPath, maxValue > minValue else {
             return from
         }
         return from
@@ -82,7 +82,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
 
     public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
         let from = Firestore.firestore().collection(type.collectionName)
-        guard let fieldPath = fieldPath, minValue > maxValue else {
+        guard let fieldPath = fieldPath, maxValue > minValue else {
             return from
         }
         return from
