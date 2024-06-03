@@ -1,60 +1,59 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.10
 
 import PackageDescription
 
 let package = Package(
-    name: "EasyFirebaseSwift",
+    name: "EasyFirebase",
     platforms: [
-        .iOS(.v13),
-        .macOS(.v11)
+		.iOS(.v15),
+        .macOS(.v13),
     ],
     products: [
         .library(
-            name: "EasyFirebaseSwiftAuth",
-            targets: ["EasyFirebaseSwiftAuth"]
+            name: "EasyFirebaseAuth",
+            targets: ["EasyFirebaseAuth"]
         ),
         .library(
-            name: "EasyFirebaseSwiftFirestore",
-            targets: ["EasyFirebaseSwiftFirestore"]
+            name: "EasyFirebaseFirestore",
+            targets: ["EasyFirebaseFirestore"]
         ),
         .library(
-            name: "EasyFirebaseSwiftStorage",
-            targets: ["EasyFirebaseSwiftStorage"]
+            name: "EasyFirebaseStorage",
+            targets: ["EasyFirebaseStorage"]
         )
     ],
     dependencies: [
         .package(
-            name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk",
-            .upToNextMajor(from: "10.0.0")
+            .upToNextMajor(from: "10.24.0")
         )
     ],
     targets: [
         .target(
-            name: "EasyFirebaseSwiftAuth",
+            name: "EasyFirebaseAuth",
             dependencies: [
-                .product(name: "FirebaseAuth", package: "Firebase")
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
             path: "Sources/Auth"
         ),
         .target(
-            name: "EasyFirebaseSwiftFirestore",
+            name: "EasyFirebaseFirestore",
             dependencies: [
                 .product(
                     name: "FirebaseFirestore",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseFirestoreSwift",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 )
             ],
             path: "Sources/Firestore"
         ),
         .target(
-            name: "EasyFirebaseSwiftStorage",
+            name: "EasyFirebaseStorage",
             dependencies: [
-                .product(name: "FirebaseStorage", package: "Firebase")
+                .product(name: "FirebaseStorage", package: "firebase-ios-sdk")
             ],
             path: "Sources/Storage"
         ),
@@ -63,15 +62,15 @@ let package = Package(
             dependencies: [
                 .product(
                     name: "FirebaseAuth",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseFirestore",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 ),
                 .product(
                     name: "FirebaseStorage",
-                    package: "Firebase"
+                    package: "firebase-ios-sdk"
                 )
             ],
             path: "Sources/TestCore"
@@ -79,14 +78,14 @@ let package = Package(
         .testTarget(
             name: "FirestoreTests",
             dependencies: [
-                .target(name: "EasyFirebaseSwiftFirestore"),
+                .target(name: "EasyFirebaseFirestore"),
                 .target(name: "TestCore")
             ]
         ),
         .testTarget(
             name: "StorageTests",
             dependencies: [
-                .target(name: "EasyFirebaseSwiftStorage"),
+                .target(name: "EasyFirebaseStorage"),
                 .target(name: "TestCore")
             ]
         )

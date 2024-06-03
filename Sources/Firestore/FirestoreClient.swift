@@ -32,9 +32,6 @@ public protocol SubCollectionModel {
     static var parentModelType: FirestoreModel.Type { get }
 }
 
-@available(*, deprecated, renamed: "FirestoreQueryFilter")
-typealias FirestoreFilterModel = FirestoreQueryFilter
-
 public protocol FirestoreQueryFilter {
     var fieldPath: String? { get }
     
@@ -42,18 +39,12 @@ public protocol FirestoreQueryFilter {
     func build<Model: FirestoreModel>(type: Model.Type) -> Query
 }
 
-@available(*, deprecated, renamed: "FirestoreQueryOrder")
-typealias FirestoreOrderModel = FirestoreQueryOrder
-
 public protocol FirestoreQueryOrder {
     var fieldPath: String { get }
     var isAscending: Bool { get }
     
     func build(from: Query) -> Query
 }
-
-@available(*, deprecated, renamed: "DefaultFirestoreQueryOrder")
-typealias FirestoreOrderModelImpl = DefaultFirestoreQueryOrder
 
 public struct DefaultFirestoreQueryOrder: FirestoreQueryOrder {
     public var fieldPath: String
@@ -69,9 +60,6 @@ public struct DefaultFirestoreQueryOrder: FirestoreQueryOrder {
     }
 }
 
-@available(*, deprecated, renamed: "FirestoreRangeFilter")
-typealias FirestoreFilterRangeModel = FirestoreRangeFilter
-
 public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
     public var fieldPath: String?
     public var minValue: Value
@@ -84,7 +72,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath, minValue > maxValue else {
+        guard let fieldPath = fieldPath, maxValue > minValue else {
             return from
         }
         return from
@@ -94,7 +82,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
 
     public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
         let from = Firestore.firestore().collection(type.collectionName)
-        guard let fieldPath = fieldPath, minValue > maxValue else {
+        guard let fieldPath = fieldPath, maxValue > minValue else {
             return from
         }
         return from
@@ -102,9 +90,6 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
             .whereField(fieldPath, isLessThan: maxValue)
     }
 }
-
-@available(*, deprecated, renamed: "FirestoreEqualFilter")
-typealias FirestoreFilterEqualModel = FirestoreEqualFilter
 
 public struct FirestoreEqualFilter: FirestoreQueryFilter {
     public var fieldPath: String?
