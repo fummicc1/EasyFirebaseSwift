@@ -608,7 +608,7 @@ extension FirestoreClient {
     ) {
         do {
             var model = model
-            guard let ref = model.ref else {
+            guard var ref = model.ref else {
                 failure(FirestoreClientError.notExistsDocumentReferenceInUpdateModel)
                 return
             }
@@ -617,7 +617,30 @@ extension FirestoreClient {
                 failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
                 return
             }
-            
+
+            if let superParentUid = superParentUid, let superParentType = Model.parentModelType as? SubCollectionModel.Type {
+                let superCollectionName = superParentType.parentModelType.collectionName
+                let parentCollectionName = Model.parentModelType.collectionName
+                let collectionName = Model.collectionName
+
+                let documentId = ref.documentID
+                ref = firestore
+                    .collection(superCollectionName)
+                    .document(superParentUid)
+                    .collection(parentCollectionName)
+                    .document(parentUid)
+                    .collection(collectionName)
+                    .document(documentId)
+            } else {
+
+                let documentId = ref.documentID
+                ref = firestore
+                    .collection(Model.parentModelType.collectionName)
+                    .document(parentUid)
+                    .collection(Model.collectionName)
+                    .document(documentId)
+            }
+
             model.updatedAt = nil
             
             try ref.setData(from: model, merge: true) { (error) in
