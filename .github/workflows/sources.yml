@@ -36,15 +36,15 @@ jobs:
       - name: Build and Test
         run: |
           set -o pipefail && \
-          xcodebuild -scheme EasyFirebaseSwiftAuth \
+          xcodebuild -scheme EasyFirebaseAuth \
           clean build \
           -destination "name=iPhone 12" \
           | bundle exec xcpretty && \
-          xcodebuild -scheme EasyFirebaseSwiftFirestore \
+          xcodebuild -scheme EasyFirebaseFirestore \
           clean build test \
           -destination "name=iPhone 12" \
           | bundle exec xcpretty && \
-          xcodebuild -scheme EasyFirebaseSwiftStorage \
+          xcodebuild -scheme EasyFirebaseStorage \
           clean build test \
           -destination "name=iPhone 12" \
           | bundle exec xcpretty
