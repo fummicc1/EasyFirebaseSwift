@@ -15,7 +15,10 @@ public protocol FirestoreModel: Codable, CombineCompatible {
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
 
-    static func buildRef(id: String) -> DocumentReference
+    static func buildRef(
+        firestore: Firestore?,
+        id: String
+    ) -> DocumentReference
 }
 
 public extension FirestoreModel {
@@ -23,8 +26,9 @@ public extension FirestoreModel {
         ref?.documentID
     }
 
-    static func buildRef(id: String) -> DocumentReference {
-        Firestore.firestore().collection(Self.collectionName).document(id)
+    static func buildRef(firestore: Firestore?, id: String) -> DocumentReference {
+        let firestore = firestore ?? Firestore.firestore()
+        return firestore.collection(Self.collectionName).document(id)
     }
 }
 
@@ -35,15 +39,15 @@ public protocol SubCollectionModel {
 public protocol FirestoreQueryFilter {
     var fieldPath: String? { get }
     
-    func build(from: Query) -> Query
     func build<Model: FirestoreModel>(type: Model.Type) -> Query
+    func intercept(from: Query) -> Query
 }
 
 public protocol FirestoreQueryOrder {
     var fieldPath: String { get }
     var isAscending: Bool { get }
     
-    func build(from: Query) -> Query
+    func intercept(from: Query) -> Query
 }
 
 public struct DefaultFirestoreQueryOrder: FirestoreQueryOrder {
@@ -55,7 +59,7 @@ public struct DefaultFirestoreQueryOrder: FirestoreQueryOrder {
         self.isAscending = isAscending
     }
     
-    public func build(from: Query) -> Query {
+    public func intercept(from: Query) -> Query {
         from.order(by: fieldPath, descending: !isAscending)
     }
 }
@@ -71,7 +75,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
         self.maxValue = maxValue
     }
 
-    public func build(from: Query) -> Query {
+    public func intercept(from: Query) -> Query {
         guard let fieldPath = fieldPath, maxValue > minValue else {
             return from
         }
@@ -100,8 +104,8 @@ public struct FirestoreEqualFilter: FirestoreQueryFilter {
         self.value = value
     }
     
-    public func build(from: Query) -> Query {
-        
+    public func intercept(from: Query) -> Query {
+
         guard let fieldPath = fieldPath else {
             return from
         }
@@ -127,9 +131,8 @@ public struct FirestoreContainFilter: FirestoreQueryFilter {
         self.value = value
     }
 
-    public func build(from: Query) -> Query {
+    public func intercept(from: Query) -> Query {
         guard let fieldPath = fieldPath, !value.isEmpty else {
-            assertionFailure("Invalid Data")
             return from
         }
         return from.whereField(fieldPath, in: value)
@@ -149,30 +152,31 @@ public enum FirestoreClientError: Error {
     case failedToDecode(data: [String: Any]?)
     
     // Ref
-    case alreadyExistsDocumentReferenceInCreateModel
-    case notExistsDocumentReferenceInUpdateModel
-    
+    case alreadyExists(ref: DocumentReference)
+    case notFound(ref: DocumentReference)
+
     // Timestamp
-    case occureTimestampExceptionInCreateModel
-    case occureTimestampExceptionInUpdateModel
+    case invalidTimestamp(createdAt: Timestamp?, updatedAt: Timestamp?)
 }
 
-public class FirestoreClient {
-    
+public actor FirestoreClient {
+
     private let firestore = Firestore.firestore()
     private var documentListeners: [DocumentReference: ListenerRegistration] = [:]
     private var queryListeners: [Query: ListenerRegistration] = [:]
     
     public init() { }
-    
+
+    internal func set(ref: DocumentReference, documentListener: ListenerRegistration) {
+        documentListeners[ref] = documentListener
+    }
+
     public func writeTransaction<Model: FirestoreModel, FieldValue>(
         _ model: Model,
         fieldPath: WritableKeyPath<Model, FieldValue>,
         fieldValue: FieldValue,
-        handler: @escaping ((FieldValue, FieldValue)) -> FieldValue,
-        success: @escaping (DocumentReference) -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
+        beforeCommit: @escaping ((FieldValue, FieldValue)) -> FieldValue,
+    ) async throws -> DocumentReference {
         var model = model
         guard let ref = model.ref else {
             return
@@ -201,132 +205,103 @@ public class FirestoreClient {
     
     public func create<Model: FirestoreModel>(
         _ model: Model,
-        documentId: String? = nil,
-        success: @escaping (DocumentReference) -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        do {
-            if model.ref != nil {
-                failure(FirestoreClientError.alreadyExistsDocumentReferenceInCreateModel)
-                return
-            }
-            
-            if model.createdAt != nil || model.updatedAt != nil {
-                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
-                return
-            }
-            
-            let ref: DocumentReference
-            
-            if let documentId = documentId {
-                ref = firestore.collection(Model.collectionName).document(documentId)
-            } else {
-                ref = firestore.collection(Model.collectionName).document()
-            }
-            
-            try ref.setData(from: model, merge: false) { error in
-                if let error = error {
-                    failure(error)
-                    return
+        documentId: String? = nil
+    ) async throws -> DocumentReference {
+        if let ref = model.ref {
+            throw FirestoreClientError.alreadyExists(
+                ref: ref
+            )
+        }
+
+        if model.createdAt != nil || model.updatedAt != nil {
+            throw FirestoreClientError.invalidTimestamp(
+                createdAt: model.createdAt,
+                updatedAt: model.updatedAt
+            )
+        }
+
+        let ref: DocumentReference
+
+        if let documentId = documentId {
+            ref = firestore.collection(Model.collectionName).document(documentId)
+        } else {
+            ref = firestore.collection(Model.collectionName).document()
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            do {
+                try ref.setData(from: model, merge: false) { error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume(returning: ref)
                 }
-                success(ref)
+            } catch {
+                continuation.resume(throwing: error)
             }
-        } catch {
-            failure(error)
         }
     }
     
     /// Update document's data or Create new document if `model.ref` is nil.
     public func write<Model: FirestoreModel>(
         _ model: Model,
-        documentId: String? = nil,
-        success: @escaping () -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        let ref: DocumentReference
-        
-        if let _ref = model.ref {
-            ref = _ref
+        documentId: String? = nil
+    ) async throws -> DocumentReference {
+        let ref: DocumentReference = if let ref = model.ref {
+            ref
         } else {
             if let documentId = documentId {
-                ref = firestore.collection(Model.collectionName).document(documentId)
+                firestore.collection(Model.collectionName).document(documentId)
             } else {
-                ref = firestore.collection(Model.collectionName).document()
+                firestore.collection(Model.collectionName).document()
             }
         }
-        
-        do {
-            try ref.setData(from: model, merge: true) { error in
-                if let error = error {
-                    failure(error)
-                    return
+        return try await withCheckedThrowingContinuation { continuation in
+            do {
+                try ref.setData(from: model, merge: true) { error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume(returning: ref)
                 }
-                success()
+            } catch {
+                continuation.resume(throwing: error)
             }
-        } catch {
-            failure(error)
-        }
-        
-    }
-    
-    public func update<Model: FirestoreModel>(
-        _ model: Model,
-        success: @escaping () -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        do {
-            guard let ref = model.ref else {
-                failure(FirestoreClientError.notExistsDocumentReferenceInUpdateModel)
-                return
-            }
-            
-            if model.createdAt == nil {
-                failure(FirestoreClientError.occureTimestampExceptionInUpdateModel)
-                return
-            }
-            
-            try ref.setData(from: model, merge: true) { error in
-                if let error = error {
-                    failure(error)
-                    return
-                }
-                success()
-            }
-            
-        } catch {
-            failure(error)
         }
     }
     
     public func listen<Model: FirestoreModel>(
-        uid: String,
-        includeCache: Bool = true,
-        success: @escaping (Model) -> Void,
-        failure: @escaping (Error) -> Void
-    ) {
-        let ref = firestore.collection(Model.collectionName)
-            .document(uid)
-        let listener = ref
-            .addSnapshotListener { (snapshot, error) in
-            if let error = error {
-                failure(error)
-                return
+        documentId: String,
+        includeCache: Bool = true
+    ) -> AsyncThrowingStream<Model, Error> {
+        let ref = Model.buildRef(firestore: firestore, id: documentId)
+        documentListeners[ref]?.remove()
+        return AsyncThrowingStream { [weak self] continuation in
+            let listener = ref.addSnapshotListener(
+                includeMetadataChanges: includeCache
+            ) { snapshot, error in
+                guard let snapshot = snapshot else {
+                    return
+                }
+                let isCache = snapshot.metadata.isFromCache
+                if isCache, !includeCache {
+                    return
+                }
+                do {
+                    let model = try snapshot.data(as: Model.self)
+                    continuation.yield(model)
+                } catch {
+                    continuation.yield(with: .failure(error))
+                }
             }
-            guard let snapshot = snapshot else {
-                return
+            continuation.onTermination = { _ in
+                listener.remove()
             }
-            if snapshot.metadata.isFromCache, includeCache == false {
-                return
-            }
-            do {
-                let model: Model = try FirestoreClient.putSnaphotTogether(snapshot)
-                success(model)
-            } catch {
-                failure(error)
+            Task { [weak self] in
+                await self?.set(ref: ref, documentListener: listener)
             }
         }
-        documentListeners[ref]?.remove()
-        documentListeners[ref] = listener
     }
     
     public func listen<Model: FirestoreModel>(
@@ -547,7 +522,7 @@ extension FirestoreClient {
         do {
             
             if model.ref != nil {
-                failure(FirestoreClientError.alreadyExistsDocumentReferenceInCreateModel)
+                failure(FirestoreClientError.alreadyExists)
                 return
             }
             
@@ -583,7 +558,7 @@ extension FirestoreClient {
             }
             
             if model.updatedAt != nil || model.createdAt != nil {
-                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
+                failure(FirestoreClientError.invalidTimestamp(createdAt: Date?, updatedAt: Date?))
                 return
             }
             
@@ -609,12 +584,12 @@ extension FirestoreClient {
         do {
             var model = model
             guard var ref = model.ref else {
-                failure(FirestoreClientError.notExistsDocumentReferenceInUpdateModel)
+                failure(FirestoreClientError.notFound)
                 return
             }
             
             if model.updatedAt == nil || model.createdAt == nil {
-                failure(FirestoreClientError.occureTimestampExceptionInCreateModel)
+                failure(FirestoreClientError.invalidTimestamp(createdAt: Date?, updatedAt: Date?))
                 return
             }
 
