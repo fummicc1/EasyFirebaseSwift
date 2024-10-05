@@ -1,13 +1,13 @@
 //
 //  StorageClient.swift
-//  
+//
 //
 //  Created by Fumiya Tanaka on 2022/01/15.
 //
 
 import Combine
-import Foundation
 import FirebaseStorage
+import Foundation
 
 public protocol Folder {
     var name: String { get set }
@@ -183,7 +183,7 @@ public class Resource {
     }
 
     public func download(
-        maxSize: Int64 = 1024 * 1024 * 10 // 10MB
+        maxSize: Int64 = 1024 * 1024 * 10  // 10MB
     ) -> AnyPublisher<Task, Never> {
         let subject: CurrentValueSubject<Task, Never> = .init(
             .init(
@@ -252,9 +252,9 @@ public class Resource {
     }
 }
 
-public extension Resource {
+extension Resource {
 
-    struct Metadata {
+    public struct Metadata {
         public init(contentType: Resource.Metadata.ContentType) {
             self.contentType = contentType
         }
@@ -300,7 +300,7 @@ public extension Resource {
         }
     }
 
-    struct Task {
+    public struct Task {
         public init(
             status: Resource.Status,
             resource: Resource
@@ -313,7 +313,7 @@ public extension Resource {
         public let resource: Resource
     }
 
-    enum Status {
+    public enum Status {
         case progress(Double)
         case success
         case fail(Error)
@@ -331,7 +331,7 @@ public class StorageClient {
 
     public static let shared: StorageClient = StorageClient()
 
-    private init() { }
+    private init() {}
 
     public func cancel() {
         uploads.forEach { task in

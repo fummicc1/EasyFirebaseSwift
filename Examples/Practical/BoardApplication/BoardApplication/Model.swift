@@ -1,6 +1,6 @@
 import Combine
-import Foundation
 import EasyFirebaseSwift
+import Foundation
 
 @MainActor
 class Model: ObservableObject {
@@ -16,7 +16,8 @@ class Model: ObservableObject {
         let action = FirestoreModelTypeAction<Message>
             .snapshots(SnapshotInputParameter.Default())
         Message.multiple(for: action, client: firestoreClient)
-            .sink { _ in } receiveValue: { messages in
+            .sink { _ in
+            } receiveValue: { messages in
                 self.list = messages
             }
             .store(in: &cancellables)

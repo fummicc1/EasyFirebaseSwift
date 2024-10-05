@@ -5,8 +5,8 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import Foundation
 import EasyFirebaseSwiftFirestore
+import Foundation
 
 extension ViewController {
     func filter() {
@@ -17,8 +17,8 @@ extension ViewController {
         client.listen(
             filter: [equalFilter],
             order: [],
-            limit: nil)
-        { (models: [Model]) in
+            limit: nil
+        ) { (models: [Model]) in
             let messageChecking = models.allSatisfy { model in
                 model.message == "Update Text"
             }

@@ -1,13 +1,13 @@
 //
 //  FirebaseAuthClient.swift
-//  
+//
 //
 //  Created by Fumiya Tanaka on 2021/05/02.
 //
 
-import Foundation
-import FirebaseAuth
 import Combine
+import FirebaseAuth
+import Foundation
 
 public enum FirebaseAuthClientError: Error {
     case noAuthData
@@ -54,7 +54,7 @@ public class FirebaseAuthClient {
         let data = try await auth.signIn(with: credential)
         return data.user
     }
-    
+
     internal func getAppleCredential(
         idToken token: String,
         nonce: String?
@@ -66,7 +66,7 @@ public class FirebaseAuthClient {
         )
         return credential
     }
-    
+
     public func link(with credential: AuthCredential) async throws -> FirebaseAuth.User {
         guard let currentUser else {
             throw FirebaseAuthClientError.currentUserNotFound
@@ -74,12 +74,14 @@ public class FirebaseAuthClient {
         let data = try await currentUser.link(with: credential)
         return data.user
     }
-    
-    public func signInWithApple(idToken token: String, nonce: String?) async throws -> FirebaseAuth.User {
+
+    public func signInWithApple(idToken token: String, nonce: String?) async throws
+        -> FirebaseAuth.User
+    {
         let credential = getAppleCredential(idToken: token, nonce: nonce)
         return try await signIn(with: credential)
     }
-    
+
     public func signInAnonymously() async throws -> FirebaseAuth.User {
         let data = try await auth.signInAnonymously()
         return data.user
@@ -88,7 +90,7 @@ public class FirebaseAuthClient {
     public func signOut() async throws {
         try auth.signOut()
     }
-    
+
     public func delete() async throws {
         try await auth.currentUser?.delete()
     }

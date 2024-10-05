@@ -1,13 +1,14 @@
 //
 //  StorageClientTests.swift
-//  
+//
 //
 //  Created by Fumiya Tanaka on 2022/01/16.
 //
 
-import XCTest
 import Combine
 import FirebaseStorage
+import XCTest
+
 @testable import EasyFirebaseStorage
 @testable import TestCore
 

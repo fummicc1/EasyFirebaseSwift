@@ -97,3 +97,5 @@ ui-debug.log
 
 # fvm
 .fvm/
+
+.index-build/

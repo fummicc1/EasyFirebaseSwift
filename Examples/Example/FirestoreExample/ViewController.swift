@@ -5,13 +5,13 @@
 //  Created by Fumiya Tanaka on 2021/05/01.
 //
 
+import Combine
 import EasyFirebaseSwiftFirestore
 import FirebaseFirestore
-import Combine
 import UIKit
 
 class ViewController: UIViewController {
-    
+
     let client = FirestoreClient()
     var cancellables: Set<AnyCancellable> = []
 
@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     }
 
     @IBOutlet private weak var label: UILabel!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         create_combine(message: "Test")
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 
     @IBAction func update() {
         model.message = getNewMessage()
-        client.update(model, success: {  }, failure: { _ in })
+        client.update(model, success: {}, failure: { _ in })
     }
 
     @IBAction func update_combine() {
@@ -82,4 +82,3 @@ class ViewController: UIViewController {
         }
     }
 }
-

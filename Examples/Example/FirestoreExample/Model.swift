@@ -5,10 +5,10 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import Foundation
-import FirebaseFirestore
 import EasyFirebaseSwiftFirestore
+import FirebaseFirestore
 import FirebaseFirestoreSwift
+import Foundation
 
 struct Model: FirestoreModel {
 

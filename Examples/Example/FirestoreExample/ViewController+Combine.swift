@@ -5,9 +5,9 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import Foundation
-import FirebaseFirestore
 import EasyFirebaseSwiftFirestore
+import FirebaseFirestore
+import Foundation
 
 extension ViewController {
     func create_combine(message: String) {
@@ -19,7 +19,8 @@ extension ViewController {
         )
         newModel.write(for: .createWithDocumentId(savedDocumentId)).sink { completion in
             print(completion)
-        } receiveValue: { }
+        } receiveValue: {
+        }
         .store(in: &cancellables)
     }
 

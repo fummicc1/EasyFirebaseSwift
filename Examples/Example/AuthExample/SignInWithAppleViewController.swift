@@ -5,9 +5,9 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import UIKit
-import EasyFirebaseSwiftAuth
 import AuthenticationServices
+import EasyFirebaseSwiftAuth
+import UIKit
 
 class SignInWithAppleViewController: UIViewController {
 
@@ -40,7 +40,7 @@ class SignInWithAppleViewController: UIViewController {
     private func startSignInWithApple() {
         // Show Authentication Alert
         // NOTE: Assign `delegate` before proceed.
-//        appleAuthClient.delegate = self
+        //        appleAuthClient.delegate = self
         // `with` parameter is optional
         appleAuthClient.startSignInWithAppleFlow(with: nil)
     }

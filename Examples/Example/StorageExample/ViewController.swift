@@ -5,12 +5,12 @@
 //  Created by Fumiya Tanaka on 2022/03/12.
 //
 
-import UIKit
+import Combine
+import EasyFirebaseSwiftStorage
+import FirebaseStorage
 import Photos
 import PhotosUI
-import Combine
-import FirebaseStorage
-import EasyFirebaseSwiftStorage
+import UIKit
 
 class ViewController: UIViewController {
 
@@ -100,7 +100,10 @@ extension ViewController: PHPickerViewControllerDelegate {
 
 @available(iOS, introduced: 14, unavailable)
 extension ViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
         picker.dismiss(animated: true, completion: nil)
         let image = info[.originalImage] as? UIImage
         self.image = image
