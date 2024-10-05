@@ -185,7 +185,9 @@ extension FirestoreClient {
         beforeCommit: @escaping ((old: FieldValue, new: FieldValue)) -> FieldValue
     ) async throws {
         var model = model
-        let ref = model.ref
+        guard let ref = model.ref else {
+            throw EasyFirebaseFirestoreError.refNotExists
+        }
         _ = try await firestore.runTransaction { transaction, errorPointeer in
             do {
                 let snapshot = try transaction.getDocument(ref)
@@ -206,7 +208,14 @@ extension FirestoreClient {
         _ model: Model,
         newDocumentIdIfNotExists: String? = nil
     ) async throws -> DocumentReference {
-        let ref = model.ref
+        let ref: DocumentReference
+        if let existingRef = model.ref {
+            ref = existingRef
+        } else {
+            let newId = newDocumentIdIfNotExists ?? Model.generateDocumentId()
+            ref = Model.buildRef(firestore: firestore, id: newId)
+        }
+
         return try await withCheckedThrowingContinuation { continuation in
             do {
                 try ref.setData(from: model, merge: true) { error in
@@ -334,7 +343,10 @@ extension FirestoreClient {
     // MARK: Delete
 
     public func delete<Model: FirestoreModel>(_ model: Model) async throws {
-        try await model.ref.delete()
+        guard let ref = model.ref else {
+            throw EasyFirebaseFirestoreError.refNotExists
+        }
+        try await ref.delete()
     }
 
     private func createQuery<Model: FirestoreModel>(
@@ -386,10 +398,10 @@ extension FirestoreClient {
 // MARK: - SubCollectionModel
 extension FirestoreClient {
 
-    public func create<Model: SubCollectionModel>(
-        _ model: Model
-    ) async throws {
-        let ref: DocumentReference = model.ref
+    public func create<Model: SubCollectionModel>(_ model: Model) async throws {
+        guard let ref = model.ref else {
+            throw EasyFirebaseFirestoreError.refNotExists
+        }
 
         if model.updatedAt != nil || model.createdAt != nil {
             throw EasyFirebaseFirestoreError.invalidTimestamp(
@@ -413,16 +425,18 @@ extension FirestoreClient {
         }
     }
 
-    public func update<Model: FirestoreModel & SubCollectionModel>(
-        _ model: Model
-    ) async throws {
-        let ref = model.ref
+    public func update<Model: FirestoreModel & SubCollectionModel>(_ model: Model) async throws {
+        guard let ref = model.ref else {
+            throw EasyFirebaseFirestoreError.refNotExists
+        }
+
         if model.updatedAt == nil || model.createdAt == nil {
             throw EasyFirebaseFirestoreError.invalidTimestamp(
                 createdAt: model.createdAt,
                 updatedAt: model.updatedAt
             )
         }
+
         return try await withCheckedThrowingContinuation { continuation in
             do {
                 try ref.setData(from: model, merge: false) { (error) in
