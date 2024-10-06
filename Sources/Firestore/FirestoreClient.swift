@@ -39,7 +39,6 @@ extension FirestoreModel {
 }
 
 public protocol SubCollectionModel: FirestoreModel {
-    static var parentModelType: (any FirestoreModel).Type { get }
     static var parentCollectionName: String { get }
     var parentDocumentRef: DocumentReference { get set }
 }
