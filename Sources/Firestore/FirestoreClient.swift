@@ -40,7 +40,6 @@ extension FirestoreModel {
 
 public protocol SubCollectionModel: FirestoreModel {
     static var parentCollectionName: String { get }
-    var parentDocumentRef: DocumentReference { get set }
 }
 
 public protocol FirestoreQueryFilter {
