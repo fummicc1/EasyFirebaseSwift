@@ -15,7 +15,7 @@ let package = Package(
         ),
         .library(
             name: "EasyFirebaseFirestore",
-            targets: ["EasyFirebaseFirestore"]
+            targets: ["EasyFirebaseFirestore", "EasyFirebaseFirestoreTests"]
         ),
         .library(
             name: "EasyFirebaseStorage",
@@ -76,14 +76,14 @@ let package = Package(
             path: "Sources/TestCore"
         ),
         .testTarget(
-            name: "FirestoreTests",
+            name: "EasyFirebaseFirestoreTests",
             dependencies: [
                 .target(name: "EasyFirebaseFirestore"),
                 .target(name: "TestCore"),
             ]
         ),
         .testTarget(
-            name: "StorageTests",
+            name: "EasyFirebaseStorageTests",
             dependencies: [
                 .target(name: "EasyFirebaseStorage"),
                 .target(name: "TestCore"),
