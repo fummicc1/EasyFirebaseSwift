@@ -14,13 +14,7 @@ public protocol FirestoreModel: Codable, Identifiable {
     var ref: DocumentReference? { get set }
     var createdAt: Timestamp? { get set }
     var updatedAt: Timestamp? { get set }
-
-    static func buildRef(
-        firestore: Firestore?,
-        id: String
-    ) -> DocumentReference
-
-    static func generateDocumentId() -> String
+    static func generateDocumentReference(firestore: Firestore?, id: String?) -> DocumentReference
 }
 
 extension FirestoreModel {
@@ -28,13 +22,12 @@ extension FirestoreModel {
         ref?.documentID
     }
 
-    public static func buildRef(firestore: Firestore?, id: String) -> DocumentReference {
+    public static func generateDocumentReference(firestore: Firestore?, id: String?) -> DocumentReference {
         let firestore = firestore ?? Firestore.firestore()
-        return firestore.collection(Self.collectionName).document(id)
-    }
-
-    public static func generateDocumentId() -> String {
-        return Firestore.firestore().collection(Self.collectionName).document().documentID
+        if let id {
+            return firestore.collection(Self.collectionName).document(id)
+        }
+        return firestore.collection(Self.collectionName).document()
     }
 }
 
@@ -210,8 +203,7 @@ extension FirestoreClient {
         if let existingRef = model.ref {
             ref = existingRef
         } else {
-            let newId = newDocumentIdIfNotExists ?? Model.generateDocumentId()
-            ref = Model.buildRef(firestore: firestore, id: newId)
+            ref = Model.generateDocumentReference(firestore: firestore, id: newDocumentIdIfNotExists)
         }
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -234,7 +226,7 @@ extension FirestoreClient {
         documentId: String,
         includeCache: Bool = true
     ) async throws -> Model {
-        let ref = Model.buildRef(firestore: firestore, id: documentId)
+        let ref = Model.generateDocumentReference(firestore: firestore, id: documentId)
         let snapshot = try await ref.getDocument(source: includeCache ? .default : .server)
 
         guard snapshot.exists else {
@@ -262,7 +254,7 @@ extension FirestoreClient {
         documentId: String,
         includeCache: Bool = true
     ) -> AsyncThrowingStream<Model, Error> {
-        let ref = Model.buildRef(firestore: firestore, id: documentId)
+        let ref = Model.generateDocumentReference(firestore: firestore, id: documentId)
         documentListeners[ref]?.remove()
         return AsyncThrowingStream { [weak self] continuation in
             let listener = ref.addSnapshotListener(
