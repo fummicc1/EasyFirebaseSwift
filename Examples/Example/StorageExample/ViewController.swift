@@ -6,7 +6,7 @@
 //
 
 import Combine
-import EasyFirebaseSwiftStorage
+import EasyFirebaseStorage
 import FirebaseStorage
 import Photos
 import PhotosUI
