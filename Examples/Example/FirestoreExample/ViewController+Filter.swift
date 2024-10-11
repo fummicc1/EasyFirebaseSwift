@@ -5,29 +5,25 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import EasyFirebaseSwiftFirestore
+import EasyFirebaseFirestore
 import Foundation
 
 extension ViewController {
-    func filter() {
+    func filter() async {
         let equalFilter = FirestoreEqualFilter(
             fieldPath: "message",
             value: "Update Text"
         )
-        client.listen(
-            filter: [equalFilter],
-            order: [],
-            limit: nil
-        ) { (models: [Model]) in
-            let messageChecking = models.allSatisfy { model in
-                model.message == "Update Text"
+        let stream: AsyncThrowingStream<[Model], any Error> = await client.listen(filter: [equalFilter])
+        var iterator = stream.makeAsyncIterator()
+        do {
+            while let model = try await iterator.next() {
+                if model.isEmpty == false && model.allSatisfy({ $0.message == "Update Text" }) {
+                    print("Update Text is included")
+                }
             }
-            // Do All models have `Update Text`?
-            // fail if condition is false.
-            assert(messageChecking)
-        } failure: { error in
+        } catch {
             print(error)
         }
-
     }
 }

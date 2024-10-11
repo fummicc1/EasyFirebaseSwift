@@ -5,7 +5,7 @@
 //  Created by Fumiya Tanaka on 2022/01/01.
 //
 
-import EasyFirebaseSwiftFirestore
+import EasyFirebaseFirestore
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation

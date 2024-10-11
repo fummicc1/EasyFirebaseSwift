@@ -6,7 +6,7 @@
 //
 
 import Combine
-import EasyFirebaseSwiftFirestore
+import EasyFirebaseFirestore
 import FirebaseFirestore
 import UIKit
 
@@ -26,18 +26,28 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        create_combine(message: "Test")
+        Task {
+            try await client.write(Model(message: "Test"))
+        }
         snapshots()
-        create_combine(message: getNewMessage())
+        super.viewDidLoad()
+        Task {
+            let message = getNewMessage()
+            try await client.write(Model(message: message))
+        }
     }
 
     @IBAction func update() {
-        model.message = getNewMessage()
-        client.update(model, success: {}, failure: { _ in })
+        Task {
+            model.message = getNewMessage()
+            try await client.write(model)
+        }
     }
 
     @IBAction func update_combine() {
-        create_combine(message: getNewMessage())
+        Task {
+            try await client.write(Model(message: getNewMessage()))
+        }
     }
 
     @IBAction func update_async() {
@@ -59,26 +69,21 @@ class ViewController: UIViewController {
 
     func get() {
         // Get single Document
-        client.get(uid: savedDocumentId) { (model: Model) in
+        Task {
+            let model: Model = try await client.get(documentId: savedDocumentId)
             print(model.message)
-        } failure: { error in
-            print(error)
         }
     }
 
     func snapshots() {
-        client.listen(
-            filter: [],
-            order: [],
-            limit: nil
-        ) { (models: [Model]) in
-            for model in models {
-                if model.id == self.savedDocumentId {
+        Task {
+            let stream: AsyncThrowingStream<[Model], any Error> = await client.listen()
+            var iterator = stream.makeAsyncIterator()
+            while let models = try await iterator.next() {
+                if let model = models.first(where: { $0.id == savedDocumentId }) {
                     self.model = model
                 }
             }
-        } failure: { error in
-            print(error)
         }
     }
 }
