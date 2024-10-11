@@ -195,6 +195,7 @@ extension FirestoreClient {
     }
 
     /// Update document's data or Create new document if `model.ref` is nil.
+    @discardableResult
     public func write<Model: FirestoreModel>(
         _ model: Model,
         newDocumentIdIfNotExists: String? = nil
