@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 extension ViewController {
     func create_async(message: String) async throws {
         let newModel = Model(
-            ref: nil,
+            ref: Model.generateDocumentReference(
+                firestore: Firestore.firestore(),
+                id: savedDocumentId
+            ),
             createdAt: nil,
             updatedAt: nil,
             message: message
         )
-        _ = try await client.create(newModel, documentId: savedDocumentId)
+        try await client.write(newModel)
     }
 }

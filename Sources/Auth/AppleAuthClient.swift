@@ -1,26 +1,26 @@
 //
 //  AppleAuthClient.swift
-//  
+//
 //
 //  Created by Fumiya Tanaka on 2021/05/02.
 //
 
-#if canImport(UIKit)
-import UIKit
-#elseif canImport(AppKit)
-import AppKit
-#endif
-import Foundation
+import AuthenticationServices
 import Combine
 import CryptoKit
-import AuthenticationServices
 import FirebaseAuth
+import Foundation
+
+#if canImport(UIKit)
+    import UIKit
+#elseif canImport(AppKit)
+    import AppKit
+#endif
 
 public enum AppleAuthClientError: Error {
     case failedToCastCredential
     case emptyIdToken
 }
-
 
 public class AppleAuthClient: NSObject {
 
@@ -83,16 +83,19 @@ public class AppleAuthClient: NSObject {
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainingLength = length
 
         while remainingLength > 0 {
-            let randoms: [UInt8] = (0 ..< 16).map { _ in
+            let randoms: [UInt8] = (0..<16).map { _ in
                 var random: UInt8 = 0
                 let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
                 if errorCode != errSecSuccess {
-                    assert(false, "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
+                    assert(
+                        false,
+                        "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+                    )
                 }
                 return random
             }
@@ -114,33 +117,40 @@ public class AppleAuthClient: NSObject {
 }
 
 #if canImport(UIKit)
-extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        guard let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }),
-              let delegate = scene.delegate as? UIWindowSceneDelegate,
-              let window = delegate.window as? UIWindow else {
-            assert(false)
-            return UIWindow()
+    extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
+        public func presentationAnchor(for controller: ASAuthorizationController)
+            -> ASPresentationAnchor
+        {
+            guard
+                let scene = UIApplication.shared.connectedScenes.first(where: {
+                    $0.activationState == .foregroundActive
+                }),
+                let delegate = scene.delegate as? UIWindowSceneDelegate,
+                let window = delegate.window as? UIWindow
+            else {
+                assert(false)
+                return UIWindow()
+            }
+            return window
         }
-        return window
     }
-}
 
 #elseif canImport(AppKit)
-extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        guard let window = NSApplication.shared.keyWindow else {
-            assert(false)
-            return NSWindow()
+    extension AppleAuthClient: ASAuthorizationControllerPresentationContextProviding {
+        public func presentationAnchor(for controller: ASAuthorizationController)
+            -> ASPresentationAnchor
+        {
+            guard let window = NSApplication.shared.keyWindow else {
+                assert(false)
+                return NSWindow()
+            }
+            return window
         }
-        return window
     }
-}
 #endif
 
-public extension AppleAuthClient {
-    class Delegator: NSObject, ASAuthorizationControllerDelegate {
-
+extension AppleAuthClient {
+    public class Delegator: NSObject, ASAuthorizationControllerDelegate {
 
         public init(
             nonce: String,
@@ -166,18 +176,24 @@ public extension AppleAuthClient {
             credentialRelay.eraseToAnyPublisher()
         }
 
-        public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        public func authorizationController(
+            controller: ASAuthorizationController, didCompleteWithError error: Error
+        ) {
             errorRelay.send(error)
         }
 
-        public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        public func authorizationController(
+            controller: ASAuthorizationController,
+            didCompleteWithAuthorization authorization: ASAuthorization
+        ) {
             // MARK: STEP2: Handle Response and Create Credential for FirebaseAuth
-            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential
+            else {
                 errorRelay.send(AppleAuthClientError.failedToCastCredential)
                 return
             }
             guard let appleIdToken = credential.identityToken,
-                  let idTokenString = String(data: appleIdToken, encoding: .utf8)
+                let idTokenString = String(data: appleIdToken, encoding: .utf8)
             else {
                 errorRelay.send(AppleAuthClientError.emptyIdToken)
                 return

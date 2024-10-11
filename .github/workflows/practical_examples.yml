@@ -39,6 +39,6 @@ jobs:
         run: |
           set -o pipefail && \
           xcodebuild -scheme BoardApplication \
-          build -destination "name=iPhone 12" \
+          build -destination "name=iPhone 15" \
           -clonedSourcePackagesDirPath SourcePackages \
           | bundle exec xcpretty

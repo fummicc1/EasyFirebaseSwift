@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "EasyFirebase",
     platforms: [
-		.iOS(.v15),
+        .iOS(.v15),
         .macOS(.v13),
     ],
     products: [
@@ -15,12 +15,12 @@ let package = Package(
         ),
         .library(
             name: "EasyFirebaseFirestore",
-            targets: ["EasyFirebaseFirestore"]
+            targets: ["EasyFirebaseFirestore", "EasyFirebaseFirestoreTests"]
         ),
         .library(
             name: "EasyFirebaseStorage",
             targets: ["EasyFirebaseStorage"]
-        )
+        ),
     ],
     dependencies: [
         .package(
@@ -46,7 +46,7 @@ let package = Package(
                 .product(
                     name: "FirebaseFirestoreSwift",
                     package: "firebase-ios-sdk"
-                )
+                ),
             ],
             path: "Sources/Firestore"
         ),
@@ -71,23 +71,23 @@ let package = Package(
                 .product(
                     name: "FirebaseStorage",
                     package: "firebase-ios-sdk"
-                )
+                ),
             ],
             path: "Sources/TestCore"
         ),
         .testTarget(
-            name: "FirestoreTests",
+            name: "EasyFirebaseFirestoreTests",
             dependencies: [
                 .target(name: "EasyFirebaseFirestore"),
-                .target(name: "TestCore")
+                .target(name: "TestCore"),
             ]
         ),
         .testTarget(
-            name: "StorageTests",
+            name: "EasyFirebaseStorageTests",
             dependencies: [
                 .target(name: "EasyFirebaseStorage"),
-                .target(name: "TestCore")
+                .target(name: "TestCore"),
             ]
-        )
+        ),
     ]
 )

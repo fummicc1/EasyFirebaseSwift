@@ -1,5 +1,5 @@
-import SwiftUI
 import Foundation
+import SwiftUI
 
 struct ContentView: View {
 

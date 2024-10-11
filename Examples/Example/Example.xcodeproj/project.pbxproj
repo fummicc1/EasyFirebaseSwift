@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,7 +22,9 @@
 		D33159D1263D409D0061211B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159CF263D409D0061211B /* Main.storyboard */; };
 		D33159D3263D409E0061211B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D33159D2263D409E0061211B /* Assets.xcassets */; };
 		D33159D6263D409E0061211B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33159D4263D409E0061211B /* LaunchScreen.storyboard */; };
-		D3B4383D277FFA3C000D6ED2 /* ViewController+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B4383C277FFA3C000D6ED2 /* ViewController+Combine.swift */; };
+		D3A38E072CB9676F000B7EE1 /* EasyFirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D3A38E062CB9676F000B7EE1 /* EasyFirebaseAuth */; };
+		D3A38E092CB9676F000B7EE1 /* EasyFirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D3A38E082CB9676F000B7EE1 /* EasyFirebaseFirestore */; };
+		D3A38E0B2CB9676F000B7EE1 /* EasyFirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D3A38E0A2CB9676F000B7EE1 /* EasyFirebaseStorage */; };
 		D3B4383F277FFABB000D6ED2 /* ViewController+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B4383E277FFABB000D6ED2 /* ViewController+Filter.swift */; };
 		D3B43841277FFAE7000D6ED2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B43840277FFAE7000D6ED2 /* Model.swift */; };
 		D3B43843277FFB5A000D6ED2 /* ViewController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B43842277FFB5A000D6ED2 /* ViewController+Async.swift */; };
@@ -56,7 +58,6 @@
 		D33159D2263D409E0061211B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D33159D5263D409E0061211B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D33159D7263D409E0061211B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D3B4383C277FFA3C000D6ED2 /* ViewController+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Combine.swift"; sourceTree = "<group>"; };
 		D3B4383E277FFABB000D6ED2 /* ViewController+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Filter.swift"; sourceTree = "<group>"; };
 		D3B43840277FFAE7000D6ED2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		D3B43842277FFB5A000D6ED2 /* ViewController+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Async.swift"; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A38E0B2CB9676F000B7EE1 /* EasyFirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A38E092CB9676F000B7EE1 /* EasyFirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A38E072CB9676F000B7EE1 /* EasyFirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +147,6 @@
 				D33159CB263D409D0061211B /* SceneDelegate.swift */,
 				D33159CD263D409D0061211B /* ViewController.swift */,
 				D3B43842277FFB5A000D6ED2 /* ViewController+Async.swift */,
-				D3B4383C277FFA3C000D6ED2 /* ViewController+Combine.swift */,
 				D3B4383E277FFABB000D6ED2 /* ViewController+Filter.swift */,
 				D33159D2263D409E0061211B /* Assets.xcassets */,
 				D33159D4263D409E0061211B /* LaunchScreen.storyboard */,
@@ -193,6 +196,7 @@
 			);
 			name = StorageExample;
 			packageProductDependencies = (
+				D3A38E0A2CB9676F000B7EE1 /* EasyFirebaseStorage */,
 			);
 			productName = StorageExample;
 			productReference = D32E5BE527DCD65200088B60 /* StorageExample.app */;
@@ -212,6 +216,7 @@
 			);
 			name = FirestoreExample;
 			packageProductDependencies = (
+				D3A38E082CB9676F000B7EE1 /* EasyFirebaseFirestore */,
 			);
 			productName = Example;
 			productReference = D33159C6263D409D0061211B /* FirestoreExample.app */;
@@ -231,6 +236,7 @@
 			);
 			name = AuthExample;
 			packageProductDependencies = (
+				D3A38E062CB9676F000B7EE1 /* EasyFirebaseAuth */,
 			);
 			productName = AuthExample;
 			productReference = D3B43848277FFBE5000D6ED2 /* AuthExample.app */;
@@ -266,6 +272,7 @@
 			);
 			mainGroup = D33159BD263D409D0061211B;
 			packageReferences = (
+				D3A38E052CB9676F000B7EE1 /* XCLocalSwiftPackageReference "../../../EasyFirebaseSwift" */,
 			);
 			productRefGroup = D33159C7263D409D0061211B /* Products */;
 			projectDirPath = "";
@@ -335,7 +342,6 @@
 				D3B43843277FFB5A000D6ED2 /* ViewController+Async.swift in Sources */,
 				D3B4383F277FFABB000D6ED2 /* ViewController+Filter.swift in Sources */,
 				D3B43841277FFAE7000D6ED2 /* Model.swift in Sources */,
-				D3B4383D277FFA3C000D6ED2 /* ViewController+Combine.swift in Sources */,
 				D33159CC263D409D0061211B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,7 +427,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -451,7 +457,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -590,7 +596,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = "$(SRCROOT)/FirestoreExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -611,7 +617,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2X6AD4W323;
 				INFOPLIST_FILE = "$(SRCROOT)/FirestoreExample/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -639,7 +645,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -669,7 +675,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -723,6 +729,28 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D3A38E052CB9676F000B7EE1 /* XCLocalSwiftPackageReference "../../../EasyFirebaseSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../EasyFirebaseSwift;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D3A38E062CB9676F000B7EE1 /* EasyFirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EasyFirebaseAuth;
+		};
+		D3A38E082CB9676F000B7EE1 /* EasyFirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EasyFirebaseFirestore;
+		};
+		D3A38E0A2CB9676F000B7EE1 /* EasyFirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EasyFirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D33159BE263D409D0061211B /* Project object */;
 }
