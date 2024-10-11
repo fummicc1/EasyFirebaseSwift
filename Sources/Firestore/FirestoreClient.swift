@@ -164,9 +164,9 @@ public enum EasyFirebaseFirestoreError: Error {
 
 public actor FirestoreClient {
 
-    private let firestore = Firestore.firestore()
-    private var documentListeners: [DocumentReference: ListenerRegistration] = [:]
-    private var queryListeners: [Query: ListenerRegistration] = [:]
+    public let firestore = Firestore.firestore()
+    public private(set) var documentListeners: [DocumentReference: ListenerRegistration] = [:]
+    public private(set) var queryListeners: [Query: ListenerRegistration] = [:]
 
     public init() {}
 
