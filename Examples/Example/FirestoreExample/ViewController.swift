@@ -46,7 +46,8 @@ class ViewController: UIViewController {
 
     @IBAction func update_combine() {
         Task {
-            try await client.write(Model(message: getNewMessage()))
+            model.message = getNewMessage()
+            try await client.write(model)
         }
     }
 
