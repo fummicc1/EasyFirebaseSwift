@@ -38,7 +38,7 @@ class Model: ObservableObject {
             sender: nickName
         )
         do {
-            try await firestoreClient.create(newMessage)
+            try await firestoreClient.write(newMessage)
             newMessageText = ""
         } catch {
             print(error)
