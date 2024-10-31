@@ -15,7 +15,7 @@ let package = Package(
         ),
         .library(
             name: "EasyFirebaseFirestore",
-            targets: ["EasyFirebaseFirestore", "EasyFirebaseFirestoreTests"]
+            targets: ["EasyFirebaseFirestore"]
         ),
         .library(
             name: "EasyFirebaseStorage",
