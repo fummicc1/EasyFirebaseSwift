@@ -5,7 +5,6 @@
 //  Created by Fumiya Tanaka on 2021/05/02.
 //
 
-import Combine
 import FirebaseAuth
 import Foundation
 
@@ -23,28 +22,23 @@ public class FirebaseAuthClient {
         auth.currentUser?.uid
     }
 
-    public let stream: AsyncStream<FirebaseAuth.User?>?
+    public let stream: AsyncStream<FirebaseAuth.User?>
 
     public var currentUser: FirebaseAuth.User? {
         auth.currentUser
     }
 
     public init(
-        auth: Auth = Auth.auth(),
-        listensToStateChange: Bool = true
+        auth: Auth = Auth.auth()
     ) {
         self.auth = auth
-        if listensToStateChange {
-            stream = .init { continuation in
-                let listener = auth.addStateDidChangeListener { (_, user) in
-                    continuation.yield(user)
-                }
-                continuation.onTermination = { _ in
-                    auth.removeStateDidChangeListener(listener)
-                }
+        stream = .init { continuation in
+            let listener = auth.addStateDidChangeListener { (_, user) in
+                continuation.yield(user)
             }
-        } else {
-            stream = nil
+            continuation.onTermination = { _ in
+                auth.removeStateDidChangeListener(listener)
+            }
         }
     }
 
