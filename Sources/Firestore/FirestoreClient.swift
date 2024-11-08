@@ -118,26 +118,23 @@ public struct FirestoreEqualFilter: FirestoreQueryFilter {
 public struct FirestoreContainFilter: FirestoreQueryFilter {
 
     public var fieldPath: String?
-    public var value: [Any]
+    public var value: Any
 
-    public init(fieldPath: String?, value: [Any]) {
+    public init(fieldPath: String?, value: Any) {
         self.fieldPath = fieldPath
         self.value = value
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath, !value.isEmpty else {
+        guard let fieldPath = fieldPath else {
             return from
         }
-        return from.whereField(fieldPath, in: value)
+        return from.whereField(fieldPath, arrayContains: value)
     }
 
     public func build<Model>(type: Model.Type) -> Query where Model: FirestoreModel {
         let from = Firestore.firestore().collection(type.collectionName)
-        guard let fieldPath = fieldPath, !value.isEmpty else {
-            return from
-        }
-        return from.whereField(fieldPath, in: value)
+        return build(from: from)
     }
 }
 
