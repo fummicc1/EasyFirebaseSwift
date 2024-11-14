@@ -22,6 +22,7 @@ public class FirebaseAuthClient {
         auth.currentUser?.uid
     }
 
+    public let continuation: AsyncStream<FirebaseAuth.User?>.Continuation
     public let stream: AsyncStream<FirebaseAuth.User?>
 
     public var currentUser: FirebaseAuth.User? {
@@ -32,14 +33,15 @@ public class FirebaseAuthClient {
         auth: Auth = Auth.auth()
     ) {
         self.auth = auth
-        stream = .init { continuation in
-            let listener = auth.addStateDidChangeListener { (_, user) in
-                continuation.yield(user)
-            }
-            continuation.onTermination = { _ in
-                auth.removeStateDidChangeListener(listener)
-            }
+        let (stream, continuation) = AsyncStream<FirebaseAuth.User?>.makeStream()
+        let listener = auth.addStateDidChangeListener { (_, user) in
+            continuation.yield(user)
         }
+        continuation.onTermination = { _ in
+            auth.removeStateDidChangeListener(listener)
+        }
+        self.continuation = continuation
+        self.stream = stream
     }
 
     public func signIn(
