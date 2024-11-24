@@ -36,7 +36,7 @@ public protocol SubCollectionModel: FirestoreModel {
 }
 
 public protocol FirestoreQueryFilter {
-    var fieldPath: String? { get }
+    var fieldPath: String { get }
 
     func build<Model: FirestoreModel>(type: Model.Type) -> Query
     func build(from: Query) -> Query
@@ -57,18 +57,18 @@ public struct FirestoreQueryOrder {
 }
 
 public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
-    public var fieldPath: String?
+    public var fieldPath: String
     public var minValue: Value
     private var maxValue: Value
 
-    public init(fieldPath: String? = nil, minValue: Value, maxValue: Value) {
+    public init(fieldPath: String, minValue: Value, maxValue: Value) {
         self.fieldPath = fieldPath
         self.minValue = minValue
         self.maxValue = maxValue
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath, maxValue > minValue else {
+        guard maxValue > minValue else {
             return from
         }
         return
@@ -79,7 +79,7 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
 
     public func build<Model>(type: Model.Type) -> Query where Model: FirestoreModel {
         let from = Firestore.firestore().collection(type.collectionName)
-        guard let fieldPath = fieldPath, maxValue > minValue else {
+        guard maxValue > minValue else {
             return from
         }
         return
@@ -89,46 +89,55 @@ public struct FirestoreRangeFilter<Value: Comparable>: FirestoreQueryFilter {
     }
 }
 
+public struct FirestoreInFilter: FirestoreQueryFilter {
+    public var fieldPath: String
+    public var values: [Any]
+
+    public init(fieldPath: String, values: [Any]) {
+        self.fieldPath = fieldPath
+        self.values = values
+    }
+
+    public func build(from: Query) -> Query {
+        from.whereField(fieldPath, in: values)
+    }
+
+    public func build<Model>(type: Model.Type) -> Query where Model : FirestoreModel {
+        let from = Firestore.firestore().collection(type.collectionName)
+        return from.whereField(fieldPath, in: values)
+    }
+}
+
 public struct FirestoreEqualFilter: FirestoreQueryFilter {
-    public var fieldPath: String?
+    public var fieldPath: String
     public var value: Any?
 
-    public init(fieldPath: String?, value: Any?) {
+    public init(fieldPath: String, value: Any?) {
         self.fieldPath = fieldPath
         self.value = value
     }
 
     public func build(from: Query) -> Query {
-
-        guard let fieldPath = fieldPath else {
-            return from
-        }
         return from.whereField(fieldPath, isEqualTo: value as Any)
     }
 
     public func build<Model>(type: Model.Type) -> Query where Model: FirestoreModel {
         let from = Firestore.firestore().collection(type.collectionName)
-        guard let fieldPath = fieldPath else {
-            return from
-        }
         return from.whereField(fieldPath, isEqualTo: value as Any)
     }
 }
 
 public struct FirestoreContainFilter: FirestoreQueryFilter {
 
-    public var fieldPath: String?
+    public var fieldPath: String
     public var value: Any
 
-    public init(fieldPath: String?, value: Any) {
+    public init(fieldPath: String, value: Any) {
         self.fieldPath = fieldPath
         self.value = value
     }
 
     public func build(from: Query) -> Query {
-        guard let fieldPath = fieldPath else {
-            return from
-        }
         return from.whereField(fieldPath, arrayContains: value)
     }
 
