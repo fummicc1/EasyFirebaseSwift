@@ -53,10 +53,10 @@ public class FirebaseAuthClient {
 
     internal func getAppleCredential(
         idToken token: String,
-        nonce: String?
+        nonce: String
     ) -> AuthCredential {
         let credential = OAuthProvider.credential(
-            withProviderID: "apple.com",
+            providerID: .apple,
             idToken: token,
             rawNonce: nonce
         )
@@ -71,7 +71,7 @@ public class FirebaseAuthClient {
         return data.user
     }
 
-    public func signInWithApple(idToken token: String, nonce: String?) async throws
+    public func signInWithApple(idToken token: String, nonce: String) async throws
         -> FirebaseAuth.User
     {
         let credential = getAppleCredential(idToken: token, nonce: nonce)

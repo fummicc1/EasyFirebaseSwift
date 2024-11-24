@@ -9,7 +9,6 @@ First of all, create Model layer inheriting `FirestoreModel` protocol.
 ```swift
 
 import EasyFirebaseSwift
-import FirebaseFirestoreSwift
 import FirebaseFirestore
 
 // Note: FirestoreModel inherits `Codable` Protocol
@@ -20,7 +19,7 @@ struct Model: FirestoreModel {
     // collectionName corresponding to Firestore's CollectionName.
     static var collectionName: String = "models"
 
-    // NOTE: To use PropertyWrapper such as @DocumentID, @ServerTimestamp, please import FirebaseFirestoreSwift.
+    // NOTE: To use PropertyWrapper such as @DocumentID, @ServerTimestamp
     @DocumentID
     var ref: DocumentReference?
 

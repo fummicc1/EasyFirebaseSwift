@@ -7,7 +7,6 @@
 
 import Combine
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import XCTest
 
 @testable import EasyFirebaseFirestore
