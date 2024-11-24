@@ -1,6 +1,5 @@
 import EasyFirebaseSwift
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import Foundation
 
 struct Message: FirestoreModel {
