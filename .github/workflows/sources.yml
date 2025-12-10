@@ -25,18 +25,8 @@ jobs:
           java-version: "17"
       - name: Install xcpretty
         run: bundle install
-      - name: Setup Firebase Emulator
+      - name: Build and Test with Firebase Emulators
         working-directory: ./firebase
-        run: ./emulator_setup.sh &
+        run: ./run_with_emulator.sh "set -o pipefail && swift build && swift test"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Wait firebase_emulator_setup
-        working-directory: ./firebase
-        run: ./wait_firebase_emulator_setup.sh
-      - name: Build and Test
-        run: |
-          set -o pipefail && \
-          swift build && \
-          swift test
-      - name: Kill firebase_emulator process
-        run: kill `cat /tmp/firebase_emulator_pid.pid` &>/dev/null
