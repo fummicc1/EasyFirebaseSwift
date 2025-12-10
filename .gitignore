@@ -99,3 +99,6 @@ ui-debug.log
 .fvm/
 
 .index-build/
+
+# Claude
+.claude/settings.local.json
