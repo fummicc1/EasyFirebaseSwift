@@ -1,4 +1,4 @@
-import EasyFirebaseSwift
+import EasyFirebaseFirestore
 import FirebaseFirestore
 import Foundation
 

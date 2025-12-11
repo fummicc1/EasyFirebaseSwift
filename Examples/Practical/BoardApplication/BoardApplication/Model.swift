@@ -1,5 +1,5 @@
 import Combine
-import EasyFirebaseSwift
+import EasyFirebaseFirestore
 import Foundation
 
 @MainActor
