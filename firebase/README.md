@@ -6,6 +6,10 @@
 
 Firebase EmulatorとともにSwiftのビルドとテストを実行するための統合スクリプトです。
 
+### 要件
+
+- Java 21以上（Firebase CLI 15.0.0以降で必要）
+
 ### 使い方
 
 ```bash
