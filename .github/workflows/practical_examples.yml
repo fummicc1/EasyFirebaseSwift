@@ -17,17 +17,22 @@ jobs:
   test:
     name: "Test BoardApplication"
     runs-on: macos-14
+    strategy:
+      matrix:
+        device:
+          - { name: "iPhone 15", os: "17.5" }
+          - { name: "iPhone 16", os: "18.2" }
     defaults:
       run:
         working-directory: Examples/Practical/BoardApplication
         shell: bash
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
       - name: Cache SwiftPM
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: SourcePackages
           key: ${{ runner.os }}-spm-${{ hashFiles('*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
@@ -35,10 +40,10 @@ jobs:
       - name: Install xcpretty
         run: bundle install
         working-directory: ./
-      - name: Build
+      - name: Build on ${{ matrix.device.name }} (iOS ${{ matrix.device.os }})
         run: |
           set -o pipefail && \
           xcodebuild -scheme BoardApplication \
-          build -destination "name=iPhone 15" \
+          build -destination "platform=iOS Simulator,name=${{ matrix.device.name }},OS=${{ matrix.device.os }}" \
           -clonedSourcePackagesDirPath SourcePackages \
           | bundle exec xcpretty

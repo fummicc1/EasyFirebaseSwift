@@ -199,7 +199,7 @@ extension AppleAuthClient {
                 return
             }
             let firCredential = OAuthProvider.credential(
-                withProviderID: "apple.com",
+                providerID: .apple,
                 idToken: idTokenString,
                 rawNonce: nonce
             )

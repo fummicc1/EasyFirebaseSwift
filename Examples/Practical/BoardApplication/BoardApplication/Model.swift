@@ -1,5 +1,4 @@
-import Combine
-import EasyFirebaseSwift
+import EasyFirebaseFirestore
 import Foundation
 
 @MainActor
@@ -9,18 +8,23 @@ class Model: ObservableObject {
     @Published var nickName: String = ""
     @Published var newMessageText: String = ""
 
-    private var cancellables: Set<AnyCancellable> = []
+    private var listenerTask: Task<Void, Never>?
     private let firestoreClient: FirestoreClient = FirestoreClient()
 
     init() {
-        let action = FirestoreModelTypeAction<Message>
-            .snapshots(SnapshotInputParameter.Default())
-        Message.multiple(for: action, client: firestoreClient)
-            .sink { _ in
-            } receiveValue: { messages in
-                self.list = messages
+        listenerTask = Task {
+            do {
+                for try await messages in await firestoreClient.listen() as AsyncThrowingStream<[Message], Error> {
+                    self.list = messages
+                }
+            } catch {
+                print("Error listening to messages: \(error)")
             }
-            .store(in: &cancellables)
+        }
+    }
+
+    deinit {
+        listenerTask?.cancel()
     }
 
     func create() async {

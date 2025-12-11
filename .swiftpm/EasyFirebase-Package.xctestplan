@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "D325B07B-16DE-4CCE-9A75-B696B8133B45",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "EasyFirebaseStorageTests",
+        "name" : "EasyFirebaseStorageTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "EasyFirebaseFirestoreTests",
+        "name" : "EasyFirebaseFirestoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}
