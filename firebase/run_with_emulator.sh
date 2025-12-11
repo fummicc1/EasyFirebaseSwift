@@ -28,5 +28,5 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-cd ..
-firebase emulators:exec "$1" --project=demo-test --import=./firebase/data --export-on-exit=./firebase/data
+# Run emulators from firebase directory and execute command in project root
+firebase emulators:exec "cd .. && $1" --project=demo-test --import=./data --export-on-exit=./data
