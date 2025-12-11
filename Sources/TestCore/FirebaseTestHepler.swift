@@ -34,6 +34,7 @@ enum FirebaseTestHelper {
                 gcmSenderID: "sender_id"
             )
             options.projectID = "test-" + dateFormatter.string(from: Date())
+            options.apiKey = "test-" + dateFormatter.string(from: Date())
             FirebaseApp.configure(options: options)
             let settings = Firestore.firestore().settings
             let host = "127.0.0.1"
