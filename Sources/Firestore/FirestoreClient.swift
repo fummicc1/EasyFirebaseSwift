@@ -699,3 +699,6 @@ extension FirestoreClient {
         return model
     }
 }
+
+// MARK: - FirestoreClientProtocol Conformance
+extension FirestoreClient: @preconcurrency FirestoreClientProtocol {}
