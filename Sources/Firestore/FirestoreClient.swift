@@ -160,6 +160,47 @@ public enum EasyFirebaseFirestoreError: Error {
     case refNotExists
 }
 
+// MARK: - Document Change Types
+
+/// Represents the type of change that occurred on a document.
+public enum FirestoreDocumentChangeType: Sendable {
+    /// A document was added to the result set.
+    case added
+    /// A document was modified in the result set.
+    case modified
+    /// A document was removed from the result set.
+    case removed
+}
+
+/// Represents a change to a document in a Firestore collection.
+public struct FirestoreDocumentChange<Model: FirestoreModel> {
+    /// The type of change (added, modified, or removed).
+    public let type: FirestoreDocumentChangeType
+
+    /// The document that was changed.
+    public let document: Model
+
+    /// The index of the document in the old snapshot (before the change).
+    /// For `.added` documents, this is `nil`.
+    public let oldIndex: Int?
+
+    /// The index of the document in the new snapshot (after the change).
+    /// For `.removed` documents, this is `nil`.
+    public let newIndex: Int?
+
+    public init(
+        type: FirestoreDocumentChangeType,
+        document: Model,
+        oldIndex: Int?,
+        newIndex: Int?
+    ) {
+        self.type = type
+        self.document = document
+        self.oldIndex = oldIndex
+        self.newIndex = newIndex
+    }
+}
+
 public actor FirestoreClient {
 
     public let firestore = Firestore.firestore()
@@ -322,6 +363,56 @@ extension FirestoreClient {
                 do {
                     let models: [Model] = try FirestoreClient.putSnaphotsTogether(snapshots)
                     continuation.yield(models)
+                } catch {
+                    continuation.yield(with: .failure(error))
+                }
+            }
+            continuation.onTermination = { _ in
+                listener.remove()
+            }
+            Task {
+                await self?.queryListeners[query]?.remove()
+                await self?.setListener(key: query, value: listener)
+            }
+        }
+    }
+
+    /// Listens to document changes in a collection, returning only differential updates.
+    /// - Parameters:
+    ///   - filter: Optional array of query filters
+    ///   - includeCache: Whether to include cache updates (defaults to true)
+    ///   - order: Optional array of ordering criteria
+    ///   - limit: Optional limit on number of documents
+    /// - Returns: AsyncThrowingStream of document change arrays
+    public func listenChanges<Model: FirestoreModel>(
+        filter: [FirestoreQueryFilter] = [],
+        includeCache: Bool = true,
+        order: [FirestoreQueryOrder] = [],
+        limit: Int? = nil
+    ) -> AsyncThrowingStream<[FirestoreDocumentChange<Model>], Error> {
+        let query = createQuery(modelType: Model.self, filter: filter)
+            .build(
+                order: order,
+                limit: limit
+            )
+        queryListeners[query]?.remove()
+        return AsyncThrowingStream { [weak self] continuation in
+            let listener = query.addSnapshotListener { (snapshots, error) in
+                if let error = error {
+                    continuation.yield(with: .failure(error))
+                    return
+                }
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if !includeCache, snapshots.metadata.isFromCache {
+                    // Ignore this event if `includeCache` is `false` and the source is from cache.
+                    return
+                }
+                do {
+                    let changes: [FirestoreDocumentChange<Model>] =
+                        try FirestoreClient.mapDocumentChanges(snapshots.documentChanges)
+                    continuation.yield(changes)
                 } catch {
                     continuation.yield(with: .failure(error))
                 }
@@ -572,6 +663,62 @@ extension FirestoreClient {
         }
     }
 
+    /// Listens to document changes in a subcollection, returning only differential updates.
+    /// - Parameters:
+    ///   - parentUid: The parent document ID
+    ///   - superParentUid: Optional super parent document ID (for nested subcollections)
+    ///   - filter: Array of query filters
+    ///   - includeCache: Whether to include cache updates
+    ///   - order: Array of ordering criteria
+    ///   - limit: Optional limit on number of documents
+    /// - Returns: AsyncThrowingStream of document change arrays
+    public func listenChanges<Model: FirestoreModel & SubCollectionModel>(
+        parent parentUid: String,
+        superParent superParentUid: String?,
+        filter: [FirestoreQueryFilter],
+        includeCache: Bool = true,
+        order: [FirestoreQueryOrder],
+        limit: Int?
+    ) -> AsyncThrowingStream<[FirestoreDocumentChange<Model>], any Error> {
+        let query = createQueryOfSubCollection(
+            parent: parentUid,
+            modelType: Model.self,
+            filter: filter,
+            order: order,
+            limit: limit
+        )
+
+        return AsyncThrowingStream { [weak self] continuation in
+            let listener = query.addSnapshotListener { (snapshots, error) in
+                if let error = error {
+                    continuation.yield(with: .failure(error))
+                    return
+                }
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if !includeCache, snapshots.metadata.isFromCache {
+                    // Ignore this event if `includeCache` is `false` and the source is from cache.
+                    return
+                }
+                do {
+                    let changes: [FirestoreDocumentChange<Model>] =
+                        try FirestoreClient.mapDocumentChanges(snapshots.documentChanges)
+                    continuation.yield(changes)
+                } catch {
+                    continuation.yield(with: .failure(error))
+                }
+            }
+            continuation.onTermination = { _ in
+                listener.remove()
+            }
+            Task {
+                await self?.queryListeners[query]?.remove()
+                await self?.setListener(key: query, value: listener)
+            }
+        }
+    }
+
     private func createQueryOfSubCollection<Model: FirestoreModel & SubCollectionModel>(
         parent parentUid: String,
         modelType: Model.Type,
@@ -655,6 +802,58 @@ extension FirestoreClient {
         }
     }
 
+    /// Listens to document changes in a collection group, returning only differential updates.
+    /// - Parameters:
+    ///   - collectionName: The collection name for the group
+    ///   - filter: Optional array of query filters
+    ///   - includeCache: Whether to include cache updates
+    ///   - order: Optional array of ordering criteria
+    ///   - limit: Optional limit on number of documents
+    /// - Returns: AsyncThrowingStream of document change arrays
+    public func listenCollectionGroupChanges<Model: FirestoreModel>(
+        collectionName: String,
+        filter: [FirestoreQueryFilter] = [],
+        includeCache: Bool = true,
+        order: [FirestoreQueryOrder] = [],
+        limit: Int? = nil
+    ) -> AsyncThrowingStream<[FirestoreDocumentChange<Model>], Error> {
+
+        let query = createQuery(
+            from: firestore.collectionGroup(collectionName),
+            filter: filter
+        ).build(order: order, limit: limit)
+
+        return AsyncThrowingStream { [weak self] continuation in
+            let listener = query.addSnapshotListener { (snapshots, error) in
+                if let error = error {
+                    continuation.yield(with: .failure(error))
+                    return
+                }
+                guard let snapshots = snapshots else {
+                    return
+                }
+                if !includeCache, snapshots.metadata.isFromCache {
+                    // Ignore this event if `includeCache` is `false` and the source is from cache.
+                    return
+                }
+                do {
+                    let changes: [FirestoreDocumentChange<Model>] =
+                        try FirestoreClient.mapDocumentChanges(snapshots.documentChanges)
+                    continuation.yield(changes)
+                } catch {
+                    continuation.yield(with: .failure(error))
+                }
+            }
+            continuation.onTermination = { _ in
+                listener.remove()
+            }
+            Task {
+                await self?.queryListeners[query]?.remove()
+                await self?.setListener(key: query, value: listener)
+            }
+        }
+    }
+
     private func createQuery(from ref: Query, filter: [FirestoreQueryFilter]) -> Query {
         var query: Query = ref
         for element in filter {
@@ -697,5 +896,37 @@ extension FirestoreClient {
     {
         let model = try snapshot.data(as: Model.self)
         return model
+    }
+
+    /// Converts Firebase DocumentChange objects to FirestoreDocumentChange objects.
+    static func mapDocumentChanges<Model: FirestoreModel>(
+        _ changes: [DocumentChange]
+    ) throws -> [FirestoreDocumentChange<Model>] {
+        try changes.map { change -> FirestoreDocumentChange<Model> in
+            let model = try change.document.data(as: Model.self)
+
+            let changeType: FirestoreDocumentChangeType
+            switch change.type {
+            case .added:
+                changeType = .added
+            case .modified:
+                changeType = .modified
+            case .removed:
+                changeType = .removed
+            }
+
+            // Firebase uses UInt for indices
+            // oldIndex is NSNotFound for added documents
+            // newIndex is NSNotFound for removed documents
+            let oldIndex: Int? = change.oldIndex == NSNotFound ? nil : Int(change.oldIndex)
+            let newIndex: Int? = change.newIndex == NSNotFound ? nil : Int(change.newIndex)
+
+            return FirestoreDocumentChange(
+                type: changeType,
+                document: model,
+                oldIndex: oldIndex,
+                newIndex: newIndex
+            )
+        }
     }
 }
