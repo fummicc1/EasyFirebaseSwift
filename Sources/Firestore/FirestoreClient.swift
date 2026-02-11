@@ -930,3 +930,6 @@ extension FirestoreClient {
         }
     }
 }
+
+// MARK: - FirestoreClientType Conformance
+extension FirestoreClient: FirestoreClientType {}
